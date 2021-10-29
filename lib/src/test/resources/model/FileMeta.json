@@ -1,0 +1,8 @@
+{
+  "label": "some.txt",
+  "description": "just something",
+  "directoryLabel": "path/to",
+  "restrict": false,
+  "categories": ["Data"],
+  "forceReplace": true
+}

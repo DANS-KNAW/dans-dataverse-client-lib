@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import nl.knaw.dans.lib.dataverse.model.FileMeta;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,9 +55,18 @@ public class DatasetApi extends AbstractApi {
         return getVersionedFromTarget("", version, List.class, DatasetVersion.class);
     }
 
+    /**
+     * See [Dataverse API Guide].
+     *
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#list-files-in-a-dataset
+     *
+     */
+    public DataverseResponse<List<DatasetVersion>> getFiles(String version) throws IOException, DataverseException {
+        return getVersionedFromTarget("", version, List.class, FileMeta.class);
+    }
+
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#export-metadata-of-a-dataset-in-various-formats
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#schema-org-json-ld
-    // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#list-files-in-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#view-dataset-files-and-folders-as-a-directory-index
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#list-all-metadata-blocks-for-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#list-single-metadata-block-for-a-dataset
