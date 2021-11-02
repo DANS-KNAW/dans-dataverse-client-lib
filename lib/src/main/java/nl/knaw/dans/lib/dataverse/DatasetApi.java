@@ -15,7 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
-import nl.knaw.dans.lib.dataverse.model.FileMeta;
+import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +62,8 @@ public class DatasetApi extends AbstractApi {
      *
      */
     public DataverseResponse<List<DatasetVersion>> getFiles(String version) throws IOException, DataverseException {
-        return getVersionedFromTarget("", version, List.class, FileMeta.class);
+        log.trace("ENTER");
+        return getVersionedFromTarget("files", version, List.class, FileMeta.class);
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#export-metadata-of-a-dataset-in-various-formats

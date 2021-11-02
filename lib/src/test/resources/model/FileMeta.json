@@ -3,6 +3,21 @@
   "description": "just something",
   "directoryLabel": "path/to",
   "restrict": false,
-  "categories": ["Data"],
+  "categories": ["Data", "Documentation", "Code"],
+  "dataFile": {
+    "id" :  "",
+    "persistentId" : "",
+    "pidURL" :  "",
+    "filename" : "",
+    "contentType" :  "",
+    "filesize" : 20000,
+    "storageIdentifier" :  "",
+    "rootDataFileId" : "",
+    "checksum" : {
+      "type" :  "",
+      "Value" : ""
+    },
+    "creationDate" : ""
+  },
   "forceReplace": true
 }

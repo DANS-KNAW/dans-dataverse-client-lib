@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse.model;
 
+import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

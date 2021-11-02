@@ -1,4 +1,4 @@
-package nl.knaw.dans.lib.dataverse.model;
+package nl.knaw.dans.lib.dataverse.model.file;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ public class FileMeta {
   private String description;
   private String directoryLabel;
   private Boolean restrict;
-  private List<String> categories; // TODO Enum: https://guides.dataverse.org/en/latest/user/dataset-management.html?highlight=category#file-tags
-  // TODO private DataFile dataFile;
+  private List<String> categories; // TODO Enum? https://guides.dataverse.org/en/latest/user/dataset-management.html?highlight=category#file-tags
+  private DataFile dataFile;
   private Boolean forceReplace;
 
   public FileMeta() {
@@ -60,6 +60,14 @@ public class FileMeta {
 
   public void setForceReplace(Boolean forceReplace) {
     this.forceReplace = forceReplace;
+  }
+
+  public DataFile getDataFile() {
+    return dataFile;
+  }
+
+  public void setDataFile(DataFile dataFile) {
+    this.dataFile = dataFile;
   }
 
   // TODO public ... toPrestagedFile = ???
