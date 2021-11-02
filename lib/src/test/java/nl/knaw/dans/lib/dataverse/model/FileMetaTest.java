@@ -35,5 +35,4 @@ class FileMetaTest extends ModelFixture {
         assertEquals(classUnderTest, e.getClass());
         // For test of the automatic reading of the envelope contents, see DataverseResponseTest
     }
-
 }
