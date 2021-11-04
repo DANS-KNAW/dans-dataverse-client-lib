@@ -1,23 +1,23 @@
 {
-  "label": "some.txt",
+  "label": "some.pdf",
   "description": "just something",
   "directoryLabel": "path/to",
   "restrict": false,
   "categories": ["Data", "Documentation", "Code"],
   "dataFile": {
-    "id" :  "",
+    "id" :  "4",
     "persistentId" : "",
     "pidURL" :  "",
     "filename" : "",
-    "contentType" :  "",
-    "filesize" : 20000,
-    "storageIdentifier" :  "",
+    "contentType" :  "application/pdf",
+    "filesize" : 767429,
+    "storageIdentifier" :  "file://17cb1aed54c-7a650a5ee0ea",
     "rootDataFileId" : "",
     "checksum" : {
-      "type" :  "",
-      "value" : ""
+      "type" :  "SHA1",
+      "value" : "bebf938060b6b1aa9f086ac368339d23e13719c7"
     },
-    "creationDate" : ""
+    "creationDate" : "2021-10-24 11:43:22.025"
   },
   "forceReplace": true
 }

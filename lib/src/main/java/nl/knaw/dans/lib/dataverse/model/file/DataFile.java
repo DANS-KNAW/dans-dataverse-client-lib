@@ -25,7 +25,7 @@ public class DataFile {
   private String storageIdentifier;
   private int rootDataFileId;
   private Checksum checksum;
-  private String creationDate;
+  private String creationDate; // TODO why not a DateTime?
 
   public String getCreationDate() {
     return creationDate;
