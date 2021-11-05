@@ -108,11 +108,16 @@ public class DatasetApi extends AbstractApi {
     private <D> DataverseHttpResponse<D> getVersionedFromTarget(String endPoint, String version, Class<?>... outputClass) throws IOException, DataverseException {
         log.trace("ENTER");
         if (isPersistentId) {
-            HashMap<String, String> parameters = new HashMap<>();
-            parameters.put("persistentId", id);
-            return httpClientWrapper.get(targetBase.resolve(persistendId).resolve("versions/").resolve(version).resolve(endPoint), parameters, outputClass);
-        } else {
-            return httpClientWrapper.get(targetBase.resolve(id).resolve("versions/").resolve(version).resolve(endPoint), outputClass);
+          HashMap<String, String> parameters = new HashMap<>();
+          parameters.put("persistentId", id);
+          Path startPath = targetBase.resolve(persistendId).resolve("versions/");
+          Path path = version.equals(":latest") ? startPath : startPath.resolve(version);
+          return httpClientWrapper.get(path.resolve(endPoint), parameters, outputClass);
+        }
+        else {
+          Path startPath = targetBase.resolve(id).resolve("versions/");
+          Path path = version.equals(":latest") ? startPath : startPath.resolve(version);
+          return httpClientWrapper.get(path.resolve(endPoint), outputClass);
         }
     }
 }
