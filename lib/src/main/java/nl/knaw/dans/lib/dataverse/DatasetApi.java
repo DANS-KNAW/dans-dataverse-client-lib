@@ -63,7 +63,7 @@ public class DatasetApi extends AbstractApi {
      */
     public DataverseResponse<List<DatasetVersion>> getFiles(String version) throws IOException, DataverseException {
         log.trace("ENTER");
-        return getVersionedFromTarget("files", version, List.class, FileMeta.class);
+        return getVersionedFromTarget(version, null, List.class, FileMeta.class);
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#export-metadata-of-a-dataset-in-various-formats

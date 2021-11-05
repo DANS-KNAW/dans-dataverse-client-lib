@@ -22,7 +22,7 @@ public class FileMeta {
   private String label;
   private String description;
   private String directoryLabel;
-  private Boolean restrict;
+  private Boolean restricted;
   private List<String> categories; // TODO Enum? https://guides.dataverse.org/en/latest/user/dataset-management.html?highlight=category#file-tags
   private DataFile dataFile;
   private Boolean forceReplace;
@@ -54,12 +54,12 @@ public class FileMeta {
     this.directoryLabel = directoryLabel;
   }
 
-  public Boolean getRestrict() {
-    return restrict;
+  public Boolean getRestricted() {
+    return restricted;
   }
 
-  public void setRestrict(Boolean restrict) {
-    this.restrict = restrict;
+  public void setRestricted(Boolean restricted) {
+    this.restricted = restricted;
   }
 
   public List<String> getCategories() {

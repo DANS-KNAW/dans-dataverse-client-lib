@@ -1,23 +1,21 @@
 {
-  "label": "some.pdf",
-  "description": "just something",
-  "directoryLabel": "path/to",
-  "restrict": false,
-  "categories": ["Data", "Documentation", "Code"],
+  "label": "deposit-api.jpg",
+  "restricted": true,
+  "version": 2,
+  "datasetVersionId": 1,
   "dataFile": {
-    "id" :  "4",
-    "persistentId" : "",
-    "pidURL" :  "",
-    "filename" : "",
-    "contentType" :  "application/pdf",
-    "filesize" : 767429,
-    "storageIdentifier" :  "file://17cb1aed54c-7a650a5ee0ea",
-    "rootDataFileId" : "",
-    "checksum" : {
-      "type" :  "SHA1",
-      "value" : "bebf938060b6b1aa9f086ac368339d23e13719c7"
+    "id": 3,
+    "persistentId": "",
+    "pidURL": "",
+    "filename": "deposit-api.jpg",
+    "contentType": "image/jpeg",
+    "filesize": 1319202,
+    "storageIdentifier": "file://17cb1aeb1d8-1d03708f8bfe",
+    "rootDataFileId": -1,
+    "checksum": {
+      "type": "SHA-1",
+      "value": "31cc50f4bbef69aed5658b8aef69cc54b67138be"
     },
-    "creationDate" : "2021-10-24 11:43:22.025"
-  },
-  "forceReplace": true
+    "creationDate": "2021-10-24"
+  }
 }
