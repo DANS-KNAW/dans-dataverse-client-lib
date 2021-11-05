@@ -16,6 +16,7 @@
 package nl.knaw.dans.lib.dataverse.model.file;
 
 public class Checksum {
+
   private String type;
   private String Value;
 

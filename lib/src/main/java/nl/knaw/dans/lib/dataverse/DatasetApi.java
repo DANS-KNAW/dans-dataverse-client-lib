@@ -61,9 +61,9 @@ public class DatasetApi extends AbstractApi {
      * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#list-files-in-a-dataset
      *
      */
-    public DataverseResponse<List<DatasetVersion>> getFiles(String version) throws IOException, DataverseException {
+    public DataverseResponse<List<FileMeta>> getFiles(String version) throws IOException, DataverseException {
         log.trace("ENTER");
-        return getVersionedFromTarget(version, null, List.class, FileMeta.class);
+        return getVersionedFromTarget("files", version, List.class, FileMeta.class);
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#export-metadata-of-a-dataset-in-various-formats
@@ -110,9 +110,9 @@ public class DatasetApi extends AbstractApi {
         if (isPersistentId) {
             HashMap<String, String> parameters = new HashMap<>();
             parameters.put("persistentId", id);
-            return httpClientWrapper.get(targetBase.resolve(persistendId).resolve("versions/").resolve(endPoint), parameters, outputClass);
+            return httpClientWrapper.get(targetBase.resolve(persistendId).resolve("versions/").resolve(version).resolve(endPoint), parameters, outputClass);
         } else {
-            return httpClientWrapper.get(targetBase.resolve(id).resolve("versions/").resolve(endPoint), outputClass);
+            return httpClientWrapper.get(targetBase.resolve(id).resolve("versions/").resolve(version).resolve(endPoint), outputClass);
         }
     }
 }

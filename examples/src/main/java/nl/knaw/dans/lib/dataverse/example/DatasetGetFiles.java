@@ -17,7 +17,7 @@ package nl.knaw.dans.lib.dataverse.example;
 
 import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
-import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
+import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,11 @@ public class DatasetGetFiles extends ExampleBase {
     private static final Logger log = LoggerFactory.getLogger(DatasetGetFiles.class);
 
     public static void main(String[] args) throws Exception {
-        DataverseResponse<List<DatasetVersion>> r = client.dataset(args[0]).getFiles(args[1]);
+        DataverseResponse<List<FileMeta>> r = client.dataset(args[0]).getFiles(args[1]);
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
+        log.info("Label: {}", r.getData().get(0).getLabel());
+        log.info("DirectoryLabel: {}", r.getData().get(0).getDirectoryLabel());
+        log.info("DataFile StorageIdentifier: {}", r.getData().get(0).getDataFile().getStorageIdentifier());
+        log.info("DataFile Checksum Value: {}", r.getData().get(0).getDataFile().getChecksum().getValue());
     }
 }

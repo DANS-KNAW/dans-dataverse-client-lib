@@ -22,6 +22,8 @@ public class FileMeta {
   private String label;
   private String description;
   private String directoryLabel;
+  private int version;
+  private int datasetVersionId;
   private Boolean restricted;
   private List<String> categories; // TODO Enum or vocab? https://guides.dataverse.org/en/latest/user/dataset-management.html?highlight=category#file-tags
   private DataFile dataFile;
@@ -84,6 +86,22 @@ public class FileMeta {
 
   public void setDataFile(DataFile dataFile) {
     this.dataFile = dataFile;
+  }
+
+  public int getDatasetVersionId() {
+    return datasetVersionId;
+  }
+
+  public void setDatasetVersionId(int datasetVersionId) {
+    this.datasetVersionId = datasetVersionId;
+  }
+
+  public int getVersion() {
+    return version;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
   }
 
   // TODO public ... toPrestagedFile = ???
