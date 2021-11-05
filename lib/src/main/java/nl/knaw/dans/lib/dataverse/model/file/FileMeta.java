@@ -23,7 +23,7 @@ public class FileMeta {
   private String description;
   private String directoryLabel;
   private Boolean restricted;
-  private List<String> categories; // TODO Enum? https://guides.dataverse.org/en/latest/user/dataset-management.html?highlight=category#file-tags
+  private List<String> categories; // TODO Enum or vocab? https://guides.dataverse.org/en/latest/user/dataset-management.html?highlight=category#file-tags
   private DataFile dataFile;
   private Boolean forceReplace;
 
