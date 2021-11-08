@@ -28,7 +28,8 @@ abstract class AbstractApi {
     protected Path buildPath(Path base, String... components) {
         Path p = base;
         for (String c: components) {
-            p  = p.resolve(c + "/");
+            if (c!= null && !c.equals("") && !c.equals(":latest"))
+                p  = p.resolve(c + "/");
         }
         return p;
     }
