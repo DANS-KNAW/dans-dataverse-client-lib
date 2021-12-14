@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse.model.dataset;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
 import java.util.List;
@@ -101,11 +102,13 @@ public class DatasetVersion {
         this.versionState = versionState;
     }
 
-    public String getUnf() {
+    @JsonProperty("UNF")
+    public String getUNF() {
         return unf;
     }
 
-    public void setUnf(String unf) {
+    @JsonProperty("UNF")
+    public void setUNF(String unf) {
         this.unf = unf;
     }
 

@@ -37,9 +37,9 @@ public class DatasetGetAllVersions extends ExampleBase {
             DatasetVersion firstVersion = r.getData().get(0);
             log.info("First Version Create Time: {}", firstVersion.getCreateTime());
             log.info("First Version State: {}", firstVersion.getVersionState());
-            if (firstVersion.getFiles().size() > 0) {
-                FileMeta firstFile = firstVersion.getFiles().get(0);
-                log.info("First File Label: {}", firstFile.getLabel());
+            for (FileMeta fm: firstVersion.getFiles()) {
+                log.info("File Label: {}", fm.getLabel());
+                log.info("File UNF (if present): {}", fm.getDataFile().getUnf());
             }
         }
     }

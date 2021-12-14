@@ -99,9 +99,11 @@ public class DatasetApi extends AbstractApi {
      * Edits the current draft's metadata, adding the fields that do not exist yet. If `replace` is set to `false`, all specified
      * fields must be either currently empty or allow multiple values. Replaces existing data.
      *
-     * @see [[https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata]]
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata
      * @param s JSON document containing the edits to perform
-     * @return
+     * @return DatasetVersion
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseResponse<DatasetVersion> editMetadata(String s) throws IOException, DataverseException {
         return editMetadata(s, true);
@@ -111,10 +113,12 @@ public class DatasetApi extends AbstractApi {
      * Edits the current draft's metadata, adding the fields that do not exist yet. If `replace` is set to `false`, all specified
      * fields must be either currently empty or allow multiple values.
      *
-     * @see [[https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata]]
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata
      * @param s       JSON document containing the edits to perform
      * @param replace whether to replace existing values
-     * @return
+     * @return DatasetVersion
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseResponse<DatasetVersion> editMetadata(String s, Boolean replace) throws IOException, DataverseException {
         log.trace("ENTER");
@@ -128,10 +132,12 @@ public class DatasetApi extends AbstractApi {
      * Edits the current draft's metadata, adding the fields that do not exist yet. If `replace` is set to `false`, all specified
      * fields must be either currently empty or allow multiple values.
      *
-     * @see [[https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata]]
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata
      * @param fields  list of fields to edit
      * @param replace whether to replace existing values
-     * @return
+     * @return DatasetVersion
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseResponse<DatasetVersion> editMetadata(FieldList fields, Boolean replace) throws IOException, DataverseException {
         return editMetadata(httpClientWrapper.getObjectMapper().writeValueAsString(fields), replace);
@@ -140,9 +146,11 @@ public class DatasetApi extends AbstractApi {
     /**
      * Edits the current draft's metadata, adding the fields that do not exist yet.
      *
-     * @see [[https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata]]
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#edit-dataset-metadata
      * @param fields  list of fields to edit
-     * @return
+     * @return DatasetVersion
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseResponse<DatasetVersion> editMetadata(FieldList fields) throws IOException, DataverseException {
         return editMetadata(httpClientWrapper.getObjectMapper().writeValueAsString(fields), true);
