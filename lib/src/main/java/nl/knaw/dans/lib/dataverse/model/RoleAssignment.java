@@ -16,8 +16,11 @@
 package nl.knaw.dans.lib.dataverse.model;
 
 public class RoleAssignment {
+    private String id;
     private String assignee;
-    private String role;
+    private String roleId;
+    private String _roleAlias;
+    private String definitionPointId;
 
     public String getAssignee() {
         return assignee;
@@ -27,11 +30,35 @@ public class RoleAssignment {
         this.assignee = assignee;
     }
 
-    public String getRole() {
-        return role;
+    public String getId() {
+        return id;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String get_roleAlias() {
+        return _roleAlias;
+    }
+
+    public void set_roleAlias(String _roleAlias) {
+        this._roleAlias = _roleAlias;
+    }
+
+    public String getDefinitionPointId() {
+        return definitionPointId;
+    }
+
+    public void setDefinitionPointId(String definitionPointId) {
+        this.definitionPointId = definitionPointId;
     }
 }

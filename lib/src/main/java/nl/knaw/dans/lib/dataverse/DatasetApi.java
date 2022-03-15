@@ -16,6 +16,7 @@
 package nl.knaw.dans.lib.dataverse;
 
 import nl.knaw.dans.lib.dataverse.model.Lock;
+import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetPublicationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
@@ -216,7 +217,16 @@ public class DatasetApi extends AbstractApi {
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-dataset-draft
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#set-citation-date-field-type-for-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#revert-citation-date-field-type-to-default-for-dataset
-    // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#list-role-assignments-in-a-dataset
+    /**
+     * See [Dataverse API Guide].
+     *
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#list-role-assignments-on-a-dataverse-api
+     * @return
+     */
+    public DataverseHttpResponse<List<RoleAssignment>> listRoleAssignments() throws IOException, DataverseException {
+        log.trace("ENTER");
+        return getUnversionedFromTarget( "assignments/", List.class, RoleAssignment.class);
+    }
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#assign-a-new-role-on-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-role-assignment-from-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#create-a-private-url-for-a-dataset
