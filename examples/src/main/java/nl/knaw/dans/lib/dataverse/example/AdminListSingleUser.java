@@ -28,6 +28,10 @@ public class AdminListSingleUser extends ExampleBase {
     public static void main(String[] args) throws Exception {
         String userId = args[0];
         DataverseResponse<AuthenticatedUser> r = client.admin().listSingleUser(userId);
+        log.info(r.getEnvelopeAsJson().toPrettyString());
+        log.info("affiliation: " + r.getData().getAffiliation());
+        log.info("displayName: " + r.getData().getDisplayName());
+        log.info(mapper.writeValueAsString(r.getEnvelope()));
         log.info(r.getEnvelopeAsString());
     }
 }

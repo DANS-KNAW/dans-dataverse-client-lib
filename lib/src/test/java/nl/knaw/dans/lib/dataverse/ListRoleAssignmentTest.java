@@ -17,8 +17,10 @@ package nl.knaw.dans.lib.dataverse;
 
 import nl.knaw.dans.lib.dataverse.model.DataverseEnvelope;
 import nl.knaw.dans.lib.dataverse.model.ModelFixture;
-import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
+import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -27,22 +29,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ListRoleAssignmentTest extends ModelFixture {
 
+    private static final Logger log = LoggerFactory.getLogger(ListRoleAssignmentTest.class);
+
+    private static class ListRoleAssignment extends DataverseEnvelope<List<RoleAssignmentReadOnly>> {
+    }
+
     private static final Class<ListRoleAssignment> wrappedClassUnderTest = ListRoleAssignment.class;
-
-    private static class ListRoleAssignment extends DataverseEnvelope<List<RoleAssignment>> {
-    }
-
-    private File getFile() {
-        return getTestJsonFileFor(wrappedClassUnderTest);
-    }
+    private final File jsonFile = getTestJsonFileFor(wrappedClassUnderTest);
 
     @Test
     public void canDeserialize() throws Exception {
-        assertEquals(":authenticated-users", mapper.readValue(getFile(), wrappedClassUnderTest).getData().get(2).getAssignee());
+        assertEquals(
+                ":authenticated-users",
+                mapper.readValue(jsonFile, wrappedClassUnderTest).getData().get(2).getAssignee()
+        );
     }
 
     @Test
     public void roundTrip() throws Exception {
-        assertEquals("@dataverseAdmin", roundTrip(getFile(), wrappedClassUnderTest).getData().get(0).getAssignee());
+        assertEquals(
+                "admin",
+                roundTrip(jsonFile, wrappedClassUnderTest).getData().get(1).get_roleAlias()
+        );
     }
 }

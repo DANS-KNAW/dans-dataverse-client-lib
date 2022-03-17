@@ -30,18 +30,21 @@ public class ListSingleUserTest extends ModelFixture {
     }
 
     private static final Class<ListSingleUser> wrappedClassUnderTest = ListSingleUser.class;
-
-    private File getFile() {
-        return getTestJsonFileFor(wrappedClassUnderTest);
-    }
+    private final File jsonFile = getTestJsonFileFor(wrappedClassUnderTest);
 
     @Test
     public void canDeserialize() throws Exception {
-        assertEquals("Dataverse Admin", mapper.readValue(getFile(), wrappedClassUnderTest).getData().getDisplayName());
+        assertEquals(
+                "Dataverse Admin",
+                mapper.readValue(jsonFile, wrappedClassUnderTest).getData().getDisplayName()
+        );
     }
 
     @Test
     public void roundTrip() throws Exception {
-        assertEquals("Dataverse.org", roundTrip(getFile(), wrappedClassUnderTest).getData().getAffiliation());
+        assertEquals(
+                "Dataverse.org",
+                roundTrip(jsonFile, wrappedClassUnderTest).getData().getAffiliation()
+        );
     }
 }

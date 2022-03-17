@@ -16,10 +16,8 @@
 package nl.knaw.dans.lib.dataverse.example;
 
 import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
-import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
-import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
-import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
+import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +29,13 @@ public class DatasetListRoleAssignments extends ExampleBase {
 
     public static void main(String[] args) throws Exception {
         String persistentId = args[0];
-        DataverseHttpResponse<List<RoleAssignment>> r = client.dataset(persistentId).listRoleAssignments();
+        DataverseHttpResponse<List<RoleAssignmentReadOnly>> r = client.dataset(persistentId).listRoleAssignments();
+        log.info(r.getEnvelopeAsJson().toPrettyString());
+        log.info("nr of rows: " + r.getData().size());
+        log.info("roleId: " + r.getData().get(0).getRoleId());
+        log.info("id: " + r.getData().get(0).getId());
+        log.info("assignee: " + r.getData().get(0).getAssignee());
+        log.info(mapper.writeValueAsString(r.getEnvelope()));// this adds "message" to the envelope and "privateUrlToken" to the role assignments
         log.info(r.getEnvelopeAsString());
     }
 }

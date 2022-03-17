@@ -15,4 +15,5 @@
 #
 
 baseUrl=http://localhost:8080
+unblockKey=s3kretKey
 apiToken=changeme

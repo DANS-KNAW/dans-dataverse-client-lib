@@ -15,13 +15,6 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
-import nl.knaw.dans.lib.dataverse.model.DataMessage;
-import nl.knaw.dans.lib.dataverse.model.Role;
-import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
-import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
-import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
-import nl.knaw.dans.lib.dataverse.model.dataverse.Dataverse;
-import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseItem;
 import nl.knaw.dans.lib.dataverse.model.user.AuthenticatedUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * API end-points that operate on a dataverse collection.

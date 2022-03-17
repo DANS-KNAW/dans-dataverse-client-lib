@@ -17,7 +17,7 @@ package nl.knaw.dans.lib.dataverse;
 
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import nl.knaw.dans.lib.dataverse.model.Role;
-import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
+import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
 import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
 import nl.knaw.dans.lib.dataverse.model.dataverse.Dataverse;
 import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseItem;
@@ -205,7 +205,7 @@ public class DataverseApi extends AbstractApi {
      *
      * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#assign-a-new-role-on-a-dataverse-collection
      */
-    public DataverseHttpResponse<DataMessage> assignRole(RoleAssignment roleAssignment) throws IOException, DataverseException {
+    public DataverseHttpResponse<DataMessage> assignRole(RoleAssignmentReadOnly roleAssignment) throws IOException, DataverseException {
         log.trace("ENTER");
         // TODO: implement
         throw new UnsupportedOperationException();
