@@ -20,10 +20,10 @@ baseUrl=http://localhost:8080
 # https://<HOST>/dataverseuser.xhtml?selectTab=apiTokenTab
 apiToken=changeme
 
-# to execute admin examples:
-# - enter the machine configured with the baseUrl
-# - execute put commands defined by
-#   https://guides.dataverse.org/en/latest/installation/config.html#blockedapikey
-# a wrong value causes a DataverseException: Endpoint available using API key only
-# omitting these steps causes: Endpoint available from localhost only
+# from https://guides.dataverse.org/en/latest/installation/config.html#blockedapikey
+# - to execute admin examples:
+#   curl -X PUT -d s3kretKey http://localhost:8080/api/admin/settings/:BlockedApiKey
+#   curl -X PUT -d unblock-key http://localhost:8080/api/admin/settings/:BlockedApiPolicy
+# - to reset for applications using the library:
+#   curl -X PUT -d localhost-only http://localhost:8080/api/admin/settings/:BlockedApiPolicy/?unblock-key=s3kretKey
 unblockKey=s3kretKey
