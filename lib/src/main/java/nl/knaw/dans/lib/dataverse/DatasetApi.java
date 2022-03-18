@@ -217,15 +217,17 @@ public class DatasetApi extends AbstractApi {
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-dataset-draft
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#set-citation-date-field-type-for-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#revert-citation-date-field-type-to-default-for-dataset
+
     /**
      * See [Dataverse API Guide].
      *
      * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#list-role-assignments-on-a-dataverse-api
+     *
      * @return
      */
     public DataverseHttpResponse<List<RoleAssignmentReadOnly>> listRoleAssignments() throws IOException, DataverseException {
         log.trace("ENTER");
-        return getUnversionedFromTarget( "assignments", List.class, RoleAssignmentReadOnly.class);
+        return getUnversionedFromTarget("assignments", List.class, RoleAssignmentReadOnly.class);
     }
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#assign-a-new-role-on-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-role-assignment-from-a-dataset
@@ -425,8 +427,7 @@ public class DatasetApi extends AbstractApi {
     }
 
     /**
-     * Helper function that waits until the specified lockState function returns `true`, or throws a LockException if this never occurs within `maxNumberOrRetries` with
-     * `waitTimeInMilliseconds`
+     * Helper function that waits until the specified lockState function returns `true`, or throws a LockException if this never occurs within `maxNumberOrRetries` with `waitTimeInMilliseconds`
      * pauses.
      *
      * @param lockState              the function that returns whether the required state has been reached

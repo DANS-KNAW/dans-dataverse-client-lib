@@ -15,8 +15,6 @@
  */
 package nl.knaw.dans.lib.dataverse.model.search;
 
-import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
-import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

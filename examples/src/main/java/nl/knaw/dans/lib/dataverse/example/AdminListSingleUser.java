@@ -38,6 +38,6 @@ public class AdminListSingleUser extends ExampleBase {
         log.info("DisplayName: " + r.getData().getDisplayName());
         log.info("one-liners showing differences");
         log.info("model deserialized: " + mapper.writeValueAsString(r.getEnvelope()));
-        log.info("original response:  "+r.getEnvelopeAsString());
+        log.info("original response:  " + r.getEnvelopeAsString());
     }
 }

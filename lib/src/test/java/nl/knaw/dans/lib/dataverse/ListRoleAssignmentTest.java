@@ -40,16 +40,16 @@ public class ListRoleAssignmentTest extends ModelFixture {
     @Test
     public void canDeserialize() throws Exception {
         assertEquals(
-                ":authenticated-users",
-                mapper.readValue(jsonFile, wrappedClassUnderTest).getData().get(2).getAssignee()
+            ":authenticated-users",
+            mapper.readValue(jsonFile, wrappedClassUnderTest).getData().get(2).getAssignee()
         );
     }
 
     @Test
     public void roundTrip() throws Exception {
         assertEquals(
-                "admin",
-                roundTrip(jsonFile, wrappedClassUnderTest).getData().get(1).get_roleAlias()
+            "admin",
+            roundTrip(jsonFile, wrappedClassUnderTest).getData().get(1).get_roleAlias()
         );
     }
 }

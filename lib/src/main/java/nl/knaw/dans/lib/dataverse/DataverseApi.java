@@ -18,7 +18,6 @@ package nl.knaw.dans.lib.dataverse;
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import nl.knaw.dans.lib.dataverse.model.Role;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
-import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
 import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
 import nl.knaw.dans.lib.dataverse.model.dataverse.Dataverse;
 import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseItem;

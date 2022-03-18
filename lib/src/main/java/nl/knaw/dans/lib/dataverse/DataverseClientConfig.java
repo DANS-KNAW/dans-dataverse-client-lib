@@ -31,7 +31,7 @@ public class DataverseClientConfig {
      * @param apiToken                                 the API token used for authorization
      * @param awaitLockStateMaxNumberOfRetries         the maximum number of tries for {@link DatasetApi#awaitLock(String)} API (default 30)
      * @param awaitLockStateMillisecondsBetweenRetries the number or milliseconds to wait between tries for {@link DatasetApi#awaitLock(String)} API (default 500)
-     * @param unblockKey                                a key required for admin tasks when not running on localhost
+     * @param unblockKey                               a key required for admin tasks when not running on localhost
      */
     public DataverseClientConfig(URI baseUrl, String apiToken, int awaitLockStateMaxNumberOfRetries, int awaitLockStateMillisecondsBetweenRetries, String unblockKey) {
         this.baseUrl = baseUrl;
@@ -44,9 +44,9 @@ public class DataverseClientConfig {
     /**
      * Configuration settings for the {@link DataverseClient}.
      *
-     * @param baseUrl  the base URL of the Dataverse server to communicate with
-     * @param apiToken the API token used for authorization
-     * @param unblockKey                                a key required for admin tasks when not running on localhost
+     * @param baseUrl    the base URL of the Dataverse server to communicate with
+     * @param apiToken   the API token used for authorization
+     * @param unblockKey a key required for admin tasks when not running on localhost
      */
     public DataverseClientConfig(URI baseUrl, String apiToken, String unblockKey) {
         this(baseUrl, apiToken, 30, 500, unblockKey);
