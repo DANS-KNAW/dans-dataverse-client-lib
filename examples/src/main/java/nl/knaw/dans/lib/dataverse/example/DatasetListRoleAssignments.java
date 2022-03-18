@@ -35,7 +35,8 @@ public class DatasetListRoleAssignments extends ExampleBase {
         log.info("roleId: " + r.getData().get(0).getRoleId());
         log.info("id: " + r.getData().get(0).getId());
         log.info("assignee: " + r.getData().get(0).getAssignee());
-        log.info(mapper.writeValueAsString(r.getEnvelope()));// this adds "message" to the envelope and "privateUrlToken" to the role assignments
-        log.info(r.getEnvelopeAsString());
+        log.info("one-liners showing differences");
+        log.info("model deserialized: " + mapper.writeValueAsString(r.getEnvelope()));// this adds "message" to the envelope and "privateUrlToken" to the role assignments
+        log.info("original response:  "+r.getEnvelopeAsString());
     }
 }

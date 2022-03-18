@@ -171,7 +171,7 @@ class HttpClientWrapper implements MediaTypes {
                     .collect(Collectors.toList());
             URIBuilder uriBuilder = new URIBuilder(config.getBaseUrl().resolve(subPath.toString()));
             uriBuilder.setParameters(nameValuePairs);
-            Optional.ofNullable(config.getUnblockKey()).ifPresent(key -> uriBuilder.addParameter(UNBLOCK_KEY, key));
+            Optional.ofNullable(config.getUnblockKey()).ifPresent(key -> uriBuilder.setParameter(UNBLOCK_KEY, key));
             URI uri = uriBuilder.build();
             log.debug("buildUri: {}", uri.toASCIIString());
             return uri;
@@ -186,7 +186,7 @@ class HttpClientWrapper implements MediaTypes {
     }
 
     private HttpResponse dispatch(HttpUriRequest request) throws IOException, DataverseException {
-        Optional.ofNullable(config.getApiToken()).ifPresent(token -> request.addHeader(HEADER_X_DATAVERSE_KEY, token));
+        Optional.ofNullable(config.getApiToken()).ifPresent(token -> request.setHeader(HEADER_X_DATAVERSE_KEY, token));
         HttpResponse r = httpClient.execute(request);
         if (r.getStatusLine().getStatusCode() >= 200 && r.getStatusLine().getStatusCode() < 300)
             return r;

@@ -22,7 +22,7 @@ public class DataverseClientConfig {
     private final String apiToken;
     private final int awaitLockStateMaxNumberOfRetries;
     private final int awaitLockStateMillisecondsBetweenRetries;
-    private String unblockKey;
+    private final String unblockKey;
 
     /**
      * Configuration settings for the {@link DataverseClient}.

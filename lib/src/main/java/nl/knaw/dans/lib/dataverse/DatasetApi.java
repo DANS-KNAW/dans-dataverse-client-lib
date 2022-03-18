@@ -225,7 +225,7 @@ public class DatasetApi extends AbstractApi {
      */
     public DataverseHttpResponse<List<RoleAssignmentReadOnly>> listRoleAssignments() throws IOException, DataverseException {
         log.trace("ENTER");
-        return getUnversionedFromTarget( "assignments/", List.class, RoleAssignmentReadOnly.class);
+        return getUnversionedFromTarget( "assignments", List.class, RoleAssignmentReadOnly.class);
     }
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#assign-a-new-role-on-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-role-assignment-from-a-dataset
