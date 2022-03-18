@@ -15,5 +15,15 @@
 #
 
 baseUrl=http://localhost:8080
-unblockKey=s3kretKey
+
+# login on the machine configured with the baseUrl and visit
+# https://<HOST>/dataverseuser.xhtml?selectTab=apiTokenTab
 apiToken=changeme
+
+# to execute admin examples:
+# - enter the machine configured with the baseUrl
+# - execute put commands defined by
+#   https://guides.dataverse.org/en/latest/installation/config.html#blockedapikey
+# a wrong value causes a DataverseException: Endpoint available using API key only
+# omitting these steps causes: Endpoint available from localhost only
+unblockKey=s3kretKey

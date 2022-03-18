@@ -25,12 +25,17 @@ public class AdminListSingleUser extends ExampleBase {
 
     private static final Logger log = LoggerFactory.getLogger(AdminListSingleUser.class);
 
+    static {
+        log.info("For exceptions on Admin examples see 'unblockKey' in dataverse.properties.template");
+    }
+
     public static void main(String[] args) throws Exception {
         String userId = args[0];
         DataverseResponse<AuthenticatedUser> r = client.admin().listSingleUser(userId);
         log.info(r.getEnvelopeAsJson().toPrettyString());
-        log.info("affiliation: " + r.getData().getAffiliation());
-        log.info("displayName: " + r.getData().getDisplayName());
+        log.info("requested Id: " + userId);
+        log.info("Id: " + r.getData().getId());
+        log.info("DisplayName: " + r.getData().getDisplayName());
         log.info(mapper.writeValueAsString(r.getEnvelope()));
         log.info(r.getEnvelopeAsString());
     }
