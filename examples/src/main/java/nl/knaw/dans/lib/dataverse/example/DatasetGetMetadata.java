@@ -28,7 +28,7 @@ public class DatasetGetMetadata extends ExampleBase {
 
     public static void main(String[] args) throws Exception {
         String persistentId = args[0];
-        DataverseResponse<DatasetMetadata> r = client.dataset(persistentId).getMetadataExport();
+        DataverseResponse<DatasetMetadata> r = client.dataset(persistentId).getMetadata();
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
 
         DatasetMetadata metadataExport = r.getData();

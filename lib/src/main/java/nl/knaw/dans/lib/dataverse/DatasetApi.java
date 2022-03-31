@@ -189,7 +189,7 @@ public class DatasetApi extends AbstractApi {
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request
      */
-    public DataverseResponse<DatasetMetadata> getMetadataExport() throws IOException, DataverseException {
+    public DataverseResponse<DatasetMetadata> getMetadata() throws IOException, DataverseException {
         return getUnversionedFromTarget("",  DatasetMetadata.class);
     }
 
