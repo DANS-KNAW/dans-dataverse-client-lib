@@ -15,7 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse.model.dataset;
 
-public class DatasetMetadata {
+public class DatasetLatestVersion {
     private int id;
     private String identifier;
     private String persistentUrl;

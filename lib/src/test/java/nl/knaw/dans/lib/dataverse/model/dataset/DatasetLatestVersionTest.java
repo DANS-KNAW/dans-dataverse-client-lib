@@ -19,23 +19,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DatasetMetadataTest extends ModelDatasetMapperFixture {
-    private static final Class<DatasetMetadata> classUnderTest = DatasetMetadata.class;
+class DatasetLatestVersionTest extends ModelDatasetMapperFixture {
+    private static final Class<DatasetLatestVersion> classUnderTest = DatasetLatestVersion.class;
 
     @Test
     public void canDeserialize() throws Exception {
-        DatasetMetadata de = mapper.readValue(getTestJsonFileFor(classUnderTest), classUnderTest);
-        assertEquals(classUnderTest, de.getClass());
-        assertEquals("file://10.5072/DAR/LDIU4X", de.getStorageIdentifier());
-        assertEquals("DANS Archaeology Data Station (dev)", de.getPublisher());
-        assertEquals("2022-03-24", de.getPublicationDate());
-        assertEquals(1, de.getLatestVersion().getFiles().size());
+        DatasetLatestVersion latestVersion = mapper.readValue(getTestJsonFileFor(classUnderTest), classUnderTest);
+        assertEquals(classUnderTest, latestVersion.getClass());
+        assertEquals("file://10.5072/DAR/LDIU4X", latestVersion.getStorageIdentifier());
+        assertEquals("DANS Archaeology Data Station (dev)", latestVersion.getPublisher());
+        assertEquals("2022-03-24", latestVersion.getPublicationDate());
+        assertEquals(1, latestVersion.getLatestVersion().getFiles().size());
     }
 
     @Test
     public void roundTrip() throws Exception {
-        DatasetMetadata mb = roundTrip(getTestJsonFileFor(classUnderTest), classUnderTest);
-        assertEquals(classUnderTest, mb.getClass());
+        DatasetLatestVersion latestVersion = roundTrip(getTestJsonFileFor(classUnderTest), classUnderTest);
+        assertEquals(classUnderTest, latestVersion.getClass());
     }
-
 }

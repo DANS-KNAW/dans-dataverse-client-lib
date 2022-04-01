@@ -17,7 +17,7 @@ package nl.knaw.dans.lib.dataverse;
 
 import nl.knaw.dans.lib.dataverse.model.Lock;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
-import nl.knaw.dans.lib.dataverse.model.dataset.DatasetMetadata;
+import nl.knaw.dans.lib.dataverse.model.dataset.DatasetLatestVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetPublicationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
@@ -66,7 +66,16 @@ public class DatasetApi extends AbstractApi {
             extraHeaders.put("X-Dataverse-invocationID", invocationId);
     }
 
-    // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#get-json-representation-of-a-dataset
+    /**
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#get-json-representation-of-a-dataset
+     *
+     * @return a JSON object that starts at the dataset level, most fields are replicated at the dataset version level.
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     */
+    public DataverseResponse<DatasetLatestVersion> viewLatestVersion() throws IOException, DataverseException {
+        return getUnversionedFromTarget("", DatasetLatestVersion.class);
+    }
 
     /**
      * See [Dataverse API Guide].
@@ -182,17 +191,7 @@ public class DatasetApi extends AbstractApi {
         return editMetadata(httpClientWrapper.writeValueAsString(fields), true);
     }
 
-    /**
-     *  [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#export-metadata-of-a-dataset-in-various-formats
-     *
-     * @return DatasetMetadataExport
-     * @throws IOException        when I/O problems occur during the interaction with Dataverse
-     * @throws DataverseException when Dataverse fails to perform the request
-     */
-    public DataverseResponse<DatasetMetadata> getMetadata() throws IOException, DataverseException {
-        return getUnversionedFromTarget("",  DatasetMetadata.class);
-    }
-
+    // TODO https://guides.dataverse.org/en/latest/api/native-api.html#export-metadata-of-a-dataset-in-various-formats
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#schema-org-json-ld
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#view-dataset-files-and-folders-as-a-directory-index
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#list-all-metadata-blocks-for-a-dataset

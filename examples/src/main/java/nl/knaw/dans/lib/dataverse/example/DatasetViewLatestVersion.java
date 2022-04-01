@@ -17,21 +17,21 @@ package nl.knaw.dans.lib.dataverse.example;
 
 import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
-import nl.knaw.dans.lib.dataverse.model.dataset.DatasetMetadata;
+import nl.knaw.dans.lib.dataverse.model.dataset.DatasetLatestVersion;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DatasetGetMetadata extends ExampleBase {
+public class DatasetViewLatestVersion extends ExampleBase {
 
-    private static final Logger log = LoggerFactory.getLogger(DatasetGetMetadata.class);
+    private static final Logger log = LoggerFactory.getLogger(DatasetViewLatestVersion.class);
 
     public static void main(String[] args) throws Exception {
         String persistentId = args[0];
-        DataverseResponse<DatasetMetadata> r = client.dataset(persistentId).getMetadata();
+        DataverseResponse<DatasetLatestVersion> r = client.dataset(persistentId).viewLatestVersion();
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
 
-        DatasetMetadata metadataExport = r.getData();
+        DatasetLatestVersion metadataExport = r.getData();
         log.info("Publication Date: {}", metadataExport.getPublicationDate());
         log.info("Publisher: {}", metadataExport.getPublisher());
         for (FileMeta fm : metadataExport.getLatestVersion().getFiles()) {
