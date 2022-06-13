@@ -26,6 +26,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -239,7 +240,27 @@ public class DatasetApi extends AbstractApi {
         log.trace("ENTER");
         return getUnversionedFromTarget("assignments", List.class, RoleAssignmentReadOnly.class);
     }
-    // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#assign-a-new-role-on-a-dataset
+
+    /**
+     * See [Dataverse API Guide].
+     *
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#assign-a-new-role-on-a-dataset
+     *
+     * @param roleAssignment JSON document describing the assignment
+     * @return
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     */
+    public DataverseResponse<RoleAssignmentReadOnly> assignRole(String roleAssignment) throws IOException, DataverseException {
+        log.trace("ENTER");
+        EntityBuilder builder = EntityBuilder.create();
+        builder.setText(roleAssignment);
+        builder.setContentType(ContentType.APPLICATION_JSON);
+        // TODO ? builder.setContentEncoding()
+        return postToTarget("assignments", builder.build(), Collections.emptyMap(), RoleAssignmentReadOnly.class);
+    }
+
+
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-role-assignment-from-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#create-a-private-url-for-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#get-the-private-url-for-a-dataset
