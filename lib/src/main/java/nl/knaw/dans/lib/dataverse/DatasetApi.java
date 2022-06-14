@@ -25,7 +25,6 @@ import nl.knaw.dans.lib.dataverse.model.dataset.FileList;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -41,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
@@ -212,7 +210,7 @@ public class DatasetApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseResponse<Object> updateMetadataFromJsonLd(String metadata, boolean replace) throws IOException, DataverseException {
-        Map<String, List<String>> queryParams = singletonMap("replace", asList((String.valueOf(replace))));
+        Map<String, List<String>> queryParams = singletonMap("replace", singletonList((String.valueOf(replace))));
         return httpClientWrapper.putJsonLdString(subPath("metadata"), metadata, params(queryParams), extraHeaders, RoleAssignmentReadOnly.class);
     }
 
@@ -270,7 +268,7 @@ public class DatasetApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseResponse<RoleAssignmentReadOnly> assignRole(String roleAssignment) throws IOException, DataverseException {
-        return postJsonToTarget("assignments", roleAssignment, emptyMap(), RoleAssignmentReadOnly.class);
+        return httpClientWrapper.postJsonString(subPath("assignments"), roleAssignment, params(emptyMap()), extraHeaders, RoleAssignmentReadOnly.class);
     }
 
 
@@ -292,7 +290,7 @@ public class DatasetApi extends AbstractApi {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         Optional.ofNullable(file).ifPresent(f -> builder.addPart("file", new FileBody(f.toFile(), ContentType.APPLICATION_OCTET_STREAM, f.getFileName().toString())));
         Optional.ofNullable(metadata).ifPresent(m -> builder.addPart("jsonData", new StringBody(m, ContentType.APPLICATION_JSON)));
-        return postToTarget("add", builder.build(), emptyMap(), FileList.class);
+        return httpClientWrapper.post(subPath("add"), builder.build(), params(emptyMap()), extraHeaders, FileList.class);
     }
 
     /**
@@ -352,18 +350,6 @@ public class DatasetApi extends AbstractApi {
         return httpClientWrapper.putJsonString(subPath(endPoint), body, params(queryParams), extraHeaders, outputClass);
     }
 
-    private <D> DataverseResponse<D> postJsonToTarget(String endPoint, String body, Map<String, List<String>> queryParams, Class<?>... outputClass)
-        throws IOException, DataverseException {
-        log.trace("ENTER");
-        return httpClientWrapper.postJsonString(subPath(endPoint), body, params(queryParams), extraHeaders, outputClass);
-    }
-
-    private <D> DataverseResponse<D> postToTarget(String endPoint, HttpEntity body, Map<String, List<String>> queryParams, Class<?>... outputClass)
-        throws IOException, DataverseException {
-        log.trace("ENTER");
-        return httpClientWrapper.post(subPath(endPoint), body, params(queryParams), extraHeaders, outputClass);
-    }
-
     private Map<String, List<String>> params(Map<String, List<String>> queryParams) {
         if (!isPersistentId)
             return queryParams;
@@ -414,9 +400,8 @@ public class DatasetApi extends AbstractApi {
     /**
      * The same
      *
-     * @throws IOException
-     * @throws DataverseException
-     * @throws InterruptedException
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public void awaitUnlock() throws IOException, DataverseException {
         awaitUnlock(httpClientWrapper.getConfig().getAwaitLockStateMaxNumberOfRetries(), httpClientWrapper.getConfig().getAwaitLockStateMillisecondsBetweenRetries());
@@ -440,9 +425,8 @@ public class DatasetApi extends AbstractApi {
      * The same as {@link #awaitLock(String, int, int)} but with defaults for number of tries and time between tries.
      *
      * @param lockType the lock type to wait for
-     * @throws IOException
-     * @throws DataverseException
-     * @throws InterruptedException
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public void awaitLock(String lockType) throws IOException, DataverseException {
         awaitLock(lockType, httpClientWrapper.getConfig().getAwaitLockStateMaxNumberOfRetries(), httpClientWrapper.getConfig().getAwaitLockStateMillisecondsBetweenRetries());
