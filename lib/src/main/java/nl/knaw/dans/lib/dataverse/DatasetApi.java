@@ -45,15 +45,9 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 
-public class DatasetApi extends AbstractApi {
+public class DatasetApi extends AbstractIdApi {
 
     private static final Logger log = LoggerFactory.getLogger(DatasetApi.class);
-    private static final String persistendId = ":persistentId/";
-    private static final String publish = "actions/:publish";
-
-    private final Path targetBase;
-    private final String id;
-    private final boolean isPersistentId;
     private final Map<String, String> extraHeaders = new HashMap<>();
 
     protected DatasetApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId) {
@@ -61,10 +55,7 @@ public class DatasetApi extends AbstractApi {
     }
 
     protected DatasetApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId, String invocationId) {
-        super(httpClientWrapper);
-        this.targetBase = Paths.get("api/datasets/");
-        this.id = id;
-        this.isPersistentId = isPersistentId;
+        super(httpClientWrapper, id, isPersistentId, Paths.get("api/datasets/"));
         if (invocationId != null)
             extraHeaders.put("X-Dataverse-invocationID", invocationId);
     }
@@ -360,29 +351,6 @@ public class DatasetApi extends AbstractApi {
         throws IOException, DataverseException {
         log.trace("ENTER");
         return httpClientWrapper.putJsonString(subPath(endPoint), body, params(queryParams), extraHeaders, outputClass);
-    }
-
-    private Map<String, List<String>> params(Map<String, List<String>> queryParams) {
-        if (!isPersistentId)
-            return queryParams;
-        HashMap<String, List<String>> parameters = new HashMap<>();
-        parameters.put("persistentId", singletonList(id));
-        parameters.putAll(queryParams);
-        return parameters;
-    }
-
-    private Path subPath(String endPoint) {
-        if (isPersistentId)
-            return buildPath(targetBase, persistendId, endPoint);
-        else
-            return buildPath(targetBase, id, endPoint);
-    }
-
-    private Path versionedSubPath(String endPoint, String version) {
-        if (isPersistentId)
-            return buildPath(targetBase, persistendId, "versions", version, endPoint);
-        else
-            return buildPath(targetBase, id, "versions", version, endPoint);
     }
 
     /**
