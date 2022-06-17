@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import nl.knaw.dans.lib.dataverse.model.Lock;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetLatestVersion;
