@@ -92,6 +92,14 @@ public class DataverseClient {
         return new SwordApi(httpClientWrapper);
     }
 
+    public AccessRequestsApi accessRequests(String pid) {
+        return new AccessRequestsApi(httpClientWrapper, pid, true);
+    }
+
+    public AccessRequestsApi accessRequests(int id) {
+        return new AccessRequestsApi(httpClientWrapper, String.valueOf(id), false);
+    }
+
     public SearchApi search() {
         if (searchApi == null)
             searchApi = new SearchApi(httpClientWrapper);
