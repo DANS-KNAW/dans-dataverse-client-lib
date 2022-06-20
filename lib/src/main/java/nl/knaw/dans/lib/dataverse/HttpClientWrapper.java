@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,6 +45,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.singletonList;
+import static org.apache.commons.codec.binary.Base64.encodeBase64String;
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.apache.http.HttpHeaders.PROXY_AUTHORIZATION;
 
 /**
  * Helper class that wraps an HttpClient, the configuration data and a Jackson object mapper. It implements generic methods for sending HTTP requests to the server and deserializing the responses
@@ -194,12 +200,21 @@ class HttpClientWrapper implements MediaTypes {
     }
 
     private HttpResponse dispatch(HttpUriRequest request) throws IOException, DataverseException {
-        Optional.ofNullable(config.getApiToken()).ifPresent(token -> request.setHeader(HEADER_X_DATAVERSE_KEY, token));
+        Optional.ofNullable(config.getApiToken()).ifPresent(token -> setAuthHeader(request, token));
         HttpResponse r = httpClient.execute(request);
         if (r.getStatusLine().getStatusCode() >= 200 && r.getStatusLine().getStatusCode() < 300)
             return r;
         else
             throw new DataverseException(r.getStatusLine().getStatusCode(), EntityUtils.toString(r.getEntity()), r);
+    }
+
+    private void setAuthHeader(HttpUriRequest request, String apiToken) {
+        if (request.getURI().getPath().contains("swordv2")) {
+            String base64 = encodeBase64String((apiToken + ":").getBytes(StandardCharsets.UTF_8));
+            request.setHeader(AUTHORIZATION, "Basic " + base64);
+        }
+        else
+            request.setHeader(HEADER_X_DATAVERSE_KEY, apiToken);
     }
 
 }

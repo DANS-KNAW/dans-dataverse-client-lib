@@ -16,12 +16,21 @@
 package nl.knaw.dans.lib.dataverse;
 
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
+import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
+import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
 public class SwordApi extends AbstractApi {
 
@@ -33,15 +42,17 @@ public class SwordApi extends AbstractApi {
     }
 
     /**
-     * Deletes a file from the current draft of the dataset. To look up the databaseId use [[DatasetApi#listFiles]].
+     * Deletes a file from the current draft of the dataset.
      *
-     * @see [[https://guides.dataverse.org/en/latest/api/sword.html#delete-a-file-by-database-id]]
-     * @param databaseId the database ID of the file to delete
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/sword.html#delete-a-file-by-database-id
+     *
+     * @param databaseId the database ID of the file to delete.
+     *                   To look up use DatasetApi#listFiles.
      * @return
      */
-    public DataverseResponse<Object> deleteFile(int databaseId) throws IOException, DataverseException {
+    public DataverseResponse<Object> deleteFile(int databaseId) throws IOException, DataverseException, URISyntaxException {
         log.trace("ENTER");
-        Path subPath = Paths.get("swordv2/edit-media/file/" + databaseId);
-        return httpClientWrapper.delete(subPath, DataMessage.class);
+        Path path = Paths.get("/dvn/api/data-deposit/v1.1/swordv2/edit-media/file/" + databaseId);
+        return httpClientWrapper.delete(path, DataMessage.class);
     }
 }
