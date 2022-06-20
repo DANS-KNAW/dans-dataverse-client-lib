@@ -16,21 +16,13 @@
 package nl.knaw.dans.lib.dataverse;
 
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
-import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
-import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 
 public class SwordApi extends AbstractApi {
 
@@ -50,9 +42,9 @@ public class SwordApi extends AbstractApi {
      *                   To look up use DatasetApi#listFiles.
      * @return
      */
-    public DataverseResponse<Object> deleteFile(int databaseId) throws IOException, DataverseException, URISyntaxException {
+    public HttpResponse deleteFile(int databaseId) throws IOException, DataverseException {
         log.trace("ENTER");
         Path path = Paths.get("/dvn/api/data-deposit/v1.1/swordv2/edit-media/file/" + databaseId);
-        return httpClientWrapper.delete(path, DataMessage.class);
+        return httpClientWrapper.delete(path);
     }
 }

@@ -46,10 +46,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.singletonList;
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.PROXY_AUTHORIZATION;
 
 /**
  * Helper class that wraps an HttpClient, the configuration data and a Jackson object mapper. It implements generic methods for sending HTTP requests to the server and deserializing the responses
@@ -173,6 +171,11 @@ class HttpClientWrapper implements MediaTypes {
     public <D> DataverseHttpResponse<D> delete(Path subPath, Map<String, List<String>> parameters, Class<?>... outputClass) throws IOException, DataverseException {
         HttpDelete delete = new HttpDelete(buildURi(subPath, parameters));
         return wrap(dispatch(delete), outputClass);
+    }
+
+    public HttpResponse delete(Path subPath) throws IOException, DataverseException {
+        HttpDelete delete = new HttpDelete(buildURi(subPath, new HashMap<>()));
+        return dispatch(delete);
     }
 
     /*
