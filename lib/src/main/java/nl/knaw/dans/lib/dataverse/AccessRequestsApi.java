@@ -29,8 +29,8 @@ import java.util.Map;
 public class AccessRequestsApi extends AbstractIdApi {
 
     private static final Logger log = LoggerFactory.getLogger(AccessRequestsApi.class);
-    private static final Path targetBase = Paths.get("swordv2/edit-media/file/");
-    private final Path subPath = subPath("allowAccessRequest");
+    private static final Path targetBase = Paths.get("api/access/");
+    private final Path subPath = subPath("allowAccessRequest/");
     private final Map<String, List<String>> params = params(new HashMap<>());
     private final HashMap<String, String> headers = new HashMap<>();
 
