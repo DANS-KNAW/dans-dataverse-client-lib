@@ -24,7 +24,7 @@ import java.util.Map;
 
 import static java.util.Collections.singletonList;
 
-abstract class AbstractIdApi extends AbstractApi{
+abstract class AbstractTargetedApi extends AbstractApi{
 
     protected static final String persistendId = ":persistentId/";
     protected static final String publish = "actions/:publish";
@@ -33,7 +33,7 @@ abstract class AbstractIdApi extends AbstractApi{
     protected final String id;
     protected final boolean isPersistentId;
 
-    protected AbstractIdApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId, Path targetBase) {
+    protected AbstractTargetedApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId, Path targetBase) {
         super(httpClientWrapper);
         this.id = id;
         this.isPersistentId = isPersistentId;

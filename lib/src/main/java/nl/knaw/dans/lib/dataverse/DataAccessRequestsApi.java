@@ -26,16 +26,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AccessRequestsApi extends AbstractIdApi {
+public class DataAccessRequestsApi extends AbstractTargetedApi {
 
-    private static final Logger log = LoggerFactory.getLogger(AccessRequestsApi.class);
-    private static final Path targetBase = Paths.get("api/access/");
+    private static final Logger log = LoggerFactory.getLogger(DataAccessRequestsApi.class);
     private final Path subPath = subPath("allowAccessRequest/");
     private final Map<String, List<String>> params = params(new HashMap<>());
     private final HashMap<String, String> headers = new HashMap<>();
 
-    protected AccessRequestsApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId) {
-        super(httpClientWrapper, id, isPersistentId, targetBase);
+    protected DataAccessRequestsApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId) {
+        super(httpClientWrapper, id, isPersistentId, Paths.get("api/access/"));
         log.trace("ENTER");
     }
 
