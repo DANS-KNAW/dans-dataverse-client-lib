@@ -15,7 +15,6 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
-import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class SwordApi extends AbstractApi {
     private static final Logger log = LoggerFactory.getLogger(SwordApi.class);
 
     protected SwordApi(HttpClientWrapper httpClientWrapper) {
-        super(httpClientWrapper.withApiTokenViaBasicAuth());
+        super(httpClientWrapper.sendApiTokenViaBasicAuth());
         log.trace("ENTER");
     }
 

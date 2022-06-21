@@ -62,7 +62,9 @@ class HttpClientWrapper implements MediaTypes {
     private final DataverseClientConfig config;
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
-    protected boolean withApiTokenViaBasicAuth = false;
+
+    // If false, it is sent through the X-Dataverse-key header
+    private boolean sendApiTokenViaBasicAuth = false;
 
     HttpClientWrapper(DataverseClientConfig config, HttpClient httpClient, ObjectMapper mapper) {
         log.trace("ENTER");
@@ -71,10 +73,10 @@ class HttpClientWrapper implements MediaTypes {
         this.mapper = mapper;
     }
 
-    public HttpClientWrapper withApiTokenViaBasicAuth () {
+    public HttpClientWrapper sendApiTokenViaBasicAuth() {
         log.trace("ENTER");
         HttpClientWrapper wrapper = new HttpClientWrapper(getConfig(), httpClient, mapper);
-        wrapper.withApiTokenViaBasicAuth = true;
+        wrapper.sendApiTokenViaBasicAuth = true;
         return wrapper;
     }
 
@@ -221,7 +223,7 @@ class HttpClientWrapper implements MediaTypes {
     }
 
     private void setApiTokenHeader(HttpUriRequest request, String apiToken) {
-        if (withApiTokenViaBasicAuth) {
+        if (sendApiTokenViaBasicAuth) {
             byte[] apiTokenBytes = (apiToken + ":").getBytes(StandardCharsets.UTF_8);
             request.setHeader(AUTHORIZATION, "Basic " + encodeBase64String(apiTokenBytes));
         }
