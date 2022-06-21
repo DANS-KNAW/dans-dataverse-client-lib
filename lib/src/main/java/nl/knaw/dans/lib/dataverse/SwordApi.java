@@ -29,7 +29,7 @@ public class SwordApi extends AbstractApi {
     private static final Logger log = LoggerFactory.getLogger(SwordApi.class);
 
     protected SwordApi(HttpClientWrapper httpClientWrapper) {
-        super(httpClientWrapper);
+        super(httpClientWrapper.withApiTokenViaBasicAuth());
         log.trace("ENTER");
     }
 

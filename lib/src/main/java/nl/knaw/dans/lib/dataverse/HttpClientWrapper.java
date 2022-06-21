@@ -62,11 +62,20 @@ class HttpClientWrapper implements MediaTypes {
     private final DataverseClientConfig config;
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
+    protected boolean withApiTokenViaBasicAuth = false;
 
     HttpClientWrapper(DataverseClientConfig config, HttpClient httpClient, ObjectMapper mapper) {
+        log.trace("ENTER");
         this.config = config;
         this.httpClient = httpClient;
         this.mapper = mapper;
+    }
+
+    public HttpClientWrapper withApiTokenViaBasicAuth () {
+        log.trace("ENTER");
+        HttpClientWrapper wrapper = new HttpClientWrapper(getConfig(), httpClient, mapper);
+        wrapper.withApiTokenViaBasicAuth = true;
+        return wrapper;
     }
 
     public DataverseClientConfig getConfig() {
@@ -203,7 +212,7 @@ class HttpClientWrapper implements MediaTypes {
     }
 
     private HttpResponse dispatch(HttpUriRequest request) throws IOException, DataverseException {
-        Optional.ofNullable(config.getApiToken()).ifPresent(token -> setAuthHeader(request, token));
+        Optional.ofNullable(config.getApiToken()).ifPresent(token -> setApiTokenHeader(request, token));
         HttpResponse r = httpClient.execute(request);
         if (r.getStatusLine().getStatusCode() >= 200 && r.getStatusLine().getStatusCode() < 300)
             return r;
@@ -211,10 +220,10 @@ class HttpClientWrapper implements MediaTypes {
             throw new DataverseException(r.getStatusLine().getStatusCode(), EntityUtils.toString(r.getEntity()), r);
     }
 
-    private void setAuthHeader(HttpUriRequest request, String apiToken) {
-        if (request.getURI().getPath().contains("swordv2")) {
-            String base64 = encodeBase64String((apiToken + ":").getBytes(StandardCharsets.UTF_8));
-            request.setHeader(AUTHORIZATION, "Basic " + base64);
+    private void setApiTokenHeader(HttpUriRequest request, String apiToken) {
+        if (withApiTokenViaBasicAuth) {
+            byte[] apiTokenBytes = (apiToken + ":").getBytes(StandardCharsets.UTF_8);
+            request.setHeader(AUTHORIZATION, "Basic " + encodeBase64String(apiTokenBytes));
         }
         else
             request.setHeader(HEADER_X_DATAVERSE_KEY, apiToken);
