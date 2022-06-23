@@ -15,27 +15,27 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
-public class FileApi extends AbstractApi {
+import static java.util.Collections.emptyMap;
 
-    private static final Logger log = LoggerFactory.getLogger(DatasetApi.class);
-    private static final String persistendId = ":persistentId/";
+public class FileApi extends AbstractTargetedApi {
 
-    private final Path targetBase;
-    private final String id;
-    private final boolean isPersistentId;
+    private static final Logger logger = LoggerFactory.getLogger(DatasetApi.class);
 
 
     protected FileApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId) {
-        super(httpClientWrapper);
-        this.targetBase = Paths.get("api/files/");
-        this.id = id;
-        this.isPersistentId = isPersistentId;
+        super(httpClientWrapper, id, isPersistentId, Paths.get("api/files/"));
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#restrict-files
@@ -45,7 +45,22 @@ public class FileApi extends AbstractApi {
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#replacing-files
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#getting-file-metadata
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#adding-file-metadata
-    // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#updating-file-metadata
+
+    /**
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#updating-file-metadata
+     * @param json the file metadata
+     * @return
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     */
+    public DataverseHttpResponse<HashMap> updateMetadata(String json) throws IOException, DataverseException {
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
+        builder.addBinaryBody("jsonData", inputStream, ContentType.APPLICATION_JSON,"jsonData");
+        return httpClientWrapper.post(subPath("metadata"), builder.build(), params(emptyMap()), new HashMap<>(), HashMap.class);
+    }
+
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#editing-variable-level-metadata
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#get-provenance-json-for-an-uploaded-file
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#get-provenance-description-for-an-uploaded-file
