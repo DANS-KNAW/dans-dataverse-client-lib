@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import nl.knaw.dans.lib.dataverse.model.dataset.FileList;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -23,7 +24,6 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +39,7 @@ public class FileApi extends AbstractTargetedApi {
 
 
     protected FileApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId) {
-        super(httpClientWrapper, id, isPersistentId, Paths.get("api/files/"));
+        super(httpClientWrapper, id, isPersistentId, Paths.get("api/v1/files/"));
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#restrict-files
@@ -49,6 +49,25 @@ public class FileApi extends AbstractTargetedApi {
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#replacing-files
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#getting-file-metadata
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#adding-file-metadata
+
+    /**
+     * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#replacing-files
+     *
+     * @param optDataFile
+     * @param optFileMetadata json
+     * @return
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     */
+    public DataverseHttpResponse<FileList> replaceFileItem(Optional<File> optDataFile, Optional<String> optFileMetadata) throws IOException, DataverseException {
+        logger.trace("{} {}", optDataFile, optFileMetadata);
+        if (!optDataFile.isPresent() && !optFileMetadata.isPresent())
+            throw new IllegalArgumentException("At least one of file data and file metadata must be provided.");
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        optDataFile.ifPresent(f -> builder.addPart("file", new FileBody(f, ContentType.APPLICATION_OCTET_STREAM, f.getPath())));
+        optFileMetadata.ifPresent(m -> builder.addPart("jsonData", new StringBody(m, ContentType.APPLICATION_JSON)));
+        return httpClientWrapper.post(subPath("replace"), builder.build(), params(emptyMap()), new HashMap<>(), FileList.class);
+    }
 
     /**
      * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#updating-file-metadata
