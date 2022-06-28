@@ -20,10 +20,12 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -64,9 +66,9 @@ public class FileApi extends AbstractTargetedApi {
         if (!optDataFile.isPresent() && !optFileMetadata.isPresent())
             throw new IllegalArgumentException("At least one of file data and file metadata must be provided.");
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        optDataFile.ifPresent(f -> builder.addPart("file", new FileBody(f, ContentType.APPLICATION_OCTET_STREAM, f.getPath())));
-        optFileMetadata.ifPresent(m -> builder.addPart("jsonData", new StringBody(m, ContentType.APPLICATION_JSON)));
-        return httpClientWrapper.post(subPath("replace"), builder.build(), params(emptyMap()), new HashMap<>(), FileList.class);
+        optDataFile.ifPresent(f -> builder.addPart("file", new FileBody(f, ContentType.APPLICATION_OCTET_STREAM, f.getName())));
+        optFileMetadata.ifPresent(m -> builder.addPart("jsonData", new InputStreamBody(new ByteArrayInputStream(m.getBytes()), ContentType.APPLICATION_JSON,"jsonData")));
+        return httpClientWrapper.post(subPath("replace"), builder.build(), (emptyMap()), new HashMap<>(), FileList.class);
     }
 
     /**

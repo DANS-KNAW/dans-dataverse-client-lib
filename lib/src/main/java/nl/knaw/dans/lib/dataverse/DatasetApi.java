@@ -332,7 +332,7 @@ public class DatasetApi extends AbstractTargetedApi {
         if (!optDataFile.isPresent() && !optFileMetadata.isPresent())
             throw new IllegalArgumentException("At least one of file data and file metadata must be provided.");
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        optDataFile.ifPresent(f -> builder.addPart("file", new FileBody(f, ContentType.APPLICATION_OCTET_STREAM, f.getPath())));
+        optDataFile.ifPresent(f -> builder.addPart("file", new FileBody(f, ContentType.APPLICATION_OCTET_STREAM, f.getName())));
         optFileMetadata.ifPresent(m -> builder.addPart("jsonData", new StringBody(m, ContentType.APPLICATION_JSON)));
         return httpClientWrapper.post(subPath("add"), builder.build(), params(emptyMap()), new HashMap<>(), FileList.class);
     }
