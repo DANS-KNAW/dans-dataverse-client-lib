@@ -21,7 +21,6 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +37,6 @@ import static java.util.Collections.emptyMap;
 public class FileApi extends AbstractTargetedApi {
 
     private static final Logger logger = LoggerFactory.getLogger(DatasetApi.class);
-
 
     protected FileApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId) {
         super(httpClientWrapper, id, isPersistentId, Paths.get("api/v1/files/"));
@@ -67,12 +65,13 @@ public class FileApi extends AbstractTargetedApi {
             throw new IllegalArgumentException("At least one of file data and file metadata must be provided.");
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         optDataFile.ifPresent(f -> builder.addPart("file", new FileBody(f, ContentType.APPLICATION_OCTET_STREAM, f.getName())));
-        optFileMetadata.ifPresent(m -> builder.addPart("jsonData", new InputStreamBody(new ByteArrayInputStream(m.getBytes()), ContentType.APPLICATION_JSON,"jsonData")));
+        optFileMetadata.ifPresent(m -> builder.addPart("jsonData", new InputStreamBody(new ByteArrayInputStream(m.getBytes()), ContentType.APPLICATION_JSON, "jsonData")));
         return httpClientWrapper.post(subPath("replace"), builder.build(), (emptyMap()), new HashMap<>(), FileList.class);
     }
 
     /**
      * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#updating-file-metadata
+     *
      * @param json the file metadata
      * @return
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
@@ -81,7 +80,7 @@ public class FileApi extends AbstractTargetedApi {
     public DataverseHttpResponse<HashMap> updateMetadata(String json) throws IOException, DataverseException {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        builder.addBinaryBody("jsonData", json.getBytes(StandardCharsets.UTF_8), ContentType.APPLICATION_JSON,"jsonData");
+        builder.addBinaryBody("jsonData", json.getBytes(StandardCharsets.UTF_8), ContentType.APPLICATION_JSON, "jsonData");
         return httpClientWrapper.post(subPath("metadata"), builder.build(), params(emptyMap()), new HashMap<>(), HashMap.class);
     }
 

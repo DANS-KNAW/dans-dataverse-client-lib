@@ -36,7 +36,6 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
 
 /**
  * API end-points that operate on a dataverse collection.
@@ -303,6 +302,7 @@ public class DataverseApi extends AbstractApi {
         // TODO: implement
         throw new UnsupportedOperationException();
     }
+
     public DataverseHttpResponse<DatasetCreationResult> importDataset(String dataset, Optional<String> optPersistentId, boolean autoPublish) throws IOException, DataverseException {
         log.trace("ENTER");
         Map<String, List<String>> parameters = new HashMap<>();

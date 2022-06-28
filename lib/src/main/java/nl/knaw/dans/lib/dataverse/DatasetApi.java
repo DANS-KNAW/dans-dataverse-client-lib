@@ -235,8 +235,6 @@ public class DatasetApi extends AbstractTargetedApi {
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-dataset-metadata
 
-    // TODO:
-
     /**
      * See [Dataverse API Guide].
      *
@@ -354,6 +352,18 @@ public class DatasetApi extends AbstractTargetedApi {
 
     // TODO: FIRST
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#view-the-timestamps-on-a-dataset
+    /**
+     * Publishes the current draft of an imported dataset as a new version with the original publication date.
+     *
+     * If publish is called shortly after a modification and there is a pre-publication workflow installed, there is a risk of the workflow failing to
+     * start because of an OptimisticLockException. This is caused by Dataverse indexing the dataset on a separate thread. This will appear to the client
+     * as Dataverse silently failing (i.e. returning success but not publishing the dataset). To make sure that indexing has already happened the `assureIsIndexed`
+     * parameter is set to `true`. It will cause Dataverse to fail fast if indexing is still pending.
+     *
+     * @param publicationDateJsonLd original publication date
+     * @param assureIsIndexed       make Dataverse return 409 Conflict if an index action is pending
+     * @return
+     */
 
     /**
      * [Dataverse API Guide]: https://guides.dataverse.org/en/latest/api/native-api.html#set-an-embargo-on-files-in-a-dataset
