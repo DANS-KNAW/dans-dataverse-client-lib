@@ -24,6 +24,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
 import nl.knaw.dans.lib.dataverse.model.dataset.FileList;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
+import nl.knaw.dans.lib.dataverse.model.dataset.UpdateType;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +72,11 @@ public class DatasetApi extends AbstractTargetedApi {
      */
     public DataverseResponse<DatasetLatestVersion> viewLatestVersion() throws IOException, DataverseException {
         return getUnversionedFromTarget("", DatasetLatestVersion.class);
+    }
+
+    public DataverseResponse<DatasetVersion> view() throws IOException, DataverseException {
+        // Not specifying a version results in getting all versions.
+        return getVersionedFromTarget("", Version.LATEST.toString(), DatasetVersion.class);
     }
 
     /**
@@ -114,6 +121,19 @@ public class DatasetApi extends AbstractTargetedApi {
         parameters.put("persistentId", singletonList(id));
         parameters.put("type", singletonList("major"));
         return httpClientWrapper.postJsonString(path, "", parameters, emptyMap(), DatasetPublicationResult.class);
+    }
+
+    public DataverseHttpResponse<DataMessage> publish(UpdateType updateType, boolean assureIsIndexed) throws IOException, DataverseException {
+        log.trace("ENTER");
+        HashMap<String, List<String>> parameters = new HashMap<>();
+        parameters.put("assureIsIndexed", singletonList(String.valueOf(assureIsIndexed)));
+        parameters.put("type", singletonList(updateType.toString()));
+        return httpClientWrapper.postJsonString(subPath(publish), "", params(parameters), new HashMap<>(), DataMessage.class);
+    }
+
+    public DataverseResponse<DatasetPublicationResult> releaseMigrated(String publicationDateJsonLd, boolean assureIsIndexed) throws IOException, DataverseException {
+        Map<String, List<String>> parameters = singletonMap("assureIsIndexed", singletonList(String.valueOf(assureIsIndexed)));
+        return httpClientWrapper.postJsonLdString(subPath("actions/:releasemigrated"), publicationDateJsonLd, params(parameters), emptyMap(), DatasetPublicationResult.class);
     }
 
     /**
