@@ -30,6 +30,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.SingleValueField;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -88,12 +89,19 @@ public class MetadataFieldDeserializer extends StdDeserializer {
         }
         else if ("compound".equals(typeClass)) {
             if (subField) throw new IllegalArgumentException("Compound fields cannot contain compound fields as subfields");
-            Iterable<JsonNode> jsonNodeIterable = valueNode::elements;
-            return new CompoundField(
-                typeName,
-                multiple,
-                StreamSupport.stream(jsonNodeIterable.spliterator(), false)
-                    .map(this::deserializeCompoundFieldValue).collect(Collectors.toList()));
+            if (multiple) {
+                Iterable<JsonNode> jsonNodeIterable = valueNode::elements;
+                return new CompoundField(
+                    typeName,
+                    multiple,
+                    StreamSupport.stream(jsonNodeIterable.spliterator(), false)
+                        .map(this::deserializeCompoundFieldValue).collect(Collectors.toList()));
+            } else {
+                return new CompoundField(
+                    typeName,
+                    multiple,
+                    List.of(deserializeCompoundFieldValue(valueNode)));
+            }
         }
 
         return null;

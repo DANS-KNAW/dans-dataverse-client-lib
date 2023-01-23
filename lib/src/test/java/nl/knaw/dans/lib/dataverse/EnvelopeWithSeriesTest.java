@@ -34,7 +34,6 @@ class EnvelopeWithSeriesTest extends ModelFixture {
         EnvelopeWithSeries e = mapper.readValue(getTestJsonFileFor(classUnderTest), EnvelopeWithSeries.class);
         assertEquals("DRAFT",e.getData().getLatestVersion().getVersionState());
 
-        // TODO DD-1237 single compound field
         var field = e.getData().getLatestVersion().getMetadataBlocks()
             .get("citation").getFields().stream()
             .filter(f -> "seriesInformation".equals(f.getTypeName()));
@@ -44,6 +43,5 @@ class EnvelopeWithSeriesTest extends ModelFixture {
     public void roundTrip() throws Exception {
         EnvelopeWithSeries e = roundTrip(getTestJsonFileFor(classUnderTest), EnvelopeWithSeries.class);
         assertEquals(classUnderTest, e.getClass());
-        // For test of the automatic reading of the envelope contents, see DataverseResponseTest
     }
 }
