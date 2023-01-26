@@ -19,7 +19,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import nl.knaw.dans.lib.dataverse.model.dataset.CompoundField;
+import nl.knaw.dans.lib.dataverse.model.dataset.CompoundMultiValueField;
+import nl.knaw.dans.lib.dataverse.model.dataset.CompoundSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.ControlledMultiValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.ControlledSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
@@ -30,7 +31,6 @@ import nl.knaw.dans.lib.dataverse.model.dataset.SingleValueField;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -91,16 +91,14 @@ public class MetadataFieldDeserializer extends StdDeserializer {
             if (subField) throw new IllegalArgumentException("Compound fields cannot contain compound fields as subfields");
             if (multiple) {
                 Iterable<JsonNode> jsonNodeIterable = valueNode::elements;
-                return new CompoundField(
+                return new CompoundMultiValueField(
                     typeName,
-                    multiple,
                     StreamSupport.stream(jsonNodeIterable.spliterator(), false)
                         .map(this::deserializeCompoundFieldValue).collect(Collectors.toList()));
             } else {
-                return new CompoundField(
+                return new CompoundSingleValueField(
                     typeName,
-                    multiple,
-                    List.of(deserializeCompoundFieldValue(valueNode)));
+                    deserializeCompoundFieldValue(valueNode));
             }
         }
 

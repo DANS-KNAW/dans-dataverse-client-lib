@@ -17,14 +17,14 @@ package nl.knaw.dans.lib.dataverse.model.dataset;
 
 import java.util.Map;
 
-public class SingleCompoundField extends MetadataField {
+public class CompoundSingleValueField extends MetadataField {
 
     private Map<String, SingleValueField> value;
 
-    public SingleCompoundField() {
+    public CompoundSingleValueField() {
     }
 
-    public SingleCompoundField(String typeName, Map<String, SingleValueField> value) {
+    public CompoundSingleValueField(String typeName, Map<String, SingleValueField> value) {
         super("compound", typeName, false);
         this.value = value;
     }
