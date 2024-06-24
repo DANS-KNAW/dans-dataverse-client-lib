@@ -1,0 +1,10 @@
+nl.knaw.dans.lib.dataverse
+nl.knaw.dans.lib.dataverse.model
+nl.knaw.dans.lib.dataverse.model.dataset
+nl.knaw.dans.lib.dataverse.model.dataverse
+nl.knaw.dans.lib.dataverse.model.file
+nl.knaw.dans.lib.dataverse.model.file.prestaged
+nl.knaw.dans.lib.dataverse.model.license
+nl.knaw.dans.lib.dataverse.model.search
+nl.knaw.dans.lib.dataverse.model.user
+nl.knaw.dans.lib.dataverse.model.workflow
