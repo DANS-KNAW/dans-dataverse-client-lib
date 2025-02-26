@@ -16,13 +16,8 @@
 package nl.knaw.dans.lib.dataverse.example;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
-import nl.knaw.dans.lib.dataverse.model.dataset.FileList;
-import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
