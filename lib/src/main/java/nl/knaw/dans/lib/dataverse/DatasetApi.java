@@ -31,6 +31,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.RetentionPeriod;
 import nl.knaw.dans.lib.dataverse.model.dataset.SubmitForReviewResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.UpdateType;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
+import nl.knaw.dans.lib.dataverse.model.file.FileMetaUpdate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.entity.mime.FileBody;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
@@ -590,6 +591,15 @@ public class DatasetApi extends AbstractTargetedApi {
     public DataverseHttpResponse<HashMap> setRetentionPeriod(String json) throws IOException, DataverseException {
         return httpClientWrapper.postJsonString(subPath("files/actions/:set-retention"), json, params(emptyMap()), extraHeaders, HashMap.class);
     }
+
+    public DataverseHttpResponse<String> deleteFiles(List<Integer> fileIds) throws IOException, DataverseException {
+        return httpClientWrapper.putJsonString(subPath("deleteFiles"), httpClientWrapper.writeValueAsString(fileIds), params(emptyMap()), extraHeaders, String.class);
+    }
+
+    public DataverseHttpResponse<String> updateFileMetadatas(List<FileMetaUpdate> fileMetas) throws IOException, DataverseException {
+        return httpClientWrapper.postJsonString(subPath("files/metadata"), httpClientWrapper.writeValueAsString(fileMetas), params(emptyMap()), extraHeaders, String.class);
+    }
+
 
     /*
      * Helper methods
