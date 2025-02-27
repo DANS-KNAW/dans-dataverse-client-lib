@@ -55,6 +55,14 @@ public class FileMeta {
         return toFileMetaUpdate(true);
     }
 
+    /**
+     * Convert this object to a FileMetaUpdate object, which can be used in the {{@link nl.knaw.dans.lib.dataverse.DatasetApi#updateFileMetadatas(List)} method. Note, that the 'restrict' property is
+     * only included in the FileMetaUpdate object if the 'sendRestrict' parameter is true and the 'restricted' property is not null. You should only send the 'restrict' property if you want to change
+     * the restricted status of the file. Dataverse will return an error if you set 'restrict' to the same value as the current restricted status of the file.
+     *
+     * @param sendRestrict whether to include the 'restrict' property in the FileMetaUpdate object
+     * @return the FileMetaUpdate object
+     */
     public FileMetaUpdate toFileMetaUpdate(boolean sendRestrict) {
         FileMetaUpdate f = restricted != null && sendRestrict ? new FileMetaUpdateWithRestrict(restricted) : new FileMetaUpdate();
         f.setDataFileId(dataFile.getId());
