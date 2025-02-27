@@ -52,7 +52,11 @@ public class FileMeta {
     }
 
     public FileMetaUpdate toFileMetaUpdate() {
-        FileMetaUpdate f = new FileMetaUpdate();
+        return toFileMetaUpdate(true);
+    }
+
+    public FileMetaUpdate toFileMetaUpdate(boolean sendRestrict) {
+        FileMetaUpdate f = restricted != null && sendRestrict ? new FileMetaUpdateWithRestrict(restricted) : new FileMetaUpdate();
         f.setDataFileId(dataFile.getId());
         f.setLabel(label);
         f.setDescription(description);
@@ -64,7 +68,6 @@ public class FileMeta {
         }
         return f;
     }
-
 
     /**
      * Dataverse uses "restrict" in the <a href="https://guides.dataverse.org/en/latest/api/native-api.html#add-a-file-to-a-dataset">Add File To Dataset</a> API, but returns "restricted" in the
