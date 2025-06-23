@@ -41,7 +41,6 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -601,7 +600,6 @@ public class DatasetApi extends AbstractTargetedApi {
         return httpClientWrapper.postJsonString(subPath("files/metadata"), httpClientWrapper.writeValueAsString(fileMetas), params(emptyMap()), extraHeaders, String.class);
     }
 
-
     /*
      * Helper methods
      */
@@ -669,8 +667,8 @@ public class DatasetApi extends AbstractTargetedApi {
      * @param lockTypes              the lock types to wait for
      * @param maxNumberOfRetries     the maximum number the check for unlock is made, defaults to #awawaitLockStateMaxNumberOfRetries
      * @param waitTimeInMilliseconds the time between tries, defaults to [[awaitLockStateMillisecondsBetweenRetries]]
-     * @throws IOException           when I/O problems occur during the interaction with Dataverse
-     * @throws DataverseException    when Dataverse fails to perform the request
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
      */
     public void awaitUnlock(List<String> lockTypes, int maxNumberOfRetries, int waitTimeInMilliseconds) throws IOException, DataverseException {
         awaitLockState(this::notLocked, String.format("Wait for unlock of types %s on %s expired", lockTypes, this.id), maxNumberOfRetries, waitTimeInMilliseconds, lockTypes.toArray(new String[0]));
@@ -707,10 +705,10 @@ public class DatasetApi extends AbstractTargetedApi {
      */
     @FunctionalInterface
     private interface Locked {
-        Boolean get(List<Lock> locks, String lockType);
+        boolean get(List<Lock> locks, String lockType);
     }
 
-    private Boolean isLocked(List<Lock> locks, String lockType) {
+    private boolean isLocked(List<Lock> locks, String lockType) {
         for (Lock lock : locks) {
             if (lock.getLockType().equals(lockType))
                 return true;
@@ -718,7 +716,7 @@ public class DatasetApi extends AbstractTargetedApi {
         return false;
     }
 
-    private Boolean notLocked(List<Lock> locks, String lockType) {
+    private boolean notLocked(List<Lock> locks, String lockType) {
         return locks.isEmpty();
     }
 
@@ -730,9 +728,9 @@ public class DatasetApi extends AbstractTargetedApi {
      * @param errorMessage           error to report in LockException if it occurs
      * @param maxNumberOfRetries     the maximum number of tries
      * @param waitTimeInMilliseconds the time to wait between tries
-     * @param lockTypes              type or types of locking
+     * @param lockTypesToCheck              type or types of locking
      */
-    private void awaitLockState(Locked desiredState, String errorMessage, int maxNumberOfRetries, int waitTimeInMilliseconds, String... lockTypes)
+    private void awaitLockState(Locked desiredState, String errorMessage, int maxNumberOfRetries, int waitTimeInMilliseconds, String... lockTypesToCheck)
         throws IOException, DataverseException {
         int numberOfTimesTried = 0;
 
@@ -743,7 +741,7 @@ public class DatasetApi extends AbstractTargetedApi {
                 return locks;
             }
 
-            private Boolean slept() {
+            private boolean slept() {
                 log.debug(String.format("Sleeping %d ms before next try..", waitTimeInMilliseconds));
                 try {
                     Thread.sleep(waitTimeInMilliseconds);
@@ -761,9 +759,9 @@ public class DatasetApi extends AbstractTargetedApi {
             locks = currentLocks.getCurrentLocks();
             numberOfTimesTried += 1;
         }
-        while (!locksHaveDesiredState(desiredState, locks, lockTypes) && numberOfTimesTried != maxNumberOfRetries && currentLocks.slept());
+        while (notAllLocksHaveDesiredState(desiredState, locks, lockTypesToCheck) && numberOfTimesTried != maxNumberOfRetries && currentLocks.slept());
 
-        if (!locksHaveDesiredState(desiredState, locks, lockTypes)) {
+        if (notAllLocksHaveDesiredState(desiredState, locks, lockTypesToCheck)) {
             var remainingLocks = locks.stream().map(Lock::getLockType).toList();
             throw new RuntimeException(String.format("%s. Number of tries = %d, wait time between tries = %d ms. Remaning lock(s): %s.",
                 errorMessage, maxNumberOfRetries, waitTimeInMilliseconds, String.join(",", remainingLocks)
@@ -771,14 +769,14 @@ public class DatasetApi extends AbstractTargetedApi {
         }
     }
 
-    private Boolean locksHaveDesiredState(Locked desiredState, List<Lock> locks, String[] lockTypes) {
+    private boolean notAllLocksHaveDesiredState(Locked desiredState, List<Lock> locks, String[] lockTypes) {
         for (String lockType : lockTypes) {
-            if ( !desiredState.get(locks, lockType)) {
-                log.debug(String.format("Lock of type %s not found in locks %s", lockType, locks));
-                return false;
+            if (!desiredState.get(locks, lockType)) {
+                log.debug(String.format("Lock %s does not have desired state", lockType));
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
