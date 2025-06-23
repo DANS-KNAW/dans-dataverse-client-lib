@@ -17,11 +17,13 @@ package nl.knaw.dans.lib.dataverse.model.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class FileMetaUpdateWithRestrict extends FileMetaUpdate {
     private Boolean restrict;
 }
