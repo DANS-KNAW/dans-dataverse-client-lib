@@ -41,6 +41,7 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -672,7 +673,7 @@ public class DatasetApi extends AbstractTargetedApi {
      * @throws DataverseException    when Dataverse fails to perform the request
      */
     public void awaitUnlock(List<String> lockTypes, int maxNumberOfRetries, int waitTimeInMilliseconds) throws IOException, DataverseException {
-        awaitLockState(this::notLocked, String.format("Wait for unlock of types %s expired", lockTypes), maxNumberOfRetries, waitTimeInMilliseconds, lockTypes.toArray(new String[0]));
+        awaitLockState(this::notLocked, String.format("Wait for unlock of types %s on %s expired", lockTypes, this.id), maxNumberOfRetries, waitTimeInMilliseconds, lockTypes.toArray(new String[0]));
     }
 
     /**
@@ -762,8 +763,12 @@ public class DatasetApi extends AbstractTargetedApi {
         }
         while (!locksHaveDesiredState(desiredState, locks, lockTypes) && numberOfTimesTried != maxNumberOfRetries && currentLocks.slept());
 
-        if (!locksHaveDesiredState(desiredState, locks, lockTypes))
-            throw new RuntimeException(String.format("%s. Number of tries = %d, wait time between tries = %d ms.", errorMessage, maxNumberOfRetries, waitTimeInMilliseconds));
+        if (!locksHaveDesiredState(desiredState, locks, lockTypes)) {
+            var remainingLocks = locks.stream().map(Lock::getLockType).toList();
+            throw new RuntimeException(String.format("%s. Number of tries = %d, wait time between tries = %d ms. Remaning lock(s): %s.",
+                errorMessage, maxNumberOfRetries, waitTimeInMilliseconds, String.join(",", remainingLocks)
+            ));
+        }
     }
 
     private Boolean locksHaveDesiredState(Locked desiredState, List<Lock> locks, String[] lockTypes) {
