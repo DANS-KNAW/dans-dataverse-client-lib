@@ -25,13 +25,11 @@ import java.net.URI;
 @AllArgsConstructor
 @NoArgsConstructor
 public class License {
-    private int id;
     private String name;
-    private String shortDescription;
     private URI uri;
     private URI iconUri;
     private String rightsIdentifier;
     private String rightsIdentifierScheme;
-    private URI schemeUri;
+    private String schemeUri;
     private String languageCode;
 }
