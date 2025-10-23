@@ -16,22 +16,13 @@
 package nl.knaw.dans.lib.dataverse.model.dataset;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.net.URI;
 
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class License {
-    private int id;
-    private String name;
-    private String shortDescription;
-    private URI uri;
-    private URI iconUri;
-    private String rightsIdentifier;
-    private String rightsIdentifierScheme;
-    private URI schemeUri;
-    private String languageCode;
+public enum DatasetType {
+    DATASET("dataset"),
+    SOFTWARE("software"),
+    WORKFLOW("workflow");
+
+    private final String text;
 }
