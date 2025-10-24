@@ -37,6 +37,8 @@ public class DatasetVersion {
     private String versionState;
     private String latestVersionPublishingState;
     private String versionNote;
+    private String archiveNote;
+    private String deaccessionLink;
     @JsonProperty("UNF")
     private String unf;
     private String lastUpdateTime;
