@@ -46,5 +46,9 @@ run an example:
 1. Copy the supplied `dataverse.properties.template` to `dataverse.properties`.
 2. Edit the properties to match your setup. For example; when running Dataverse on localhost, set the `baseUrl=http://localhost:8080`.
 3. Run [one of the programs]{:target=_blank} providing sensible command line parameters where required.
+4. For the admin tests, the following settings in Dataverse need to be changed:
+
+       curl -X PUT -d s3kretKey http://localhost:8080/api/admin/settings/:BlockedApiKey
+       curl -X PUT -d unblock-key http://localhost:8080/api/admin/settings/:BlockedApiPolicy
 
 [one of the programs]: https://github.com/DANS-KNAW/dans-dataverse-client-lib/tree/master/examples/src/main/java/nl/knaw/dans/lib/dataverse/example

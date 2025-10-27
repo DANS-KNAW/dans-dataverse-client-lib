@@ -19,17 +19,21 @@ import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.CompoundFieldBuilder;
 import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.MetadataUtil;
 import nl.knaw.dans.lib.dataverse.model.dataset.ControlledMultiValueField;
+import nl.knaw.dans.lib.dataverse.model.dataset.ControlledSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetCreationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
+import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveMultiValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -42,10 +46,6 @@ public class DataverseImportDataset extends ExampleBase {
             System.out.println("Supplied citation metadata key: " + mdKeyValue);
         }
 
-        MetadataBlock citation = new MetadataBlock();
-        citation.setName("citation");
-        citation.setDisplayName("Citation Metadata");
-
         MetadataField title = new PrimitiveSingleValueField("title", "Test imported dataset");
         MetadataField description = new CompoundFieldBuilder("dsDescription", true)
             .addSubfield("dsDescriptionValue", "Test description")
@@ -57,11 +57,20 @@ public class DataverseImportDataset extends ExampleBase {
             .addSubfield("datasetContactName", "Test Contact")
             .addSubfield("datasetContactEmail", "test@example.com").build();
         MetadataField subjects = new ControlledMultiValueField("subject", Arrays.asList("Arts and Humanities", "Computer and Information Science"));
+        var citation = MetadataUtil.toMetadataBlock("citation", "Citation Metadata", title, author, contact, description, subjects);
+
+        MetadataField lang = new ControlledMultiValueField("dansMetadataLanguage", List.of("English"));
+        MetadataField rightsHolder = new PrimitiveMultiValueField("dansRightsHolder", List.of("DANS", "Another Holder"));
+        MetadataField hasPersonalData = new ControlledSingleValueField("dansPersonalDataPresent", "No");
+        var rights = MetadataUtil.toMetadataBlock("dansRights", "Rights Metadata", rightsHolder, hasPersonalData, lang);
+
+        MetadataField audience = new PrimitiveMultiValueField("dansAudience", List.of("https://www.narcis.nl/classification/D23320", "https://www.narcis.nl/classification/D23360"));
+        var relation = MetadataUtil.toMetadataBlock("dansRelationMetadata", "Relation Metadata", audience);
 
         citation.setFields(Arrays.asList(title, author, contact, description, subjects));
 
         DatasetVersion version = new DatasetVersion();
-        version.setMetadataBlocks(Collections.singletonMap("citation", citation));
+        version.setMetadataBlocks(MetadataUtil.toMetadataBlockMap(citation, rights, relation));
         version.setFiles(Collections.emptyList()); // Otherwise a 400 Bad Request is returned; you are not allowed to change file metadata this way
         // The license field is ignored, for how to set it, see example DatasetUpdateMetadataFromJsonLd
         //        License license = new License();
@@ -77,10 +86,11 @@ public class DataverseImportDataset extends ExampleBase {
         log.info(toPrettyJson(dataset));
 
         UUID uuid = UUID.randomUUID();
-        var doi = String.format("doi:10.5072/EDDA-RAGNAROK/IMPORTTEST-%s", uuid);
+        var doi = String.format("doi:10.5072/DAR/IMPORTTEST-%s", uuid);
         DataverseHttpResponse<DatasetCreationResult> r = client.dataverse("root").importDataset(dataset,
             doi, false, keyMap);
         log.info("Status Line: {} {}", r.getHttpResponse().getCode(), r.getHttpResponse().getReasonPhrase());
+        log.info("Persistent ID: {}", r.getData().getPersistentId());
     }
 
 }

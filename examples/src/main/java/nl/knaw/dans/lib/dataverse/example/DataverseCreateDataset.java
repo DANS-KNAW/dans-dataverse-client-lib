@@ -19,17 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.CompoundFieldBuilder;
 import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.MetadataUtil;
 import nl.knaw.dans.lib.dataverse.model.dataset.ControlledMultiValueField;
+import nl.knaw.dans.lib.dataverse.model.dataset.ControlledSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetCreationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
-import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
+import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveMultiValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 public class DataverseCreateDataset extends ExampleBase {
@@ -41,10 +43,6 @@ public class DataverseCreateDataset extends ExampleBase {
             System.out.println("Supplied citation metadata key: " + mdKeyValue);
         }
 
-        MetadataBlock citation = new MetadataBlock();
-        citation.setName("citation");
-        citation.setDisplayName("Citation Metadata");
-
         MetadataField title = new PrimitiveSingleValueField("title", "Test dataset");
         MetadataField description = new CompoundFieldBuilder("dsDescription", true)
             .addSubfield("dsDescriptionValue", "Test description")
@@ -55,12 +53,20 @@ public class DataverseCreateDataset extends ExampleBase {
         MetadataField contact = new CompoundFieldBuilder("datasetContact", true)
             .addSubfield("datasetContactName", "Test Contact")
             .addSubfield("datasetContactEmail", "test@example.com").build();
-        MetadataField subjects = new ControlledMultiValueField("subject", Arrays.asList("Arts and Humanities", "Computer and Information Science"));
+        MetadataField subjects = new ControlledMultiValueField("subject", List.of("Arts and Humanities", "Computer and Information Science"));
 
-        citation.setFields(Arrays.asList(title, author, contact, description, subjects));
+        var citation = MetadataUtil.toMetadataBlock("citation", "Citation Metadata", title, author, contact, description, subjects);
+
+        MetadataField lang = new ControlledMultiValueField("dansMetadataLanguage", List.of("English"));
+        MetadataField rightsHolder = new PrimitiveMultiValueField("dansRightsHolder", List.of("DANS", "Another Holder"));
+        MetadataField hasPersonalData = new ControlledSingleValueField("dansPersonalDataPresent", "No");
+        var rights = MetadataUtil.toMetadataBlock("dansRights", "Rights Metadata", rightsHolder, hasPersonalData, lang);
+
+        MetadataField audience = new PrimitiveMultiValueField("dansAudience", List.of("https://www.narcis.nl/classification/D23320", "https://www.narcis.nl/classification/D23360"));
+        var relation = MetadataUtil.toMetadataBlock("dansRelationMetadata", "Relation Metadata", audience);
 
         DatasetVersion version = new DatasetVersion();
-        version.setMetadataBlocks(Collections.singletonMap("citation", citation));
+        version.setMetadataBlocks(MetadataUtil.toMetadataBlockMap(citation, rights, relation));
         version.setFiles(Collections.emptyList()); // Otherwise a 400 Bad Request is returned; you are not allowed to change file metadata this way
         // The license field is ignored, for how to set it, see example DatasetUpdateMetadataFromJsonLd
         //        License license = new License();
@@ -83,4 +89,5 @@ public class DataverseCreateDataset extends ExampleBase {
         DataverseHttpResponse<DatasetVersion> r2 = client.dataset(r.getData().getPersistentId()).updateMetadata(version);
         log.info("Status Line: {} {}", r2.getHttpResponse().getCode(), r2.getHttpResponse().getReasonPhrase());
     }
+
 }
