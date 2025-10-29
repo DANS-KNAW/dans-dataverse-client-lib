@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class DatasetVersion {
     private String latestVersionPublishingState;
     private String versionNote;
     private String archiveNote;
-    private String deaccessionLink;
+    private URI deaccessionLink;
     @JsonProperty("UNF")
     private String unf;
     private String lastUpdateTime;
