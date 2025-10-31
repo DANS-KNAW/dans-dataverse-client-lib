@@ -15,19 +15,23 @@
  */
 package nl.knaw.dans.lib.dataverse.model.dataset;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.net.URI;
 
 @Data
+@JsonIgnoreProperties({"isPartOf"})
 public class DatasetPublicationResult {
     private int id;
     private String identifier;
     private URI persistentUrl;
     private String protocol;
     private String authority;
+    private String separator;
     private String publisher;
     private String publicationDate;
     private String storageIdentifier;
     private String metadataLanguage;
+    DatasetType datasetType;
 }

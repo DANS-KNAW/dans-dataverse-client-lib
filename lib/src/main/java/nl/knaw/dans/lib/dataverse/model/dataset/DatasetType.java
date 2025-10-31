@@ -16,7 +16,8 @@
 package nl.knaw.dans.lib.dataverse.model.dataset;
 
 import lombok.AllArgsConstructor;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 @AllArgsConstructor
 public enum DatasetType {
@@ -25,4 +26,24 @@ public enum DatasetType {
     WORKFLOW("workflow");
 
     private final String text;
+
+//    DatasetType(String text) {
+//        this.text = text;
+//    }
+
+    @JsonValue
+    @Override
+    public String toString() {
+        return text;
+    }
+
+    @JsonCreator
+    public static DatasetType fromString(String text) {
+        for (DatasetType type : DatasetType.values()) {
+            if (type.text.equalsIgnoreCase(text)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown dataset type: " + text);
+    }
 }
