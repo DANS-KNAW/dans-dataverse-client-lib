@@ -43,6 +43,7 @@ public class DatasetVersion {
     private URI deaccessionLink;
     private String distributionDate;
     private String productionDate;
+    private String archiveNote; // Removed in Dataverse 6.6
     @JsonProperty("UNF")
     private String unf;
     private String lastUpdateTime;
