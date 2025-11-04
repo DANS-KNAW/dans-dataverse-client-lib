@@ -26,30 +26,34 @@ import java.util.List;
 public class DatasetSmokeTest {
     public static void main(String[] args) throws Exception {
         if (args.length < 2) {
-            log.error("Usage: {} <dataset-DOI> >", FileSmokeTest.class.getSimpleName());
+            log.error("Usage: {} <dataset-DOI> <role-assignment-id>", FileSmokeTest.class.getSimpleName());
             System.exit(1);
         }
         var persistentId = args[0];
+        var roleAssignmentId = args[1];
         DatasetGetAllVersions.main(List.of(persistentId).toArray(new String[0]));
         DatasetGetFiles.main(List.of(persistentId, "1").toArray(new String[0]));
         DatasetGetVersion.main(List.of(persistentId, "1").toArray(new String[0]));
+
         DatasetListRoleAssignments.main(List.of(persistentId).toArray(new String[0]));
-        DatasetEditMetadata.main(List.of(persistentId).toArray(new String[0]));
+        DatasetDeleteRoleAssignment.main(List.of(args[0], roleAssignmentId).toArray(new String[0])); // sword publish rights
+        DatasetAssignRole.main(List.of(args[0], "user001", "datamanager").toArray(new String[0]));
+
+        DatasetAwaitUnlock.main(List.of(persistentId).toArray(new String[0])); // See its own comment
+        DatasetGetLocks.getLocks(persistentId); // main wraps a loop sleeping 300 times 0.5 second.
+
+        DatasetEditMetadata.main(List.of(persistentId, "new title value").toArray(new String[0]));
         DatasetUpdateMetadata.main(List.of(persistentId).toArray(new String[0]));
         DatasetUpdateFilemetadatas.main(List.of(args[0], "someKey=someValue").toArray(new String[0]));
         DatasetUpdateMetadataFromJsonLd.main(List.of(args[0], "citation","description json value").toArray(new String[0]));
-        DatasetAwaitUnlock.main(List.of(persistentId).toArray(new String[0])); // See its own comment
         DatasetSubmitForReview.main(args);
         DatasetPublish.main(args);
-        DatasetGetLocks.getLocks(persistentId); // main wraps a loop sleeping 300 times 0.5 second.
         if (true) {
             // condition outsmarts compiler errors:
             // keep imports
             // do not execute until figured out a scenario
             return;
         }
-        DatasetDeleteRoleAssignment.main(List.of(args[0], "9").toArray(new String[0])); // sword publish rights
-        DatasetAssignRole.main(List.of(args[0], "user001", "datamanager").toArray(new String[0]));
         DatasetAwaitLock.main(List.of(persistentId).toArray(new String[0])); // TODO throws wait expired
         DatasetDeleteMetadata.main(List.of(persistentId, "This dataset makes use of the ddm:available field to put all files under embargo until a specified date.").toArray(new String[0]));
     }
