@@ -43,6 +43,19 @@ public class DataverseCreateDataset extends ExampleBase {
             System.out.println("Supplied citation metadata key: " + mdKeyValue);
         }
 
+        var dataset = getDataset();
+        log.info(toPrettyJson(dataset));
+
+        DataverseHttpResponse<DatasetCreationResult> r = client.dataverse("root").createDataset(dataset, keyMap);
+        log.info("Status Line: {} {}", r.getHttpResponse().getCode(), r.getHttpResponse().getReasonPhrase());
+        log.info("DOI: {}", r.getData().getPersistentId());
+
+        // termsOfAccess and fileAccessRequest are currently ignored by the create dataset API, as a work-around call updateMetadata
+        DataverseHttpResponse<DatasetVersion> r2 = client.dataset(r.getData().getPersistentId()).updateMetadata(dataset.getDatasetVersion());
+        log.info("Status Line: {} {}", r2.getHttpResponse().getCode(), r2.getHttpResponse().getReasonPhrase());
+    }
+
+    public static Dataset getDataset() {
         MetadataField title = new PrimitiveSingleValueField("title", "Test dataset");
         MetadataField description = new CompoundFieldBuilder("dsDescription", true)
             .addSubfield("dsDescriptionValue", "Test description")
@@ -65,29 +78,21 @@ public class DataverseCreateDataset extends ExampleBase {
         MetadataField audience = new PrimitiveMultiValueField("dansAudience", List.of("https://www.narcis.nl/classification/D23320", "https://www.narcis.nl/classification/D23360"));
         var relation = MetadataUtil.toMetadataBlock("dansRelationMetadata", "Relation Metadata", audience);
 
-        DatasetVersion version = new DatasetVersion();
-        version.setMetadataBlocks(MetadataUtil.toMetadataBlockMap(citation, rights, relation));
-        version.setFiles(Collections.emptyList()); // Otherwise a 400 Bad Request is returned; you are not allowed to change file metadata this way
+        DatasetVersion version1 = new DatasetVersion();
+        version1.setMetadataBlocks(MetadataUtil.toMetadataBlockMap(citation, rights, relation));
+        version1.setFiles(Collections.emptyList()); // Otherwise a 400 Bad Request is returned; you are not allowed to change file metadata this way
         // The license field is ignored, for how to set it, see example DatasetUpdateMetadataFromJsonLd
         //        License license = new License();
         //        license.setName("CC BY-NC-SA 4.0");
         //        license.setUri(new URI("http://creativecommons.org/licenses/by-nc-sa/4.0"));
         //        version.setLicense(license);
-        version.setTermsOfAccess("Some terms");
-        version.setFileAccessRequest(false);
+        version1.setTermsOfAccess("Some terms");
+        version1.setFileAccessRequest(false);
+        var version = version1;
 
         Dataset dataset = new Dataset();
         dataset.setDatasetVersion(version);
-
-        log.info(toPrettyJson(dataset));
-
-        DataverseHttpResponse<DatasetCreationResult> r = client.dataverse("root").createDataset(dataset, keyMap);
-        log.info("Status Line: {} {}", r.getHttpResponse().getCode(), r.getHttpResponse().getReasonPhrase());
-        log.info("DOI: {}", r.getData().getPersistentId());
-
-        // termsOfAccess and fileAccessRequest are currently ignored by the create dataset API, as a work-around call updateMetadata
-        DataverseHttpResponse<DatasetVersion> r2 = client.dataset(r.getData().getPersistentId()).updateMetadata(version);
-        log.info("Status Line: {} {}", r2.getHttpResponse().getCode(), r2.getHttpResponse().getReasonPhrase());
+        return dataset;
     }
 
 }
