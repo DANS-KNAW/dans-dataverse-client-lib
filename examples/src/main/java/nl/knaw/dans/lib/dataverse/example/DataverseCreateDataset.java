@@ -57,6 +57,7 @@ public class DataverseCreateDataset extends ExampleBase {
 
     public static Dataset getDataset() {
         MetadataField title = new PrimitiveSingleValueField("title", "Test dataset");
+        MetadataField note = new PrimitiveSingleValueField("notesText", "Not mandatory content");
         MetadataField description = new CompoundFieldBuilder("dsDescription", true)
             .addSubfield("dsDescriptionValue", "Test description")
             .addSubfield("dsDescriptionDate", "").build();
@@ -68,7 +69,7 @@ public class DataverseCreateDataset extends ExampleBase {
             .addSubfield("datasetContactEmail", "test@example.com").build();
         MetadataField subjects = new ControlledMultiValueField("subject", List.of("Arts and Humanities", "Computer and Information Science"));
 
-        var citation = MetadataUtil.toMetadataBlock("citation", "Citation Metadata", title, author, contact, description, subjects);
+        var citation = MetadataUtil.toMetadataBlock("citation", "Citation Metadata", title, author, contact, description, subjects, note);
 
         MetadataField lang = new ControlledMultiValueField("dansMetadataLanguage", List.of("English"));
         MetadataField rightsHolder = new PrimitiveMultiValueField("dansRightsHolder", List.of("DANS", "Another Holder"));

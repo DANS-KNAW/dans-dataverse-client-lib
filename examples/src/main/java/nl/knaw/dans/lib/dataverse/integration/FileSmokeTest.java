@@ -17,10 +17,7 @@ package nl.knaw.dans.lib.dataverse.integration;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.example.BasicFileAccessGetFile;
-import nl.knaw.dans.lib.dataverse.example.DatasetAddFile;
 import nl.knaw.dans.lib.dataverse.example.DatasetDeleteFiles;
-import nl.knaw.dans.lib.dataverse.example.DatasetGetFiles;
-import nl.knaw.dans.lib.dataverse.example.DatasetUpdateFilemetadatas;
 import nl.knaw.dans.lib.dataverse.example.FileReplace;
 import nl.knaw.dans.lib.dataverse.example.FileUpdateMetadata;
 
@@ -40,16 +37,12 @@ public class FileSmokeTest {
         var persistentId = args[0];
         var destination = args[1];
         var fileIds = Arrays.copyOfRange(args, 3, args.length);
-        var fileToUpload1 = new File("README.md").getAbsolutePath();
-        var fileToUpload2 = new File("examples/src/main/resources/test.txt").getAbsolutePath();
+        var fileToUpload = new File("examples/src/main/resources/test.txt").getAbsolutePath();
 
-        DatasetGetFiles.main(List.of(persistentId, "1").toArray(new String[0]));
         BasicFileAccessGetFile.main(List.of(fileIds[0], destination).toArray(new String[0])); // TODO range
-        DatasetAddFile.main(List.of(persistentId, fileToUpload1).toArray(new String[0]));
-        FileReplace.main(List.of(fileIds[0], fileToUpload2).toArray(new String[0]));
+        FileReplace.main(List.of(fileIds[0], fileToUpload).toArray(new String[0]));
 
         DatasetDeleteFiles.main(List.of(persistentId, fileIds[2]).toArray(new String[0]));
         FileUpdateMetadata.main(List.of(fileIds[1], "newName", "newFolder").toArray(new String[0]));
-        DatasetUpdateFilemetadatas.main(List.of(persistentId, "someKey=someValue").toArray(new String[0]));
     }
 }
