@@ -16,10 +16,7 @@
 package nl.knaw.dans.lib.dataverse.integration;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.knaw.dans.lib.dataverse.example.AdminGetDatabaseSetting;
-import nl.knaw.dans.lib.dataverse.example.AdminListSingleUser;
-import nl.knaw.dans.lib.dataverse.example.AdminPutDatabaseSetting;
-import nl.knaw.dans.lib.dataverse.example.AdminValidateDatasetFiles;
+import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreate;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
 import nl.knaw.dans.lib.dataverse.example.DataverseDelete;
@@ -36,7 +33,7 @@ import nl.knaw.dans.lib.dataverse.example.DataverseView;
 import java.util.List;
 
 @Slf4j
-public class DataverseSmokeTest {
+public class DataverseSmokeTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
         DataverseGetContents.main(new String[0]);
         DataverseGetStorageSize.main(new String[0]);
@@ -50,11 +47,12 @@ public class DataverseSmokeTest {
         DataverseIsMetadataBlocksRoot.main(List.of("root").toArray(new String[0]));
         DataverseSetMetadataBlocksRoot.main(List.of("root", "true").toArray(new String[0]));
 
-        // TODO internal server error on create
-//        DataverseCreate.main(new String[0]);
-//        DataversePublish.main(List.of("test2").toArray(new String[0]));
-//        DataverseIsMetadataBlocksRoot.main(List.of("test2").toArray(new String[0]));
-//        DataverseSetMetadataBlocksRoot.main(List.of("test2", "true").toArray(new String[0]));
-//        DataverseDelete.main(List.of("test2").toArray(new String[0]));
+        var dvAlias = client.dataverse("root")
+            .create(DataverseCreate.getDataverse())
+            .getData().getAlias();
+        DataversePublish.main(List.of(dvAlias).toArray(new String[0]));
+        DataverseIsMetadataBlocksRoot.main(List.of(dvAlias).toArray(new String[0]));
+        DataverseSetMetadataBlocksRoot.main(List.of(dvAlias).toArray(new String[0]));
+        DataverseDelete.main(List.of(dvAlias).toArray(new String[0]));
     }
 }

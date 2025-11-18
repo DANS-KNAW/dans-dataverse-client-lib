@@ -38,16 +38,15 @@ import static nl.knaw.dans.lib.dataverse.MetadataUtil.toFieldList;
 @Slf4j
 public class DatasetSmokeTest extends ExampleBase {
     /**
-     * Calls dataset API methods and some methods of other API's
-     * that require (or create) the persistent ID of a dataset or file ID's within a dataset.
+     * Calls dataset API methods and some methods of other API's that require (or create) the persistent ID of a dataset or file ID's within a dataset.
      *
-     * @param args
-     * @throws Exception
+     * @param args none
+     * @throws Exception should not happen
      */
     public static void main(String[] args) throws Exception {
 
         var persistentId = client.dataverse("root")
-            .createDataset(DataverseCreateDataset.getDataset(), new HashMap<String, String>())
+            .createDataset(DataverseCreateDataset.getDataset(), new HashMap<>())
             .getData().getPersistentId();
 
         var isInReview = client.dataset(persistentId)
@@ -136,13 +135,16 @@ public class DatasetSmokeTest extends ExampleBase {
             .updateMetadata(fileMeta3)
             .getBodyAsString();
         log.info("first original line of {} : {}, updateMsg: {}", dataFile.getId(), firstLine, updateMsg2);
+        var validation = client.admin()
+            .validateDatasetFiles(persistentId)
+            .getBodyAsObject().getDataFiles().get(0);
+        log.info("storage ID: {}, status: {}", validation.getStorageIdentifier(), validation.getStatus());
         var deleteMsg = client.dataset(persistentId)
             .deleteFiles(List.of(newFileId))
             .getBodyAsString();
         log.info(deleteMsg);
 
         // TODO too much logging: isolate direct API call from example
-        AdminValidateDatasetFiles.main(List.of(persistentId).toArray(new String[0]));
         DatasetUpdateMetadata.main(List.of(persistentId).toArray(new String[0]));
         DatasetUpdateMetadataFromJsonLd.main(List.of(persistentId, "citation", "description json value").toArray(new String[0]));
     }
