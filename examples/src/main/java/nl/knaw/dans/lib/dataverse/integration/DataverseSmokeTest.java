@@ -50,7 +50,7 @@ public class DataverseSmokeTest {
         DataverseIsMetadataBlocksRoot.main(List.of("root").toArray(new String[0]));
         DataverseSetMetadataBlocksRoot.main(List.of("root", "true").toArray(new String[0]));
 
-        // TODO internal server error on create, probably not used
+        // TODO internal server error on create
 //        DataverseCreate.main(new String[0]);
 //        DataversePublish.main(List.of("test2").toArray(new String[0]));
 //        DataverseIsMetadataBlocksRoot.main(List.of("test2").toArray(new String[0]));

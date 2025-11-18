@@ -27,10 +27,6 @@ import java.util.List;
 @Slf4j
 public class AdminSmokeTest {
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            log.error("Expecting a doi argument (e.g: doi:10.5072/DAR/I529LE) of an existing dataset with files");
-            System.exit(1);
-        }
         AdminListSingleUser.main(List.of("user001").toArray(new String[0]));
         AdminListSingleUser.main(List.of("dataverseAdmin").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2").toArray(new String[0]));

@@ -26,7 +26,9 @@ import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +37,13 @@ import static nl.knaw.dans.lib.dataverse.MetadataUtil.toFieldList;
 
 @Slf4j
 public class DatasetSmokeTest extends ExampleBase {
+    /**
+     * Calls dataset API methods and some methods of other API's
+     * that require (or create) the persistent ID of a dataset or file ID's within a dataset.
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         var persistentId = client.dataverse("root")
@@ -93,23 +102,44 @@ public class DatasetSmokeTest extends ExampleBase {
             .getData().getMetadataBlocks().get("citation").getFields();
         log.info("Citation without note: {}", reducedCitation);
 
-        var fileMeta = new FileMeta();
-        fileMeta.setLabel("some_file.md");
-        var fileToAdd = new File("README.md").getAbsoluteFile().toPath();
+        var fileMeta1 = new FileMeta();
+        fileMeta1.setLabel("some_file.md");
+        var fileToAdd = new File("docs/getting-started.md").getAbsoluteFile().toPath();
+        var fileForReplace = new File("docs/api.md").getAbsoluteFile().toPath();
         var dataFile = client.dataset(persistentId)
-            .addFile(fileToAdd, fileMeta)
+            .addFile(fileToAdd, fileMeta1)
             .getData().getFiles().get(0).getDataFile();
         var contentType = client.dataset(persistentId)
             .getFiles(Version.DRAFT.toString())
             .getData().get(0).getDataFile().getContentType();
-        fileMeta.setDirectoryLabel("some_dir");
-        fileMeta.setRestricted(true);
-        fileMeta.setDataFile(dataFile);
+        fileMeta1.setDirectoryLabel("some_dir");
+        fileMeta1.setRestricted(true);
+        fileMeta1.setDataFile(dataFile);
         var updateMsg = client.dataset(persistentId)
-            .updateFileMetadatas(List.of(fileMeta.toFileMetaUpdate()))
+            .updateFileMetadatas(List.of(fileMeta1.toFileMetaUpdate()))
             .getBodyAsString();
-        // TODO what is left in FileSmokeTest
         log.info("Added file id: {} File content type: {}, updateMsg: {}", dataFile.getId(), contentType, updateMsg);
+
+        var firstLine = client.basicFileAccess(dataFile.getId()).getFile(r -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(r.getEntity().getContent()))) {
+                return reader.readLine();
+            }
+        });
+        var fileMeta2 = new FileMeta();
+        fileMeta2.setLabel("replaced_label");
+        var newFileId = client.file(dataFile.getId())
+            .replaceFile(fileForReplace, fileMeta2)
+            .getData().getFiles().get(0).getDataFile().getId();
+        var fileMeta3 = new FileMeta();
+        fileMeta3.setDirectoryLabel("replaced_dir");
+        var updateMsg2 = client.file(newFileId)
+            .updateMetadata(fileMeta3)
+            .getBodyAsString();
+        log.info("first original line of {} : {}, updateMsg: {}", dataFile.getId(), firstLine, updateMsg2);
+        var deleteMsg = client.dataset(persistentId)
+            .deleteFiles(List.of(newFileId))
+            .getBodyAsString();
+        log.info(deleteMsg);
 
         // TODO too much logging: isolate direct API call from example
         AdminValidateDatasetFiles.main(List.of(persistentId).toArray(new String[0]));
