@@ -18,6 +18,7 @@ package nl.knaw.dans.lib.dataverse.integration;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.Version;
+import nl.knaw.dans.lib.dataverse.example.AdminValidateDatasetFiles;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadataFromJsonLd;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
@@ -111,6 +112,7 @@ public class DatasetSmokeTest extends ExampleBase {
         log.info("Added file id: {} File content type: {}, updateMsg: {}", dataFile.getId(), contentType, updateMsg);
 
         // TODO too much logging: isolate direct API call from example
+        AdminValidateDatasetFiles.main(List.of(persistentId).toArray(new String[0]));
         DatasetUpdateMetadata.main(List.of(persistentId).toArray(new String[0]));
         DatasetUpdateMetadataFromJsonLd.main(List.of(persistentId, "citation", "description json value").toArray(new String[0]));
     }

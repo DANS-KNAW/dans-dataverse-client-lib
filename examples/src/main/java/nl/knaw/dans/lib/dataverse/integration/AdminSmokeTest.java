@@ -33,7 +33,6 @@ public class AdminSmokeTest {
         }
         AdminListSingleUser.main(List.of("user001").toArray(new String[0]));
         AdminListSingleUser.main(List.of("dataverseAdmin").toArray(new String[0]));
-        AdminValidateDatasetFiles.main(args);
         AdminValidateDatasetFiles.main(List.of("2").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2", "True").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2", "False").toArray(new String[0]));
