@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.integration;
+package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
@@ -33,21 +33,22 @@ import nl.knaw.dans.lib.dataverse.example.DataverseView;
 import java.util.List;
 
 @Slf4j
-public class DataverseSmokeTest extends ExampleBase {
+public class DataverseTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
+        var alias = new Properties().getProperty("dataverseAlias");
         DataverseGetContents.main(new String[0]);
         DataverseGetStorageSize.main(new String[0]);
-        DataverseIsMetadataBlocksRoot.main(List.of("root").toArray(new String[0]));
+        DataverseIsMetadataBlocksRoot.main(List.of(alias).toArray(new String[0]));
         DataverseListRoleAssignments.main(new String[0]);
         DataverseListRoles.main(new String[0]);
-        DataverseView.main(List.of("root").toArray(new String[0]));
+        DataverseView.main(List.of(alias).toArray(new String[0]));
         DataverseCreateDataset.main(new String[0]);
         DataverseImportDataset.main(new String[0]);
 
-        DataverseIsMetadataBlocksRoot.main(List.of("root").toArray(new String[0]));
-        DataverseSetMetadataBlocksRoot.main(List.of("root", "true").toArray(new String[0]));
+        DataverseIsMetadataBlocksRoot.main(List.of(alias).toArray(new String[0]));
+        DataverseSetMetadataBlocksRoot.main(List.of(alias, "true").toArray(new String[0]));
 
-        var dvAlias = client.dataverse("root")
+        var dvAlias = client.dataverse(alias)
             .create(DataverseCreate.getDataverse())
             .getData().getAlias();
         DataversePublish.main(List.of(dvAlias).toArray(new String[0]));

@@ -2,4 +2,5 @@
 /*.iml
 /.idea
 /dataverse.properties
+/smoketest.properties
 /pom.xml.versionsBackup

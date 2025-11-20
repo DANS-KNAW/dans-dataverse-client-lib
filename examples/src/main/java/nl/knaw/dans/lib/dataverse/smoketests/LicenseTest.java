@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.integration;
+package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
@@ -24,20 +24,20 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-public class LicenseSmokeTest extends ExampleBase {
+public class LicenseTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
         var msg1 = client.license().getDefaultLicense()
             .getData().getMessage();
         log.info(msg1);
 
-        var name = client.license().getLicenseById(1)
-            .getData().getName();
-        log.info(name);
+        var uri = client.license().getLicenseById(1)
+            .getData().getUri();
+        log.info(uri);
 
         var id = UUID.randomUUID().toString();
         var license = new License();
         license.setName("some name - " + id);
-        license.setUri("https://dans.knaw.nl/license/" + id);
+        license.setUri(uri + "/" + id);
         license.setShortDescription("Dans license");
         var msg2 = client.license().addLicense(license)
             .getData().getMessage();
@@ -45,6 +45,8 @@ public class LicenseSmokeTest extends ExampleBase {
 
         var data = client.license().getLicenses()
             .getData();
+
+        // cleanup: find the id of the created license and delete it
         int largestId = data.stream()
             .mapToInt(License::getId)
             .max()

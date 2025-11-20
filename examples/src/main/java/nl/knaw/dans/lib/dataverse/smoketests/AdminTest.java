@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.integration;
+package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.example.AdminGetDatabaseSetting;
@@ -24,10 +24,9 @@ import nl.knaw.dans.lib.dataverse.example.AdminValidateDatasetFiles;
 import java.util.List;
 
 @Slf4j
-public class AdminSmokeTest {
+public class AdminTest {
     public static void main(String[] args) throws Exception {
         AdminListSingleUser.main(List.of("user001").toArray(new String[0]));
-        AdminListSingleUser.main(List.of("dataverseAdmin").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2", "True").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2", "False").toArray(new String[0]));

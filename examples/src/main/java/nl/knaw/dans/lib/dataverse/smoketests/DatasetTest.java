@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.integration;
+package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.Version;
-import nl.knaw.dans.lib.dataverse.example.AdminValidateDatasetFiles;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadataFromJsonLd;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
+import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
+import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
 import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
@@ -33,10 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import static java.util.Collections.emptyMap;
-import static nl.knaw.dans.lib.dataverse.MetadataUtil.toFieldList;
 
 @Slf4j
-public class DatasetSmokeTest extends ExampleBase {
+public class DatasetTest extends ExampleBase {
     /**
      * Calls dataset API methods and some methods of other API's that require (or create) the persistent ID of a dataset or file ID's within a dataset.
      *
@@ -46,7 +46,7 @@ public class DatasetSmokeTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
 
         var persistentId = client.dataverse("root")
-            .createDataset(DataverseCreateDataset.getDataset(), new HashMap<>())
+            .createDataset(DataverseCreateDataset.getDataset("Test description"), new HashMap<>())
             .getData().getPersistentId();
 
         var isInReview = client.dataset(persistentId)
@@ -147,5 +147,13 @@ public class DatasetSmokeTest extends ExampleBase {
         // TODO too much logging: isolate direct API call from example
         DatasetUpdateMetadata.main(List.of(persistentId).toArray(new String[0]));
         DatasetUpdateMetadataFromJsonLd.main(List.of(persistentId, "citation", "description json value").toArray(new String[0]));
+    }
+
+    private static FieldList toFieldList(MetadataField... fields) {
+        var fieldList = new FieldList();
+        for (var field : fields) {
+            fieldList.add(field);
+        }
+        return fieldList;
     }
 }

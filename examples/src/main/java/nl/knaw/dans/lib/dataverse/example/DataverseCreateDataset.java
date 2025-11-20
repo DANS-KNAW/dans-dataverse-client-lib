@@ -19,12 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.CompoundFieldBuilder;
 import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
-import nl.knaw.dans.lib.dataverse.MetadataUtil;
 import nl.knaw.dans.lib.dataverse.model.dataset.ControlledMultiValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.ControlledSingleValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetCreationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
+import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
 import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveMultiValueField;
 import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
@@ -32,6 +32,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.PrimitiveSingleValueField;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class DataverseCreateDataset extends ExampleBase {
@@ -43,7 +44,7 @@ public class DataverseCreateDataset extends ExampleBase {
             System.out.println("Supplied citation metadata key: " + mdKeyValue);
         }
 
-        var dataset = getDataset();
+        var dataset = getDataset("Test description");
         log.info(toPrettyJson(dataset));
 
         DataverseHttpResponse<DatasetCreationResult> r = client.dataverse("root").createDataset(dataset, keyMap);
@@ -55,11 +56,11 @@ public class DataverseCreateDataset extends ExampleBase {
         log.info("Status Line: {} {}", r2.getHttpResponse().getCode(), r2.getHttpResponse().getReasonPhrase());
     }
 
-    public static Dataset getDataset() {
+    public static Dataset getDataset(String testDescription) {
         MetadataField title = new PrimitiveSingleValueField("title", "Test dataset");
         MetadataField note = new PrimitiveSingleValueField("notesText", "Not mandatory content");
         MetadataField description = new CompoundFieldBuilder("dsDescription", true)
-            .addSubfield("dsDescriptionValue", "Test description")
+            .addSubfield("dsDescriptionValue", testDescription)
             .addSubfield("dsDescriptionDate", "").build();
         MetadataField author = new CompoundFieldBuilder("author", true)
             .addSubfield("authorName", "A U Thor")
@@ -69,18 +70,18 @@ public class DataverseCreateDataset extends ExampleBase {
             .addSubfield("datasetContactEmail", "test@example.com").build();
         MetadataField subjects = new ControlledMultiValueField("subject", List.of("Arts and Humanities", "Computer and Information Science"));
 
-        var citation = MetadataUtil.toMetadataBlock("citation", "Citation Metadata", title, author, contact, description, subjects, note);
+        var citation = toMetadataBlock("citation", "Citation Metadata", title, author, contact, description, subjects, note);
 
         MetadataField lang = new ControlledMultiValueField("dansMetadataLanguage", List.of("English"));
         MetadataField rightsHolder = new PrimitiveMultiValueField("dansRightsHolder", List.of("DANS", "Another Holder"));
         MetadataField hasPersonalData = new ControlledSingleValueField("dansPersonalDataPresent", "No");
-        var rights = MetadataUtil.toMetadataBlock("dansRights", "Rights Metadata", rightsHolder, hasPersonalData, lang);
+        var rights = toMetadataBlock("dansRights", "Rights Metadata", rightsHolder, hasPersonalData, lang);
 
         MetadataField audience = new PrimitiveMultiValueField("dansAudience", List.of("https://www.narcis.nl/classification/D23320", "https://www.narcis.nl/classification/D23360"));
-        var relation = MetadataUtil.toMetadataBlock("dansRelationMetadata", "Relation Metadata", audience);
+        var relation = toMetadataBlock("dansRelationMetadata", "Relation Metadata", audience);
 
         DatasetVersion version1 = new DatasetVersion();
-        version1.setMetadataBlocks(MetadataUtil.toMetadataBlockMap(citation, rights, relation));
+        version1.setMetadataBlocks(toMetadataBlockMap(citation, rights, relation));
         version1.setFiles(Collections.emptyList()); // Otherwise a 400 Bad Request is returned; you are not allowed to change file metadata this way
         // The license field is ignored, for how to set it, see example DatasetUpdateMetadataFromJsonLd
         //        License license = new License();
@@ -96,4 +97,19 @@ public class DataverseCreateDataset extends ExampleBase {
         return dataset;
     }
 
+    static Map<String, MetadataBlock> toMetadataBlockMap(MetadataBlock... blocks) {
+        var map = new HashMap<String, MetadataBlock>();
+        for (var block : blocks) {
+            map.put(block.getName(), block);
+        }
+        return map;
+    }
+
+    private static MetadataBlock toMetadataBlock(String name, String displayName, MetadataField... fields) {
+        MetadataBlock metadataBlock = new MetadataBlock();
+        metadataBlock.setName(name);
+        metadataBlock.setDisplayName(displayName);
+        metadataBlock.setFields(List.of(fields));
+        return metadataBlock;
+    }
 }
