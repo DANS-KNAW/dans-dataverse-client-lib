@@ -40,7 +40,7 @@ public class DatasetUpdateMetadataFromJsonLd extends ExampleBase {
             var mdBlockName = args[3];
             var mdKeyValue = args[4];
             keyMap.put(mdBlockName, mdKeyValue);
-            log.info("Supplied metadata key (name, value): ({}< {}})", mdBlockName, mdKeyValue);
+            log.info("Supplied metadata key (name, value): ({}< {})", mdBlockName, mdKeyValue);
         }
 
         DataverseResponse<Object> r = client.dataset(persistentId)

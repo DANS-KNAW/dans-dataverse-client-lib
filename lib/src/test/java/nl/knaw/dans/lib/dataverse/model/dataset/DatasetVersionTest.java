@@ -18,6 +18,7 @@ package nl.knaw.dans.lib.dataverse.model.dataset;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class DatasetVersionTest extends ModelDatasetMapperFixture {
@@ -30,6 +31,10 @@ class DatasetVersionTest extends ModelDatasetMapperFixture {
         assertEquals(7, dsv.getId());
         assertEquals("file://10.5072/FK2/U6AEZM", dsv.getStorageIdentifier());
         assertEquals("CC0", dsv.getLicense().getName());
+        assertNull(dsv.getLicense().getRightsIdentifier());
+        assertNull(dsv.getLicense().getRightsIdentifierScheme());
+        assertNull(dsv.getLicense().getSchemeUri());
+        assertNull(dsv.getLicense().getLanguageCode());
         MetadataField title = dsv.getMetadataBlocks()
             .get("citation")
             .getFields()
