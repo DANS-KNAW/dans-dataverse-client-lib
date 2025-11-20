@@ -16,7 +16,6 @@
 package nl.knaw.dans.lib.dataverse.integration;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.knaw.dans.lib.dataverse.DataverseException;
 import nl.knaw.dans.lib.dataverse.example.AdminGetDatabaseSetting;
 import nl.knaw.dans.lib.dataverse.example.AdminListSingleUser;
 import nl.knaw.dans.lib.dataverse.example.AdminPutDatabaseSetting;
@@ -33,6 +32,6 @@ public class AdminSmokeTest {
         AdminValidateDatasetFiles.main(List.of("2", "True").toArray(new String[0]));
         AdminValidateDatasetFiles.main(List.of("2", "False").toArray(new String[0]));
         AdminGetDatabaseSetting.main(List.of(":AllowSignUp").toArray(new String[0]));
-        AdminPutDatabaseSetting.main(List.of(":AllowSignUp","False").toArray(new String[0]));
+        AdminPutDatabaseSetting.main(List.of(":AllowSignUp", "False").toArray(new String[0]));
     }
 }
