@@ -38,6 +38,11 @@ public class DataverseResponseTest extends MapperFixture {
                 mapper, Dataverse.class);
         Assertions.assertEquals("root", r.getData().getAlias());
         Assertions.assertEquals("Dataverse Name", r.getData().getName());
+        Assertions.assertEquals(null, r.getData().getAffiliation());
+        Assertions.assertEquals("The root dataverse.", r.getData().getDescription());
+        Assertions.assertEquals(0, r.getData().getOwnerId());
+        Assertions.assertEquals(1, r.getData().getId());
+        Assertions.assertTrue(r.getData().isPermissionRoot());
     }
 
     @Test
