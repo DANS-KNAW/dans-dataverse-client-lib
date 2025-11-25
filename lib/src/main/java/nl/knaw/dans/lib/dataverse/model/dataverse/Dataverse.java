@@ -38,7 +38,7 @@ public class Dataverse {
     private DataverseTheme theme;
     private List<DataverseContact> dataverseContacts;
     // isPartOf ignore!
-    private boolean filePIDsEnabled;
+    private Boolean filePIDsEnabled;
     @JsonProperty("isReleased")
     private boolean isReleased;
 }

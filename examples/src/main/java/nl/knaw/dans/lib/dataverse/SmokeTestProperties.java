@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.smoketests;
+package nl.knaw.dans.lib.dataverse;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public class Properties {
+public class SmokeTestProperties {
     private java.util.Properties properties = new java.util.Properties();
 
-    public Properties() throws IOException {
-        try (FileInputStream fis = new FileInputStream("dataverse.properties")) {
+    public SmokeTestProperties() throws IOException {
+        String propsFiles = Files.exists(Path.of("examples/smoketest.properties")) ?
+            "examples/smoketest.properties" : "modules/dans-dataverse-client-lib/examples/smoketest.properties";
+        try (FileInputStream fis = new FileInputStream(propsFiles)) {
             properties.load(fis);
         }
     }

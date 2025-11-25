@@ -17,8 +17,8 @@ package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
-import nl.knaw.dans.lib.dataverse.example.DataverseDelete;
 import nl.knaw.dans.lib.dataverse.example.SearchFind;
 import nl.knaw.dans.lib.dataverse.example.SearchIterator;
 
@@ -31,7 +31,7 @@ public class SearchTest extends ExampleBase {
 
         // make sure there is some data to find, regardless of the content of the Dataverse installation
         var dataset = DataverseCreateDataset.getDataset("Description for smoky search queries.");
-        var persistentId = client.dataverse(new Properties().getProperty("dataverseAlias")).createDataset(dataset, new HashMap<>())
+        var persistentId = client.dataverse(new SmokeTestProperties().getProperty("dataverseAlias")).createDataset(dataset, new HashMap<>())
             .getData().getPersistentId();
 
         // the following test should both show the dataset above

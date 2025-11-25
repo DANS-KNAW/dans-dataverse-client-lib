@@ -17,6 +17,7 @@ package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.Version;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadataFromJsonLd;
@@ -73,7 +74,7 @@ public class DatasetTest extends ExampleBase {
         log.info("Dataset {}, inReview was: {}, datasetType: {}, lockType was: {}", persistentId, isInReview, datasetType, lockType);
 
         RoleAssignment roleAssignment = new RoleAssignment();
-        roleAssignment.setAssignee("@user001");
+        roleAssignment.setAssignee("@" + new SmokeTestProperties().getProperty("username"));
         roleAssignment.setRole("fileDownloader");
         var roleAssignmentId = client.dataset(persistentId)
             .assignRole(roleAssignment)

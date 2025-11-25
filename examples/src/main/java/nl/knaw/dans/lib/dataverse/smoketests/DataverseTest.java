@@ -17,6 +17,7 @@ package nl.knaw.dans.lib.dataverse.smoketests;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreate;
 import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
 import nl.knaw.dans.lib.dataverse.example.DataverseDelete;
@@ -35,7 +36,7 @@ import java.util.List;
 @Slf4j
 public class DataverseTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
-        var alias = new Properties().getProperty("dataverseAlias");
+        var alias = new SmokeTestProperties().getProperty("dataverseAlias");
         DataverseGetContents.main(new String[0]);
         DataverseGetStorageSize.main(new String[0]);
         DataverseIsMetadataBlocksRoot.main(List.of(alias).toArray(new String[0]));
