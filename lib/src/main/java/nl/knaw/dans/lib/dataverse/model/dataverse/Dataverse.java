@@ -23,7 +23,7 @@ import java.util.List;
 
 // Ignoring isPartOf, has to specified as option in the API call, which we don't do yet
 @Data
-@JsonIgnoreProperties({"isPartOf"})
+@JsonIgnoreProperties({"isPartOf", "inputLevels", "isMetadataBlockRoot", "isFacetRoot", "effectiveRequiresFilesToPublishDataset"})
 public class Dataverse {
     private int id;
     private int ownerId;
@@ -38,7 +38,7 @@ public class Dataverse {
     private DataverseTheme theme;
     private List<DataverseContact> dataverseContacts;
     // isPartOf ignore!
-    private boolean filePIDsEnabled;
+    private Boolean filePIDsEnabled;
     @JsonProperty("isReleased")
     private boolean isReleased;
 }

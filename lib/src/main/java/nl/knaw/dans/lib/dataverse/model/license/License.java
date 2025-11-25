@@ -33,4 +33,8 @@ public class License {
     private boolean defaultLicense;
     @JsonIgnoreProperties(ignoreUnknown = true)
     private int sortOrder;
+    private String rightsIdentifier;
+    private String rightsIdentifierScheme;
+    private String schemeUri;
+    private String languageCode;
 }
