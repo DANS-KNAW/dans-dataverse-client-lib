@@ -45,7 +45,7 @@ public class DatasetAwaitUnlock extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            log.error("Usage: DatasetAwaitUnlock <persistentId> [<maxNumberOfRetries> [<millisecondsBetweenRetries> [<lockType1> <lockType2> ...]]]");
+            log.error("Usage: {} <persistentId> [<maxNumberOfRetries> [<millisecondsBetweenRetries> [<lockType1> <lockType2> ...]]]", DatasetAwaitUnlock.class.getSimpleName());
             System.exit(1);
         }
         var persistentId = args[0];

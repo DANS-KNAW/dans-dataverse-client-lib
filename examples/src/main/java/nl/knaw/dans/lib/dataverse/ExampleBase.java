@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.configuration.ConfigurationException;
@@ -28,7 +29,7 @@ import java.nio.file.Path;
 public abstract class ExampleBase {
 
     protected static DataverseClient client;
-    protected static ObjectMapper mapper = new ObjectMapper();
+    protected static ObjectMapper mapper = new ObjectMapper().configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 
     static {
         try {
@@ -36,7 +37,7 @@ public abstract class ExampleBase {
                 "examples/dataverse.properties" : "modules/dans-dataverse-client-lib/examples/dataverse.properties";
             PropertiesConfiguration props = new PropertiesConfiguration(propsFiles);
             DataverseClientConfig config = new DataverseClientConfig(new URI(props.getString("baseUrl")), props.getString("apiToken"), props.getString("unblockKey", null));
-            client = new DataverseClient(config);
+            client = new DataverseClient(config, null, mapper);
         }
         catch (ConfigurationException | URISyntaxException e) {
             e.printStackTrace();

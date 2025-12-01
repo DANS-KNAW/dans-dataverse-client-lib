@@ -20,6 +20,7 @@ import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.model.dataverse.Dataverse;
 import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseContact;
+import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseTheme;
 import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseType;
 import org.apache.hc.core5.http.HttpStatus;
 
@@ -29,15 +30,7 @@ import java.util.Arrays;
 public class DataverseCreate extends ExampleBase {
 
     public static void main(String[] args) throws Exception {
-        Dataverse dataverse = new Dataverse();
-        dataverse.setDataverseType(DataverseType.JOURNALS);
-        dataverse.setName("A Test Dataverse");
-        dataverse.setAlias("test2");
-        dataverse.setDescription("This is a longer description than 'name' and 'alias'");
-        dataverse.setDataverseContacts(
-            Arrays.asList(
-                new DataverseContact(0, "dummy@email.com"),
-                new DataverseContact(1, "dummier@email.com")));
+        var dataverse = getDataverse();
         log.info(toPrettyJson(dataverse));
         DataverseHttpResponse<Dataverse> r = client.dataverse("root").create(dataverse);
         log.info("Status Line: {} {}", r.getHttpResponse().getCode(), r.getHttpResponse().getReasonPhrase());
@@ -45,5 +38,20 @@ public class DataverseCreate extends ExampleBase {
             log.info("Created: {}", r.getData().getDescription());
             log.info("Creation Date: {}", r.getData().getCreationDate());
         }
+    }
+
+    public static Dataverse getDataverse() {
+        Dataverse dataverse = new Dataverse();
+        dataverse.setDataverseType(DataverseType.JOURNALS);
+        dataverse.setName("A Test Dataverse");
+        dataverse.setAlias("test2");
+        dataverse.setTheme(new DataverseTheme());
+        dataverse.setFilePIDsEnabled(null); // both true and false causes: cannot be enabled per collection
+        dataverse.setDescription("This is a longer description than 'name' and 'alias'");
+        dataverse.setDataverseContacts(
+            Arrays.asList(
+                new DataverseContact(0, "dummy@email.com"),
+                new DataverseContact(1, "dummier@email.com")));
+        return dataverse;
     }
 }
