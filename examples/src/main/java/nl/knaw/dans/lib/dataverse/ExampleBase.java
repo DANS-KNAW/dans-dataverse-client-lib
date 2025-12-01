@@ -15,7 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.configuration.ConfigurationException;
@@ -25,16 +25,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 public abstract class ExampleBase {
 
     protected static DataverseClient client;
-    protected static ObjectMapper mapper = new ObjectMapper().configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+    protected static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
 
     static {
         try {
-            String propsFiles = Files.exists(Path.of("examples/dataverse.properties")) ?
-                "examples/dataverse.properties" : "modules/dans-dataverse-client-lib/examples/dataverse.properties";
+            String propsFiles = getExamplesRoot().resolve("dataverse.properties").toString();
             PropertiesConfiguration props = new PropertiesConfiguration(propsFiles);
             DataverseClientConfig config = new DataverseClientConfig(new URI(props.getString("baseUrl")), props.getString("apiToken"), props.getString("unblockKey", null));
             client = new DataverseClient(config, null, mapper);
@@ -47,4 +47,20 @@ public abstract class ExampleBase {
     protected static String toPrettyJson(Object value) throws JsonProcessingException {
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
     }
+
+    protected static Path getExamplesRoot() {
+        var workingDir = Path.of("").toAbsolutePath();
+        var candidates = List.of(Path.of("modules/dans-dataverse-client-lib/examples"),
+            Path.of("dans-dataverse-client-lib/examples"),
+            Path.of("examples"),
+            Path.of("."));
+        for (var candidate : candidates) {
+            var fullPath = workingDir.resolve(candidate);
+            if (Files.exists(fullPath)) {
+                return fullPath;
+            }
+        }
+        throw new IllegalStateException("Could not find examples root from working dir: " + workingDir);
+    }
+
 }

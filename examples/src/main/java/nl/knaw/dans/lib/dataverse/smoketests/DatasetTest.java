@@ -104,8 +104,8 @@ public class DatasetTest extends ExampleBase {
 
         var fileMeta1 = new FileMeta();
         fileMeta1.setLabel("some_file.md");
-        var fileToAdd = new File("docs/getting-started.md").getAbsoluteFile().toPath();
-        var fileForReplace = new File("docs/api.md").getAbsoluteFile().toPath();
+        var fileToAdd = ExampleBase.getExamplesRoot().resolve("../docs/getting-started.md");
+        var fileForReplace = ExampleBase.getExamplesRoot().resolve("../docs/api.md");
         var dataFile = client.dataset(persistentId)
             .addFile(fileToAdd, fileMeta1)
             .getData().getFiles().get(0).getDataFile();

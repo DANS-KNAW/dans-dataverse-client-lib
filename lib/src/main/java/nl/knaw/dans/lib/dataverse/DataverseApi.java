@@ -358,8 +358,8 @@ public class DataverseApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#publish-a-dataverse-collection" target="_blank">Dataverse documentation</a>
      */
-    public DataverseHttpResponse<DataMessage> publish() throws IOException, DataverseException {
-        return httpClientWrapper.postJsonString(subPath.resolve(publish), "", new HashMap<>(), new HashMap<>(), DataMessage.class);
+    public DataverseHttpResponse<Dataverse> publish() throws IOException, DataverseException {
+        return httpClientWrapper.postJsonString(subPath.resolve(publish), "", new HashMap<>(), new HashMap<>(), Dataverse.class);
     }
 
     /*https://guides.dataverse.org/en/latest/api/native-api.html#retrieve-guestbook-responses-for-a-dataverse-collection

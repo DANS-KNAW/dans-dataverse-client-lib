@@ -54,7 +54,7 @@ public class DataverseTest extends ExampleBase {
             .getData().getAlias();
         DataversePublish.main(List.of(dvAlias).toArray(new String[0]));
         DataverseIsMetadataBlocksRoot.main(List.of(dvAlias).toArray(new String[0]));
-        DataverseSetMetadataBlocksRoot.main(List.of(dvAlias).toArray(new String[0]));
+        DataverseSetMetadataBlocksRoot.main(List.of(dvAlias, "false").toArray(new String[0]));
         DataverseDelete.main(List.of(dvAlias).toArray(new String[0]));
     }
 }

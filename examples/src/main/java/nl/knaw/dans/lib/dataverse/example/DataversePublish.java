@@ -19,14 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
+import nl.knaw.dans.lib.dataverse.model.dataverse.Dataverse;
 
 @Slf4j
 public class DataversePublish extends ExampleBase {
 
     public static void main(String[] args) throws Exception {
         String alias = args[0];
-        DataverseHttpResponse<DataMessage> r = client.dataverse(alias).publish();
+        var r = client.dataverse(alias).publish();
         log.info("Status Line of DATAVERSE PUBLICATION: {} {}", r.getHttpResponse().getCode(), r.getHttpResponse().getReasonPhrase());
-        log.info("Response message: {}", r.getData().getMessage());
+        log.info(r.getBodyAsString());
+        log.info("Response message: {}", r.getData());
     }
 }

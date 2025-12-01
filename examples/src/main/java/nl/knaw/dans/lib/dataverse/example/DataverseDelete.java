@@ -25,7 +25,8 @@ import org.apache.hc.core5.http.HttpStatus;
 public class DataverseDelete extends ExampleBase {
 
     public static void main(String[] args) throws Exception {
-        DataverseHttpResponse<DataMessage> r = client.dataverse("test").delete();
+        String alias = args[0];
+        DataverseHttpResponse<DataMessage> r = client.dataverse(alias).delete();
         log.info("Status Line: {} {}", r.getHttpResponse().getCode(), r.getHttpResponse().getReasonPhrase());
         if (r.getHttpResponse().getCode() < HttpStatus.SC_CLIENT_ERROR) {
             log.info("Message: {}", r.getData().getMessage());

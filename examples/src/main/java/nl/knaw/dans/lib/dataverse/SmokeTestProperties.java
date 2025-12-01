@@ -19,13 +19,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Properties;
 
 public class SmokeTestProperties {
-    private java.util.Properties properties = new java.util.Properties();
+    private final Properties properties = new Properties();
 
     public SmokeTestProperties() throws IOException {
-        String propsFiles = Files.exists(Path.of("examples/smoketest.properties")) ?
-            "examples/smoketest.properties" : "modules/dans-dataverse-client-lib/examples/smoketest.properties";
+        String propsFiles = ExampleBase.getExamplesRoot().resolve("smoketest.properties").toString();
         try (FileInputStream fis = new FileInputStream(propsFiles)) {
             properties.load(fis);
         }
