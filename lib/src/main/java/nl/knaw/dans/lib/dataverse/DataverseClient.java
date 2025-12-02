@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.ToString;
@@ -53,7 +54,9 @@ public class DataverseClient {
      * @param objectMapper the Jackson object mapper to use, or null to use a default mapper
      */
     public DataverseClient(DataverseClientConfig config, HttpClient httpClient, ObjectMapper objectMapper) {
-        ObjectMapper mapper = objectMapper == null ? new ObjectMapper() : objectMapper;
+        ObjectMapper mapper = objectMapper == null ?
+            new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL) :
+            objectMapper;
         SimpleModule module = new SimpleModule();
         // TODO: How to get rid of type warnings?
         // TODO: Create proper Jackson module for this?
