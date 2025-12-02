@@ -28,7 +28,7 @@ popd
 echo "Removing existing JavaDocs if present"
 if [ -d "docs/javadocs" ]; then rm -fr docs/javadocs; fi
 echo "Moving newly generated JavaDocs in place"
-mv lib/target/site/apidocs docs/javadocs
+mv lib/target/reports/apidocs docs/javadocs
 echo "DONE build and add javadocs"
 
 
