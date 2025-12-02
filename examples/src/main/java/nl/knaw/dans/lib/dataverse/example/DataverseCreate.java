@@ -45,8 +45,6 @@ public class DataverseCreate extends ExampleBase {
         dataverse.setDataverseType(DataverseType.JOURNALS);
         dataverse.setName("A Test Dataverse");
         dataverse.setAlias("test2");
-        dataverse.setTheme(new DataverseTheme());
-        dataverse.setFilePIDsEnabled(null); // both true and false causes: cannot be enabled per collection
         dataverse.setDescription("This is a longer description than 'name' and 'alias'");
         dataverse.setDataverseContacts(
             Arrays.asList(

@@ -32,7 +32,7 @@ public class AdminListSingleUser extends ExampleBase {
         log.info("Id: " + r.getData().getId());
         log.info("DisplayName: " + r.getData().getDisplayName());
         log.info("one-liners showing differences");
-        log.info("model deserialized: " + mapper.writeValueAsString(r.getEnvelope()));
+        log.info("model deserialized: " + toPrettyJson(r.getEnvelope()));
         log.info("original response:  " + r.getEnvelopeAsString());
     }
 }

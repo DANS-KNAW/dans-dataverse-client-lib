@@ -30,14 +30,14 @@ import java.util.List;
 public abstract class ExampleBase {
 
     protected static DataverseClient client;
-    protected static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
+    private static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
 
     static {
         try {
             String propsFiles = getExamplesRoot().resolve("dataverse.properties").toString();
             PropertiesConfiguration props = new PropertiesConfiguration(propsFiles);
             DataverseClientConfig config = new DataverseClientConfig(new URI(props.getString("baseUrl")), props.getString("apiToken"), props.getString("unblockKey", null));
-            client = new DataverseClient(config, null, mapper);
+            client = new DataverseClient(config);
         }
         catch (ConfigurationException | URISyntaxException e) {
             e.printStackTrace();

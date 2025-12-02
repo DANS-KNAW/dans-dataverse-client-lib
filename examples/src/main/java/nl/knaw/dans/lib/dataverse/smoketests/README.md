@@ -23,3 +23,5 @@ TODO:
 * rewrite tests such that we won't need a smoke test configuration at all, such as:
   * create user with a UUID in its name
   * create a dataverse with a UUID in its name
+* Setup that (temporarily) makes DANS specific metadata blocks optional
+  for DataverseCreateDataset and DataverseImportDataset examples, introduced in PR #60.
