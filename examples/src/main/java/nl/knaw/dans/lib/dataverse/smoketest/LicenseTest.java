@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.smoketests;
+package nl.knaw.dans.lib.dataverse.smoketest;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
