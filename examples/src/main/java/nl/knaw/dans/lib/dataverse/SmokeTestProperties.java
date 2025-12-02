@@ -15,18 +15,16 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Properties;
 
 public class SmokeTestProperties {
     private final Properties properties = new Properties();
 
     public SmokeTestProperties() throws IOException {
-        String propsFiles = ExampleBase.getExamplesRoot().resolve("smoketest.properties").toString();
-        try (FileInputStream fis = new FileInputStream(propsFiles)) {
+        var propsFile = ExampleBase.getExamplesRoot().resolve("smoketest.properties");
+        try (var fis = Files.newInputStream(propsFile)) {
             properties.load(fis);
         }
     }
