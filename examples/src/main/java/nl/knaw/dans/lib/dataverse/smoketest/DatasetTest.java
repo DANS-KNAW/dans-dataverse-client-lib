@@ -16,6 +16,7 @@
 package nl.knaw.dans.lib.dataverse.smoketest;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.knaw.dans.lib.dataverse.DataverseException;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.Version;
@@ -45,9 +46,16 @@ public class DatasetTest extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
 
-        var persistentId = client.dataverse("root")
-            .createDataset(DataverseCreateDataset.getDataset("Test description"), new HashMap<>())
-            .getData().getPersistentId();
+        String persistentId;
+        try {
+            persistentId = client.dataverse("root")
+                .createDataset(DataverseCreateDataset.getDataset("Test description"), new HashMap<>())
+                .getData().getPersistentId();
+        } catch (DataverseException e) {
+            log.error("Could not create dataset, aborting test", e);
+            warnForCustomMetadataBlocks(e);
+            return;
+        }
 
         var isInReview = client.dataset(persistentId)
             .submitForReview()
