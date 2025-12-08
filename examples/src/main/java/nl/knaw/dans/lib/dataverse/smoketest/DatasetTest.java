@@ -157,6 +157,13 @@ public class DatasetTest extends ExampleBase {
             .validateDatasetFiles(persistentId)
             .getBodyAsObject().getDataFiles().get(0);
         log.info("storage ID: {}, status: {}", validation.getStorageIdentifier(), validation.getStatus());
+
+        var enableMsg = client.accessRequests(persistentId)
+            .enable().getData().getMessage();
+        var disableMsg = client.accessRequests(persistentId)
+            .disable().getData().getMessage();
+        log.info("Access requests enable msg: {} -- disable msg: {}", enableMsg, disableMsg);
+
         var deleteMsg = client.dataset(persistentId)
             .deleteFiles(List.of(newFileId))
             .getBodyAsString();
