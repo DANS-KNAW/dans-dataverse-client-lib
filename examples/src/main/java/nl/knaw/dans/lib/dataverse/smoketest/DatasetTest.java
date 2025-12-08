@@ -31,6 +31,7 @@ import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,10 +47,14 @@ public class DatasetTest extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
 
-        var dataset = Files.readString(getExamplesRoot()
-            .resolve(new SmokeTestProperties().getProperty("jsonResourcesDir"))
-            .resolve("new-dataset.json")
-        );
+        var jsonResourcesDir = new SmokeTestProperties().getProperty("jsonResourcesDir");
+        var file = getExamplesRoot()
+            .resolve(jsonResourcesDir)
+            .resolve("new-dataset.json");
+        if (!file.toFile().exists()) {
+            file = Path.of(jsonResourcesDir);
+        }
+        var dataset = Files.readString(file);
 
         String persistentId;
         try {
