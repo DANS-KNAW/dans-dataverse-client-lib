@@ -17,3 +17,6 @@
 # values that do exist in the target dataverse installation
 dataverseAlias=changeMe
 username=changeMe
+
+# valid mandatory metadata for the target dataverse installation
+jsonResourcesDir=src/main/resources/changeMe

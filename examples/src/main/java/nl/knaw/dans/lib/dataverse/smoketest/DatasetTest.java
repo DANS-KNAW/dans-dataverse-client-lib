@@ -22,7 +22,6 @@ import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.Version;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata;
 import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadataFromJsonLd;
-import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
@@ -31,6 +30,7 @@ import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,10 +46,15 @@ public class DatasetTest extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
 
+        var dataset = Files.readString(getExamplesRoot()
+            .resolve(new SmokeTestProperties().getProperty("jsonResourcesDir"))
+            .resolve("new-dataset.json")
+        );
+
         String persistentId;
         try {
             persistentId = client.dataverse("root")
-                .createDataset(DataverseCreateDataset.getDataset("Test description"), new HashMap<>())
+                .createDataset(dataset, new HashMap<>())
                 .getData().getPersistentId();
         } catch (DataverseException e) {
             log.error("Could not create dataset, aborting test", e);

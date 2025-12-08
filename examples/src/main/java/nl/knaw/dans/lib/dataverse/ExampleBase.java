@@ -32,7 +32,7 @@ import java.util.List;
 public abstract class ExampleBase {
 
     protected static DataverseClient client;
-    private static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
+    protected static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
 
     static {
         try {
