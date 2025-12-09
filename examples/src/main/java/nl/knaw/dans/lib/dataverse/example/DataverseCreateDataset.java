@@ -42,7 +42,7 @@ public class DataverseCreateDataset extends ExampleBase {
             System.out.println("Supplied citation metadata key: " + mdKeyValue);
         }
 
-        var dataset = getDataset("Test description");
+        var dataset = getDataset();
         log.info(toPrettyJson(dataset));
 
         DataverseHttpResponse<DatasetCreationResult> r;
@@ -61,11 +61,11 @@ public class DataverseCreateDataset extends ExampleBase {
         log.info("Status Line: {} {}", r2.getHttpResponse().getCode(), r2.getHttpResponse().getReasonPhrase());
     }
 
-    public static Dataset getDataset(String testDescription) {
+    private static Dataset getDataset() {
         MetadataField title = new PrimitiveSingleValueField("title", "Test dataset");
         MetadataField note = new PrimitiveSingleValueField("notesText", "Not mandatory content");
         MetadataField description = new CompoundFieldBuilder("dsDescription", true)
-            .addSubfield("dsDescriptionValue", testDescription)
+            .addSubfield("dsDescriptionValue", "Test description")
             .addSubfield("dsDescriptionDate", "").build();
         MetadataField author = new CompoundFieldBuilder("author", true)
             .addSubfield("authorName", "A U Thor")

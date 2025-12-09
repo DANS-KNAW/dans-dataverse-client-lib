@@ -96,18 +96,22 @@ public class DatasetTest extends ExampleBase {
             .getData().getMessage();
         log.info("Deleted role assignment id {} fistAssignee {}: {}", roleAssignmentId, firstAssignee, deleteMessage);
 
-        var newTitle = toFieldList(new PrimitiveSingleValueField("title", "updated title value"));
+        MetadataField titleField = new PrimitiveSingleValueField("title", "updated title value");
+        var fieldListWithTitle = new FieldList();
+        fieldListWithTitle.add(titleField);
         var citation = client.dataset(persistentId)
-            .editMetadata(newTitle, true, emptyMap())
+            .editMetadata(fieldListWithTitle, true, emptyMap())
             .getData().getMetadataBlocks().get("citation").getFields();
         var nrOfVersions = client.dataset(persistentId)
             .getAllVersions()
             .getData().size();
         log.info("nrOfVersions: {}, Citation with changed title: {}", nrOfVersions, citation);
 
-        var noteField = toFieldList(new PrimitiveSingleValueField("notesText", "Not mandatory content"));
+        MetadataField notesField = new PrimitiveSingleValueField("notesText", "Not mandatory content");
+        var fieldListWithNote = new FieldList();
+        fieldListWithNote.add(notesField);
         var reducedCitation = client.dataset(persistentId)
-            .deleteMetadata(noteField, emptyMap())
+            .deleteMetadata(fieldListWithNote, emptyMap())
             .getData().getMetadataBlocks().get("citation").getFields();
         log.info("Citation without note: {}", reducedCitation);
 
@@ -185,13 +189,5 @@ public class DatasetTest extends ExampleBase {
             .updateMetadata(latest, emptyMap())
             .getData().getInternalVersionNumber();
         log.info("Version number: {}", internalVersionNumber);
-    }
-
-    private static FieldList toFieldList(MetadataField... fields) {
-        var fieldList = new FieldList();
-        for (var field : fields) {
-            fieldList.add(field);
-        }
-        return fieldList;
     }
 }
