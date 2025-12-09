@@ -18,11 +18,6 @@ package nl.knaw.dans.lib.dataverse.smoketest;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
-import nl.knaw.dans.lib.dataverse.example.AdminGetDatabaseSetting;
-import nl.knaw.dans.lib.dataverse.example.AdminPutDatabaseSetting;
-import nl.knaw.dans.lib.dataverse.example.AdminValidateDatasetFiles;
-
-import java.util.List;
 
 @Slf4j
 public class AdminTest extends ExampleBase {
@@ -35,8 +30,8 @@ public class AdminTest extends ExampleBase {
             .getDatabaseSetting(":AllowSignUp")
             .getBodyAsObject().getData().getMessage();
         log.info("AllowSignUp setting: {}", msg);
-        var x =  client.admin().putDatabaseSetting(":AllowSignUp", "False")
-                .getData();
+        var x = client.admin().putDatabaseSetting(":AllowSignUp", "False")
+            .getData();
         log.info("Set AllowSignUp keys: {}", x.keySet());
         log.info("Set AllowSignUp values: {}", x.values());
     }

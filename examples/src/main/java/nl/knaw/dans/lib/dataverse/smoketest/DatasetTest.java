@@ -20,8 +20,6 @@ import nl.knaw.dans.lib.dataverse.DataverseException;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.Version;
-import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata;
-import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadataFromJsonLd;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
@@ -30,12 +28,13 @@ import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyMap;
+import static nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata.getNewCitationMetadataBlock;
 
 @Slf4j
 public class DatasetTest extends ExampleBase {
@@ -47,14 +46,7 @@ public class DatasetTest extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
 
-        var jsonResourcesDir = new SmokeTestProperties().getProperty("jsonResourcesDir");
-        var file = getExamplesRoot()
-            .resolve(jsonResourcesDir)
-            .resolve("new-dataset.json");
-        if (!file.toFile().exists()) {
-            file = Path.of(jsonResourcesDir);
-        }
-        var dataset = Files.readString(file);
+        var dataset = new SmokeTestProperties().readJson("new-dataset.json");
 
         String persistentId;
         try {
@@ -174,9 +166,25 @@ public class DatasetTest extends ExampleBase {
             .getBodyAsString();
         log.info(deleteMsg);
 
-        // TODO too much logging: isolate direct API call from example
-        DatasetUpdateMetadata.main(List.of(persistentId).toArray(new String[0]));
-        DatasetUpdateMetadataFromJsonLd.main(List.of(persistentId, "citation", "description json value").toArray(new String[0]));
+        var fieldObject = Map.of("citation", "description json value");
+        var jsonLd = toPrettyJson(fieldObject);
+        var r = client.dataset(persistentId)
+            .updateMetadataFromJsonLd(jsonLd, true, emptyMap())
+            .getData();
+        log.info("Updated from JSON-LD, new metadata: {}", r);
+
+        var latest = client.dataset(persistentId)
+            .getVersion()
+            .getData();
+        latest.setTermsOfAccess("Some new terms. Pray I don't alter them any further.");
+        latest.setFiles(Collections.emptyList());
+        var metadataBlocks = latest.getMetadataBlocks();
+        metadataBlocks.put("citation", getNewCitationMetadataBlock());
+        latest.setMetadataBlocks(metadataBlocks);
+        var internalVersionNumber = client.dataset(persistentId)
+            .updateMetadata(latest, emptyMap())
+            .getData().getInternalVersionNumber();
+        log.info("Version number: {}", internalVersionNumber);
     }
 
     private static FieldList toFieldList(MetadataField... fields) {

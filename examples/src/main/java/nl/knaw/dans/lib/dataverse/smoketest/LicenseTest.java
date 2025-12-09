@@ -17,20 +17,20 @@ package nl.knaw.dans.lib.dataverse.smoketest;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
-import nl.knaw.dans.lib.dataverse.example.LicensesDelete;
 import nl.knaw.dans.lib.dataverse.model.license.License;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 public class LicenseTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
-        var msg1 = client.license().getDefaultLicense()
+        var msg1 = client.license()
+            .getDefaultLicense()
             .getData().getMessage();
         log.info(msg1);
 
-        var uri = client.license().getLicenseById(1)
+        var uri = client.license()
+            .getLicenseById(1)
             .getData().getUri();
         log.info(uri);
 
@@ -39,18 +39,24 @@ public class LicenseTest extends ExampleBase {
         license.setName("some name - " + id);
         license.setUri(uri + "/" + id);
         license.setShortDescription("Dans license");
-        var msg2 = client.license().addLicense(license)
+        var msg2 = client.license()
+            .addLicense(license)
             .getData().getMessage();
         log.info(msg2);
 
-        var data = client.license().getLicenses()
+        var data = client.license()
+            .getLicenses()
             .getData();
 
-        // cleanup: find the id of the created license and delete it
+        // prepare cleanup: find the id of the created license and delete it
         int largestId = data.stream()
             .mapToInt(License::getId)
             .max()
             .orElseThrow(() -> new RuntimeException("No licenses found"));
-        LicensesDelete.main(List.of("" + largestId).toArray(new String[0]));
+
+        var deleteMsg = client.license()
+            .deleteLicense(largestId)
+            .getData().getMessage();
+        log.info("Deleted license with id {}: {}", largestId, deleteMsg);
     }
 }
