@@ -18,6 +18,7 @@ package nl.knaw.dans.lib.dataverse;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
@@ -27,10 +28,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+@Slf4j
 public abstract class ExampleBase {
 
     protected static DataverseClient client;
-    private static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
+    protected static ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(Include.NON_NULL);
 
     static {
         try {
@@ -61,6 +63,14 @@ public abstract class ExampleBase {
             }
         }
         throw new IllegalStateException("Could not find examples root from working dir: " + workingDir);
+    }
+
+    protected static void warnForCustomMetadataBlocks(DataverseException e) {
+        if (e.getMessage().contains("Validation Failed") && e.getMessage().contains("is required")) {
+            log.warn("The test assumes only the citation block is mandatory.");
+            log.warn("See https://guides.dataverse.org/en/latest/api/native-api.html#define-metadata-blocks-for-a-dataverse-collection");
+            log.warn("or login as admin and edit the 'metadata fields' in the 'general information' of the dataverse");
+        }
     }
 
 }

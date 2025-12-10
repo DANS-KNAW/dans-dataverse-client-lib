@@ -16,12 +16,10 @@
 package nl.knaw.dans.lib.dataverse.smoketest;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.knaw.dans.lib.dataverse.DataverseException;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
 import nl.knaw.dans.lib.dataverse.Version;
-import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata;
-import nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadataFromJsonLd;
-import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
 import nl.knaw.dans.lib.dataverse.model.dataset.MetadataField;
@@ -30,10 +28,13 @@ import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyMap;
+import static nl.knaw.dans.lib.dataverse.example.DatasetUpdateMetadata.getNewCitationMetadataBlock;
 
 @Slf4j
 public class DatasetTest extends ExampleBase {
@@ -45,9 +46,18 @@ public class DatasetTest extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
 
-        var persistentId = client.dataverse("root")
-            .createDataset(DataverseCreateDataset.getDataset("Test description"), new HashMap<>())
-            .getData().getPersistentId();
+        var dataset = new SmokeTestProperties().readJson("new-dataset.json");
+
+        String persistentId;
+        try {
+            persistentId = client.dataverse("root")
+                .createDataset(dataset, new HashMap<>())
+                .getData().getPersistentId();
+        } catch (DataverseException e) {
+            log.error("Could not create dataset, aborting test", e);
+            warnForCustomMetadataBlocks(e);
+            return;
+        }
 
         var isInReview = client.dataset(persistentId)
             .submitForReview()
@@ -86,18 +96,22 @@ public class DatasetTest extends ExampleBase {
             .getData().getMessage();
         log.info("Deleted role assignment id {} fistAssignee {}: {}", roleAssignmentId, firstAssignee, deleteMessage);
 
-        var newTitle = toFieldList(new PrimitiveSingleValueField("title", "updated title value"));
+        MetadataField titleField = new PrimitiveSingleValueField("title", "updated title value");
+        var fieldListWithTitle = new FieldList();
+        fieldListWithTitle.add(titleField);
         var citation = client.dataset(persistentId)
-            .editMetadata(newTitle, true, emptyMap())
+            .editMetadata(fieldListWithTitle, true, emptyMap())
             .getData().getMetadataBlocks().get("citation").getFields();
         var nrOfVersions = client.dataset(persistentId)
             .getAllVersions()
             .getData().size();
         log.info("nrOfVersions: {}, Citation with changed title: {}", nrOfVersions, citation);
 
-        var noteField = toFieldList(new PrimitiveSingleValueField("notesText", "Not mandatory content"));
+        MetadataField notesField = new PrimitiveSingleValueField("notesText", "Not mandatory content");
+        var fieldListWithNote = new FieldList();
+        fieldListWithNote.add(notesField);
         var reducedCitation = client.dataset(persistentId)
-            .deleteMetadata(noteField, emptyMap())
+            .deleteMetadata(fieldListWithNote, emptyMap())
             .getData().getMetadataBlocks().get("citation").getFields();
         log.info("Citation without note: {}", reducedCitation);
 
@@ -139,21 +153,41 @@ public class DatasetTest extends ExampleBase {
             .validateDatasetFiles(persistentId)
             .getBodyAsObject().getDataFiles().get(0);
         log.info("storage ID: {}, status: {}", validation.getStorageIdentifier(), validation.getStatus());
+
+        var enableMsg = client.accessRequests(persistentId)
+            .enable().getData().getMessage();
+        var disableMsg = client.accessRequests(persistentId)
+            .disable().getData().getMessage();
+        log.info("Access requests enable msg: {} -- disable msg: {}", enableMsg, disableMsg);
+
+        var storageId = client.admin()
+            .validateDatasetFiles(persistentId)
+            .getBodyAsObject().getDataFiles().get(0).getStorageIdentifier();
+        log.info("Storage identifier of file {}: {}", newFileId, storageId);
+
         var deleteMsg = client.dataset(persistentId)
             .deleteFiles(List.of(newFileId))
             .getBodyAsString();
         log.info(deleteMsg);
 
-        // TODO too much logging: isolate direct API call from example
-        DatasetUpdateMetadata.main(List.of(persistentId).toArray(new String[0]));
-        DatasetUpdateMetadataFromJsonLd.main(List.of(persistentId, "citation", "description json value").toArray(new String[0]));
-    }
+        var fieldObject = Map.of("citation", "description json value");
+        var jsonLd = toPrettyJson(fieldObject);
+        var r = client.dataset(persistentId)
+            .updateMetadataFromJsonLd(jsonLd, true, emptyMap())
+            .getData();
+        log.info("Updated from JSON-LD, new metadata: {}", r);
 
-    private static FieldList toFieldList(MetadataField... fields) {
-        var fieldList = new FieldList();
-        for (var field : fields) {
-            fieldList.add(field);
-        }
-        return fieldList;
+        var latest = client.dataset(persistentId)
+            .getVersion()
+            .getData();
+        latest.setTermsOfAccess("Some new terms. Pray I don't alter them any further.");
+        latest.setFiles(Collections.emptyList());
+        var metadataBlocks = latest.getMetadataBlocks();
+        metadataBlocks.put("citation", getNewCitationMetadataBlock());
+        latest.setMetadataBlocks(metadataBlocks);
+        var internalVersionNumber = client.dataset(persistentId)
+            .updateMetadata(latest, emptyMap())
+            .getData().getInternalVersionNumber();
+        log.info("Version number: {}", internalVersionNumber);
     }
 }

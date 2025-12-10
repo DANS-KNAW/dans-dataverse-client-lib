@@ -17,13 +17,15 @@ package nl.knaw.dans.lib.dataverse;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class SmokeTestProperties {
     private final Properties properties = new Properties();
+    private final Path examplesRoot = ExampleBase.getExamplesRoot();
 
     public SmokeTestProperties() throws IOException {
-        var propsFile = ExampleBase.getExamplesRoot().resolve("smoketest.properties");
+        var propsFile = examplesRoot.resolve("smoketest.properties");
         try (var fis = Files.newInputStream(propsFile)) {
             properties.load(fis);
         }
@@ -31,5 +33,16 @@ public class SmokeTestProperties {
 
     public String getProperty(String key) {
         return properties.getProperty(key);
+    }
+
+    public String readJson(String p) throws IOException {
+        var jsonResourcesDir = properties.getProperty("jsonResourcesDir");
+        var path = examplesRoot
+            .resolve(jsonResourcesDir)
+            .resolve(p);
+        if (!path.toFile().exists()) {
+            path = Path.of(jsonResourcesDir);
+        }
+        return Files.readString(path);
     }
 }

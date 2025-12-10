@@ -1,0 +1,113 @@
+{
+  "datasetVersion" : {
+    "termsOfAccess" : "Some terms",
+    "fileAccessRequest" : false,
+    "metadataBlocks" : {
+      "dansRelationMetadata" : {
+        "displayName" : "Relation Metadata",
+        "name" : "dansRelationMetadata",
+        "fields" : [ {
+          "typeClass" : "primitive",
+          "typeName" : "dansAudience",
+          "multiple" : true,
+          "value" : [ "https://www.narcis.nl/classification/D23320", "https://www.narcis.nl/classification/D23360" ]
+        } ]
+      },
+      "citation" : {
+        "displayName" : "Citation Metadata",
+        "name" : "citation",
+        "fields" : [ {
+          "typeClass" : "primitive",
+          "typeName" : "title",
+          "multiple" : false,
+          "value" : "Test dataset"
+        }, {
+          "typeClass" : "compound",
+          "typeName" : "author",
+          "multiple" : true,
+          "value" : [ {
+            "authorName" : {
+              "typeClass" : "primitive",
+              "typeName" : "authorName",
+              "multiple" : false,
+              "value" : "A U Thor"
+            },
+            "authorAffiliation" : {
+              "typeClass" : "primitive",
+              "typeName" : "authorAffiliation",
+              "multiple" : false,
+              "value" : "Walhalla"
+            }
+          } ]
+        }, {
+          "typeClass" : "compound",
+          "typeName" : "datasetContact",
+          "multiple" : true,
+          "value" : [ {
+            "datasetContactEmail" : {
+              "typeClass" : "primitive",
+              "typeName" : "datasetContactEmail",
+              "multiple" : false,
+              "value" : "test@example.com"
+            },
+            "datasetContactName" : {
+              "typeClass" : "primitive",
+              "typeName" : "datasetContactName",
+              "multiple" : false,
+              "value" : "Test Contact"
+            }
+          } ]
+        }, {
+          "typeClass" : "compound",
+          "typeName" : "dsDescription",
+          "multiple" : true,
+          "value" : [ {
+            "dsDescriptionDate" : {
+              "typeClass" : "primitive",
+              "typeName" : "dsDescriptionDate",
+              "multiple" : false,
+              "value" : ""
+            },
+            "dsDescriptionValue" : {
+              "typeClass" : "primitive",
+              "typeName" : "dsDescriptionValue",
+              "multiple" : false,
+              "value" : "Test description"
+            }
+          } ]
+        }, {
+          "typeClass" : "controlledVocabulary",
+          "typeName" : "subject",
+          "multiple" : true,
+          "value" : [ "Arts and Humanities", "Computer and Information Science" ]
+        }, {
+          "typeClass" : "primitive",
+          "typeName" : "notesText",
+          "multiple" : false,
+          "value" : "Not mandatory content"
+        } ]
+      },
+      "dansRights" : {
+        "displayName" : "Rights Metadata",
+        "name" : "dansRights",
+        "fields" : [ {
+          "typeClass" : "primitive",
+          "typeName" : "dansRightsHolder",
+          "multiple" : true,
+          "value" : [ "DANS", "Another Holder" ]
+        }, {
+          "typeClass" : "controlledVocabulary",
+          "typeName" : "dansPersonalDataPresent",
+          "multiple" : false,
+          "value" : "No"
+        }, {
+          "typeClass" : "controlledVocabulary",
+          "typeName" : "dansMetadataLanguage",
+          "multiple" : true,
+          "value" : [ "English" ]
+        } ]
+      }
+    },
+    "files" : [ ]
+  }
+}

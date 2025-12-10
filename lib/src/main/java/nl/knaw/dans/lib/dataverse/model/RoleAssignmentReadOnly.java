@@ -15,9 +15,11 @@
  */
 package nl.knaw.dans.lib.dataverse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties("Version Updated")
 public class RoleAssignmentReadOnly {
     private int id;
     private String assignee;

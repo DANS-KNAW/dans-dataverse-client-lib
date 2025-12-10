@@ -42,10 +42,35 @@ public class DatasetUpdateMetadata extends ExampleBase {
             log.info("Supplied citation metadata key: {}", mdKeyValue);
         }
 
-        MetadataBlock citation = new MetadataBlock();
-        citation.setDisplayName("Citation Metadata");
-        citation.setName("citation");
-        citation.setFields(Arrays.asList(
+        // Note that if the dataset is not already in draft state, the draft created here will not be indexed.
+        // You may initiate a draft for a new version by making a trivial change to the metadata using the editMetadata API
+        try {
+            DataverseResponse<DatasetVersion> r = client.dataset(persistentId).getVersion();
+            DatasetVersion latest = r.getData();
+            latest.setTermsOfAccess("Some new terms. Pray I don't alter them any further.");
+            latest.setFiles(Collections.emptyList());
+            /*
+             * Replacing the Citation Metadata block and keeping all other blocks the same. Note that leaving out metadata fields
+             * means they will be removed from the dataset. In case those fields are protected by a system metadata key, you will
+             * get a 403 Forbidden error.
+             */
+            var metadataBlocks = latest.getMetadataBlocks();
+            metadataBlocks.put("citation", getNewCitationMetadataBlock());
+            latest.setMetadataBlocks(metadataBlocks);
+            var r2 = client.dataset(persistentId).updateMetadata(latest, keyMap);
+            log.info("Response message: {}", r2.getEnvelopeAsJson().toPrettyString());
+            log.info("Version number: {}", r2.getData().getVersionNumber());
+        }
+        catch (DataverseException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static MetadataBlock getNewCitationMetadataBlock() {
+        MetadataBlock citationBlock = new MetadataBlock();
+        citationBlock.setDisplayName("Citation Metadata");
+        citationBlock.setName("citation");
+        citationBlock.setFields(Arrays.asList(
             new PrimitiveSingleValueField("title", "My New Title"),
             new CompoundFieldBuilder("author", true)
                 .addSubfield("authorName", "A. Thor")
@@ -62,28 +87,6 @@ public class DatasetUpdateMetadata extends ExampleBase {
                 .build(),
             new ControlledMultiValueField("subject", Collections.singletonList("Chemistry"))
         ));
-
-        // Note that if the dataset is not already in draft state, the draft created here will not be indexed.
-        // You may initiate a draft for a new version by making a trivial change to the metadata using the editMetadata API
-        try {
-            DataverseResponse<DatasetVersion> r = client.dataset(persistentId).getVersion();
-            DatasetVersion latest = r.getData();
-            latest.setTermsOfAccess("Some new terms. Pray I don't alter them any further.");
-            latest.setFiles(Collections.emptyList());
-            /*
-             * Replacing the Citation Metadata block and keeping all other blocks the same. Note that leaving out metadata fields
-             * means they will be removed from the dataset. In case those fields are protected by a system metadata key, you will
-             * get a 403 Forbidden error.
-             */
-            var metadataBlocks = latest.getMetadataBlocks();
-            metadataBlocks.put("citation", citation);
-            latest.setMetadataBlocks(metadataBlocks);
-            var r2 = client.dataset(persistentId).updateMetadata(latest, keyMap);
-            log.info("Response message: {}", r2.getEnvelopeAsJson().toPrettyString());
-            log.info("Version number: {}", r2.getData().getVersionNumber());
-        }
-        catch (DataverseException e) {
-            System.out.println(e.getMessage());
-        }
+        return citationBlock;
     }
 }

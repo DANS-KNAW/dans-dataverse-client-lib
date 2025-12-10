@@ -18,43 +18,73 @@ package nl.knaw.dans.lib.dataverse.smoketest;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.SmokeTestProperties;
-import nl.knaw.dans.lib.dataverse.example.DataverseCreate;
-import nl.knaw.dans.lib.dataverse.example.DataverseCreateDataset;
-import nl.knaw.dans.lib.dataverse.example.DataverseDelete;
-import nl.knaw.dans.lib.dataverse.example.DataverseGetContents;
-import nl.knaw.dans.lib.dataverse.example.DataverseGetStorageSize;
-import nl.knaw.dans.lib.dataverse.example.DataverseImportDataset;
-import nl.knaw.dans.lib.dataverse.example.DataverseIsMetadataBlocksRoot;
-import nl.knaw.dans.lib.dataverse.example.DataverseListRoleAssignments;
-import nl.knaw.dans.lib.dataverse.example.DataverseListRoles;
-import nl.knaw.dans.lib.dataverse.example.DataversePublish;
-import nl.knaw.dans.lib.dataverse.example.DataverseSetMetadataBlocksRoot;
-import nl.knaw.dans.lib.dataverse.example.DataverseView;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
+
+import static nl.knaw.dans.lib.dataverse.example.DataverseCreate.getDataverse;
 
 @Slf4j
 public class DataverseTest extends ExampleBase {
     public static void main(String[] args) throws Exception {
         var alias = new SmokeTestProperties().getProperty("dataverseAlias");
-        DataverseGetContents.main(new String[0]);
-        DataverseGetStorageSize.main(new String[0]);
-        DataverseIsMetadataBlocksRoot.main(List.of(alias).toArray(new String[0]));
-        DataverseListRoleAssignments.main(new String[0]);
-        DataverseListRoles.main(new String[0]);
-        DataverseView.main(List.of(alias).toArray(new String[0]));
-        DataverseCreateDataset.main(new String[0]);
-        DataverseImportDataset.main(new String[0]);
 
-        DataverseIsMetadataBlocksRoot.main(List.of(alias).toArray(new String[0]));
-        DataverseSetMetadataBlocksRoot.main(List.of(alias, "true").toArray(new String[0]));
+        var type = client.dataverse(alias)
+            .getContents()
+            .getData().get(0).getType();
+        log.info("First item in dataverse {} is of type {}", alias, type);
 
-        var dvAlias = client.dataverse(alias)
-            .create(DataverseCreate.getDataverse())
+        var sizeMsg = client.dataverse(alias)
+            .getStorageSize()
+            .getData().getMessage();
+        log.info("Storage size of dataverse {}: {}", alias, sizeMsg);
+
+        var assignee = client.dataverse("root")
+            .listRoleAssignments()
+            .getData().get(0).getAssignee();
+        log.info("First role assignment in root dataverse is {}, assigned to {}", alias, assignee);
+
+        var roleDescription = client.dataverse("root")
+            .listRoles()
+            .getData().get(0).getDescription();
+        log.info("First role in root dataverse is {}", roleDescription);
+
+        var description = client.dataverse("root")
+            .view()
+            .getData().getDescription();
+        log.info("Root dataverse description: {}", description);
+
+        var dataset = new SmokeTestProperties().readJson("new-dataset.json");
+        var uuid = UUID.randomUUID();
+        var doi = String.format("doi:10.5072/DAR/IMPORTTEST-%s", uuid);
+        var id = client.dataverse(alias)
+            .importDataset(dataset, doi, false, new HashMap<>())
+            .getData().getId();
+        log.info("Imported dataset with id {}", id);
+
+        var isRoot = client.dataverse(alias)
+            .isMetadataBlocksRoot()
+            .getData();
+        log.info("Dataverse {} is metadata blocks root: {}", alias, isRoot);
+
+        var subAlias = client.dataverse(alias)
+            .create(getDataverse())
             .getData().getAlias();
-        DataversePublish.main(List.of(dvAlias).toArray(new String[0]));
-        DataverseIsMetadataBlocksRoot.main(List.of(dvAlias).toArray(new String[0]));
-        DataverseSetMetadataBlocksRoot.main(List.of(dvAlias, "false").toArray(new String[0]));
-        DataverseDelete.main(List.of(dvAlias).toArray(new String[0]));
+        log.info("Created sub-dataverse with alias {}", subAlias);
+
+        var changedIsRootMsg = client.dataverse(subAlias)
+            .setMetadataBlocksRoot(true)
+            .getData().getMessage();
+        log.info("Set sub-dataverse {} as metadata blocks root: {}", subAlias, changedIsRootMsg);
+
+        var contacts = client.dataverse(subAlias)
+            .publish()
+            .getData().getDataverseContacts();
+        log.info("Dataverse {} has {} contacts", subAlias, contacts.size());
+
+        var deleteMsg = client.dataverse(subAlias)
+            .delete()
+            .getData().getMessage();
+        log.info("Deleted dataverse {}: {}", subAlias, deleteMsg);
     }
 }

@@ -16,12 +16,10 @@
 package nl.knaw.dans.lib.dataverse.example;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.knaw.dans.lib.dataverse.DataverseException;
 import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.model.Lock;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -37,18 +35,12 @@ public class DatasetGetLocks extends ExampleBase {
         String persistentId = args[0];
 
         for (int i = 0; i < 300; i += 1) {
-            var locks = getLocks(persistentId);
+            var locks = client.dataset(persistentId).getLocks().getData();
+            log.debug("Locks: {}", locks);
             if (!locks.isEmpty())
                 log.info(String.format("Dataset is currently locked by: %s", locks));
             log.debug("Sleeping {} ms", sleepTime);
             Thread.sleep(sleepTime);
         }
-    }
-
-    public static List<Lock> getLocks(String persistentId) throws IOException, DataverseException {
-        DataverseResponse<List<Lock>> response = client.dataset(persistentId).getLocks();
-        List<Lock> locks = response.getData();
-        log.debug("Locks: {}", locks);
-        return locks;
     }
 }
