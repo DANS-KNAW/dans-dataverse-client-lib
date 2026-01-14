@@ -36,6 +36,7 @@ public class DatasetAssignRole extends ExampleBase {
         RoleAssignmentReadOnly ra = r.getData();
         log.info("Role Assignment ID: {}", ra.getId());
         log.info("Role ID: {}", ra.getRoleId());
+        log.info("Role name: {}", ra.getRoleName());
         log.info("Assignee: {}", ra.getAssignee());
         log.info("Definition Point: {}", ra.getDefinitionPointId());
         log.info("Role Assignment Private URL Token: {}", ra.getPrivateUrlToken());
