@@ -58,6 +58,8 @@ public class DataFile {
     private List<String> tabularTags = new ArrayList<>();
     private String creationDate;
     private String  publicationDate;
+    private String directoryLabel;
+    private String lastUpdateTime;
     private Boolean fileAccessRequest;
     private Boolean restricted; // Could be ignored, but simple to add
     private Long fileMetadataId; // Could be ignored, but simple to add

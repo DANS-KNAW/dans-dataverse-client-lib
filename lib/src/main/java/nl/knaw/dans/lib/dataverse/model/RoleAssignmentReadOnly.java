@@ -24,6 +24,7 @@ public class RoleAssignmentReadOnly {
     private int id;
     private String assignee;
     private int roleId;
+    private String roleName;
     private String _roleAlias;
     private String definitionPointId;
     private String privateUrlToken;
