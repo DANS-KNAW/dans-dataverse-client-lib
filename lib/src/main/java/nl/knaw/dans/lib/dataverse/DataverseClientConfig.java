@@ -22,6 +22,11 @@ import nl.knaw.dans.lib.dataverse.model.dataset.UpdateType;
 import java.net.URI;
 
 public class DataverseClientConfig {
+    public static final int DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES = 30;
+    public static final int DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES = 500;
+    public static final int DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES = 15;
+    public static final int DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES = 1000;
+
     @Getter(AccessLevel.PACKAGE)
     private final URI baseUrl;
     @Getter(AccessLevel.PACKAGE)
@@ -37,11 +42,6 @@ public class DataverseClientConfig {
 
     @Getter(AccessLevel.PACKAGE)
     private final String unblockKey;
-
-    public static final int DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES = 30;
-    public static final int DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES = 500;
-    public static final int DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES = 15;
-    public static final int DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES = 1000;
 
     /**
      * Configuration settings for the {@link DataverseClient}.
