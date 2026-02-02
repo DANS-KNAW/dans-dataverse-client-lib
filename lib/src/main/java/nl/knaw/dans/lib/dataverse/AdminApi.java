@@ -174,6 +174,8 @@ public class AdminApi extends AbstractApi {
     }
 
     /**
+     * Deletes a banner message.
+     *
      * @param id the banner message id
      * @return the response envelope from Dataverse
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
