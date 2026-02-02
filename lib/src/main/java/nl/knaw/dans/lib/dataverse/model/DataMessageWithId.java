@@ -18,6 +18,6 @@ package nl.knaw.dans.lib.dataverse.model;
 import lombok.Data;
 
 @Data
-public class DataMessageWithId extends  DataMessage {
+public class DataMessageWithId extends DataMessage {
     private String id;
 }
