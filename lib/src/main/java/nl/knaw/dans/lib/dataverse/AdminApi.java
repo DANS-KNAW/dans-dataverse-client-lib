@@ -18,7 +18,10 @@ package nl.knaw.dans.lib.dataverse;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
+import nl.knaw.dans.lib.dataverse.model.DataMessageWithId;
 import nl.knaw.dans.lib.dataverse.model.DatasetFileValidationResultList;
+import nl.knaw.dans.lib.dataverse.model.banner.BannerMessage;
+import nl.knaw.dans.lib.dataverse.model.banner.Messages;
 import nl.knaw.dans.lib.dataverse.model.user.AuthenticatedUser;
 
 import java.io.IOException;
@@ -81,24 +84,106 @@ public class AdminApi extends AbstractApi {
         return httpClientWrapper.get(path, DataMessage.class);
     }
 
+    /**
+     * The following validates all the physical files in the dataset specified by recalculating the checksums and comparing them against the values saved in the database.
+     *
+     * @param dbId the dataset database id
+     * @return the result
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#physical-files-validation-in-a-dataset" target="_blank">Dataverse documentation</a>
+     */
     public DataverseHttpResponseWithoutEnvelope<DatasetFileValidationResultList> validateDatasetFiles(int dbId) throws IOException, DataverseException {
         return validateDatasetFiles(Integer.toString(dbId), false);
     }
 
+    /**
+     * Validates all the physical files in the dataset specified by recalculating the checksums and comparing them against the values saved in the database.
+     *
+     * @param pid the dataset persistent identifier
+     * @return the result
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#physical-files-validation-in-a-dataset" target="_blank">Dataverse documentation</a>
+     */
     public DataverseHttpResponseWithoutEnvelope<DatasetFileValidationResultList> validateDatasetFiles(String pid) throws IOException, DataverseException {
         return validateDatasetFiles(pid, true);
     }
 
+    /**
+     * Validates all the physical files in the dataset specified by recalculating the checksums and comparing them against the values saved in the database.
+     *
+     * @param id             the dataset id (dbId or pid)
+     * @param isPersistentId indicates whether the id is a persistent identifier
+     * @return the result
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#physical-files-validation-in-a-dataset" target="_blank">Dataverse documentation</a>
+     */
     public DataverseHttpResponseWithoutEnvelope<DatasetFileValidationResultList> validateDatasetFiles(String id, boolean isPersistentId) throws IOException, DataverseException {
         Path path = buildPath(targetBase, "validate/dataset/files");
         var queryParameters = new HashMap<String, List<String>>();
         if (isPersistentId) {
             path = path.resolve(":persistentId");
             queryParameters.put("persistentId", List.of(id));
-        } else {
+        }
+        else {
             path = path.resolve(id);
         }
         return httpClientWrapper.getWithoutEnvelope(path, queryParameters, new HashMap<>(), DatasetFileValidationResultList.class);
     }
 
+    /**
+     * Lists all banner messages.
+     *
+     * @return the list of banner messages
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#manage-banner-messages" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<List<BannerMessage>> listBannerMessages() throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "bannerMessage");
+        return httpClientWrapper.get(path, List.class, BannerMessage.class);
+    }
+
+    /**
+     * Adds a banner message.
+     *
+     * @param json the banner message in JSON format
+     * @return the response
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#manage-banner-messages" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessageWithId> addBannerMessage(String json) throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "bannerMessage");
+        return httpClientWrapper.postJsonString(path, json, new HashMap<>(), new HashMap<>(), DataMessageWithId.class);
+    }
+
+    /**
+     * Adds a banner message.
+     *
+     * @param messages the banner message
+     * @return the response
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#manage-banner-messages" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessageWithId> addBannerMessage(Messages messages) throws IOException, DataverseException {
+        return addBannerMessage(httpClientWrapper.writeValueAsString(messages));
+    }
+
+    /**
+     * Deletes a banner message.
+     *
+     * @param id the banner message id
+     * @return the response envelope from Dataverse
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#manage-banner-messages" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> deleteBannerMessage(int id) throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "bannerMessage", Integer.toString(id));
+        return httpClientWrapper.delete(path, new HashMap<>(), DataMessage.class);
+    }
 }

@@ -639,6 +639,38 @@ public class DatasetApi extends AbstractTargetedApi {
     }
 
     /**
+     * Deletes a lock of the specified type from the dataset.
+     *
+     * @param lockType the type of lock to delete (for example, "InReview", "Ingest").
+     * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
+     *         with information about the result of the deletion.
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request or returns an error status
+     *
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse Native API: Dataset locks</a>
+     * @see <a href="https://github.com/DANS-KNAW/dans-dataverse-client-lib/blob/master/examples/src/main/java/nl/knaw/dans/lib/dataverse/example/DatasetDeleteLock.java">Code example</a>
+     */
+    public DataverseHttpResponse<DataMessage> deleteLock(String lockType) throws IOException, DataverseException {
+        Map<String, List<String>> parameters = new HashMap<>();
+        parameters.put("lockType", singletonList(lockType));
+        return httpClientWrapper.delete(subPath("locks"), params(parameters), DataMessage.class);
+    }
+
+    /**
+     * Adds a lock of the specified type to the dataset.
+     * @param lockType the type of lock to add (for example, "InReview", "Ingest").
+     * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
+     * @throws IOException       when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request or returns an error status
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse Native API: Dataset locks</a>
+     */
+    public DataverseHttpResponse<DataMessage> addLock(String lockType) throws IOException, DataverseException {
+        return httpClientWrapper.post(subPath("lock/" + lockType), new StringEntity(""), params(emptyMap()), extraHeaders, DataMessage.class);
+    }
+
+
+
+    /**
      * Utility function that lets you wait until all locks are cleared before proceeding. Unlike most other functions in this library, this does not correspond directly with an API call. Rather the
      * {@link #getLocks()} call is done repeatedly to check if the locks have been cleared. Note that in scenarios where concurrent processes might access the same dataset it is not guaranteed that
      * the locks, once cleared, stay that way.

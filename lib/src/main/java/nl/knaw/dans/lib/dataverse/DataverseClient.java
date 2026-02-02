@@ -156,4 +156,8 @@ public class DataverseClient {
     public LicenseApi license() {
         return new LicenseApi(httpClientWrapper);
     }
+
+    public DatabaseApi database() {
+        return new DatabaseApi(httpClientWrapper);
+    }
 }
