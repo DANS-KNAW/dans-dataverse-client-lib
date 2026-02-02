@@ -29,7 +29,7 @@ public class DatabaseTruncateNotifications extends ExampleBase {
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1 && args.length != 2) {
-            log.error("Usage: DatabaseTruncateNotifications <numberOfRecordsToKeep> | <userName> <numberOfRecordsToKeep>");
+            log.error("Usage: DatabaseTruncateNotifications <numberOfRecordsToKeep> | <userId> <numberOfRecordsToKeep>");
             return;
         }
 
