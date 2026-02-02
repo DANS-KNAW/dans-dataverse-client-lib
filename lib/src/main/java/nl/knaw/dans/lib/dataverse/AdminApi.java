@@ -173,4 +173,16 @@ public class AdminApi extends AbstractApi {
         return addBannerMessage(httpClientWrapper.writeValueAsString(messages));
     }
 
+    /**
+     * @param id the banner message id
+     * @return the response envelope from Dataverse
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#manage-banner-messages" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> deleteBannerMessage(int id) throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "bannerMessage", Integer.toString(id));
+        return httpClientWrapper.delete(path, new HashMap<>(), DataMessage.class);
+    }
+
 }
