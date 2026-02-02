@@ -664,7 +664,7 @@ public class DatasetApi extends AbstractTargetedApi {
      * @throws DataverseException when Dataverse fails to perform the request or returns an error status
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse Native API: Dataset locks</a>
      */
-    public DataverseHttpResponse<DataMessage>  addLock(String lockType) throws IOException, DataverseException {
+    public DataverseHttpResponse<DataMessage> addLock(String lockType) throws IOException, DataverseException {
         return httpClientWrapper.post(subPath("lock/" + lockType), new StringEntity(""), params(emptyMap()), extraHeaders, DataMessage.class);
     }
 
