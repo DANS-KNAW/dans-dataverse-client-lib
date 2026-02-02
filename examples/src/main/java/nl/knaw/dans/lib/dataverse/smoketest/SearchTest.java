@@ -47,7 +47,7 @@ public class SearchTest extends ExampleBase {
             .editMetadata(fieldList, true, emptyMap())
             .getData().getMetadataBlocks().get("citation").getFields();
         log.info("Created dataset with persistentId {}", persistentId);
-        log.info("Waiting a while ed for search index to be updated");
+        log.info("Waiting a while for search index to be updated");
         sleep(4000);
 
         var options = new SearchOptions();
