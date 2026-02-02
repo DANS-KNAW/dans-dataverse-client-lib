@@ -26,6 +26,5 @@ public class AdminListBannerMessages extends ExampleBase {
         for (var msg : response.getData()) {
             log.info(" - id: {}, displayValue: {}", msg.getId(), msg.getDisplayValue());
         }
-
     }
 }
