@@ -38,11 +38,25 @@ public abstract class ExampleBase {
         try {
             String propsFiles = getExamplesRoot().resolve("dataverse.properties").toString();
             PropertiesConfiguration props = new PropertiesConfiguration(propsFiles);
-            DataverseClientConfig config = new DataverseClientConfig(new URI(props.getString("baseUrl")), props.getString("apiToken"), props.getString("unblockKey", null));
+            DataverseClientConfig config = new DataverseClientConfig(
+                new URI(props.getString("baseUrl")),
+                props.getString("apiToken"),
+                props.getInt("awaitLockStateMaxNumberOfRetries", DataverseClientConfig.DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES),
+                props.getInt("awaitLockStateMillisecondsBetweenRetries", DataverseClientConfig.DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES),
+                props.getInt("awaitIndexingMaxNumberOfRetries", DataverseClientConfig.DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES),
+                props.getInt("awaitIndexingMillisecondsBetweenRetries", DataverseClientConfig.DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES),
+                props.getString("unblockKey", null),
+                props.getString("databaseUrl", null),
+                props.getString("databaseUser", null),
+                props.getString("databasePassword", null));
             client = new DataverseClient(config);
+            Class.forName("org.postgresql.Driver");
         }
         catch (ConfigurationException | URISyntaxException e) {
             e.printStackTrace();
+        }
+        catch (ClassNotFoundException e) {
+            log.warn("PostgreSQL JDBC driver not found in classpath, database connectivity will not work.");
         }
     }
 

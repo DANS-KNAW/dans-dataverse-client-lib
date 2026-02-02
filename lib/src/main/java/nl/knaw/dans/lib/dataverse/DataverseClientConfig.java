@@ -43,6 +43,14 @@ public class DataverseClientConfig {
     @Getter(AccessLevel.PACKAGE)
     private final String unblockKey;
 
+    // Optional database connectivity
+    @Getter(AccessLevel.PACKAGE)
+    private final String databaseUrl;
+    @Getter(AccessLevel.PACKAGE)
+    private final String databaseUser;
+    @Getter(AccessLevel.PACKAGE)
+    private final String databasePassword;
+
     /**
      * Configuration settings for the {@link DataverseClient}.
      *
@@ -56,11 +64,15 @@ public class DataverseClientConfig {
      * @param awaitIndexingMillisecondsBetweenRetries  the number of milliseconds to wait between tries for {@link DatasetApi#publish(UpdateType, boolean)} API (default
      *                                                 {@value #DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES})
      * @param unblockKey                               a key required for admin tasks when not running on localhost
+     * @param databaseUrl                              JDBC URL for direct database access (optional)
+     * @param databaseUser                             database username (optional)
+     * @param databasePassword                         database password (optional)
      */
     public DataverseClientConfig(URI baseUrl, String apiToken,
         int awaitLockStateMaxNumberOfRetries, int awaitLockStateMillisecondsBetweenRetries,
         int awaitIndexingMaxNumberOfRetries, int awaitIndexingMillisecondsBetweenRetries,
-        String unblockKey) {
+        String unblockKey,
+        String databaseUrl, String databaseUser, String databasePassword) {
         this.baseUrl = baseUrl;
         this.apiToken = apiToken;
         this.awaitLockStateMaxNumberOfRetries = awaitLockStateMaxNumberOfRetries;
@@ -68,6 +80,51 @@ public class DataverseClientConfig {
         this.awaitIndexingMaxNumberOfRetries = awaitIndexingMaxNumberOfRetries;
         this.awaitIndexingMillisecondsBetweenRetries = awaitIndexingMillisecondsBetweenRetries;
         this.unblockKey = unblockKey;
+        this.databaseUrl = databaseUrl;
+        this.databaseUser = databaseUser;
+        this.databasePassword = databasePassword;
+    }
+
+    /**
+     * Configuration settings for the {@link DataverseClient}.
+     *
+     * @param baseUrl    the base URL of the Dataverse server to communicate with
+     * @param apiToken   the API token used for authorization
+     * @param unblockKey a key required for admin tasks when not running on localhost
+     * @param databaseUrl      JDBC URL for direct database access (optional)
+     * @param databaseUser     database username (optional)
+     * @param databasePassword database password (optional)
+     */
+    public DataverseClientConfig(URI baseUrl, String apiToken, String unblockKey,
+        String databaseUrl, String databaseUser, String databasePassword) {
+        this(baseUrl, apiToken,
+            DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES,
+            DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES,
+            unblockKey,
+            databaseUrl, databaseUser, databasePassword);
+    }
+
+    /**
+     * Configuration settings for the {@link DataverseClient}.
+     *
+     * @param baseUrl  the base URL of the Dataverse server to communicate with
+     * @param apiToken the API token used for authorization
+     */
+    public DataverseClientConfig(URI baseUrl, String apiToken) {
+        this(baseUrl, apiToken,
+            DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES,
+            DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES,
+            null,
+            null, null, null);
+    }
+
+    /**
+     * Configuration settings for the {@link DataverseClient}. No API token is specified, so the client will only be able to access endpoints that require no account.
+     *
+     * @param baseUrl the base URL of the Dataverse server to communicate with
+     */
+    public DataverseClientConfig(URI baseUrl) {
+        this(baseUrl, null);
     }
 
     /**
@@ -81,28 +138,7 @@ public class DataverseClientConfig {
         this(baseUrl, apiToken,
             DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES,
             DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES,
-            unblockKey);
-    }
-
-    /**
-     * Configuration settings for the {@link DataverseClient}.
-     *
-     * @param baseUrl  the base URL of the Dataverse server to communicate with
-     * @param apiToken the API token used for authorization
-     */
-    public DataverseClientConfig(URI baseUrl, String apiToken) {
-        this(baseUrl, apiToken,
-            DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_LOCK_STATE_MILLISECONDS_BETWEEN_RETRIES,
-            DEFAULT_AWAIT_INDEXING_MAX_NUMBER_OF_RETRIES, DEFAULT_AWAIT_INDEXING_MILLISECONDS_BETWEEN_RETRIES,
-            null);
-    }
-
-    /**
-     * Configuration settings for the {@link DataverseClient}. No API token is specified, so the client will only be able to access endpoints that require no account.
-     *
-     * @param baseUrl the base URL of the Dataverse server to communicate with
-     */
-    public DataverseClientConfig(URI baseUrl) {
-        this(baseUrl, null);
+            unblockKey,
+            null, null, null);
     }
 }
