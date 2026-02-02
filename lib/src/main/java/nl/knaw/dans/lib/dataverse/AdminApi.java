@@ -184,5 +184,4 @@ public class AdminApi extends AbstractApi {
         Path path = buildPath(targetBase, "bannerMessage", Integer.toString(id));
         return httpClientWrapper.delete(path, new HashMap<>(), DataMessage.class);
     }
-
 }
