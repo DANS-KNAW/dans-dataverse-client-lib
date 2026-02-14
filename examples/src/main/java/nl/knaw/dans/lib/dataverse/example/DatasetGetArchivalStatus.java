@@ -16,7 +16,8 @@
 package nl.knaw.dans.lib.dataverse.example;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.knaw.dans.lib.dataverse.DataverseHttpResponse;
+import nl.knaw.dans.lib.dataverse.DataverseException;
+import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetArchivalStatus;
 
@@ -28,9 +29,21 @@ public class DatasetGetArchivalStatus extends ExampleBase {
         String version = args[1];
 
         log.info("Getting archival status for {} version {}", persistentId, version);
-        DataverseHttpResponse<DatasetArchivalStatus> r = client.dataset(persistentId).getArchivalStatus(version);
-        log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
-        log.info("Status: {}", r.getData().getStatus());
-        log.info("Message: {}", r.getData().getMessage());
+        try {
+            DataverseResponse<DatasetArchivalStatus> r = client.dataset(persistentId).getArchivalStatus(version);
+            log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
+            log.info("Status: {}", r.getData().getStatus());
+            log.info("Message: {}", r.getData().getMessage());
+        }
+        catch (DataverseException e) {
+            // Dataverse quirk: if the dataset version exists but has not been archived, the API returns a 404 with a message that contains "This dataset version has not been archived".
+            // In that case, we want to log that message and not throw an exception.
+            if (e.getStatus() == 404 && e.getMessage().contains("This dataset version has not been archived")) {
+                log.info("This dataset version has not been archived");
+            }
+            else {
+                throw e;
+            }
+        }
     }
 }

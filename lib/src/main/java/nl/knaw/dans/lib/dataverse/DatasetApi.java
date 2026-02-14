@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
@@ -862,7 +863,7 @@ public class DatasetApi extends AbstractTargetedApi {
      * @return the archival status
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request
-     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-archival-status-of-a-dataset-version" target="_blank">Dataverse documentation</a>
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-the-archival-status-of-a-dataset-by-version" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<DatasetArchivalStatus> getArchivalStatus(String version) throws IOException, DataverseException {
         return httpClientWrapper.get(buildPath(targetBase, persistendId, version, "archivalStatus"), params(emptyMap()), extraHeaders, DatasetArchivalStatus.class);

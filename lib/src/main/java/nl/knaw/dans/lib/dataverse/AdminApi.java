@@ -194,7 +194,7 @@ public class AdminApi extends AbstractApi {
      * @return the result
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request
-     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#submit-a-dataset-version-to-archive" target="_blank">Dataverse documentation</a>
+     * @see <a href="https://guides.dataverse.org/en/latest/installation/config.html#bagit-export-api-calls" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<DataMessage> submitDatasetVersionToArchive(String id, String version, boolean isPersistentId) throws IOException, DataverseException {
         Path path = buildPath(targetBase, "submitDatasetVersionToArchive");
