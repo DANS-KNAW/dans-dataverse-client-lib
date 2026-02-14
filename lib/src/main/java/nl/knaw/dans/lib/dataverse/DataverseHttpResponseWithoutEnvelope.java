@@ -16,7 +16,6 @@
 package nl.knaw.dans.lib.dataverse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.apache.hc.core5.http.HttpResponse;
 
 import java.io.IOException;
