@@ -13,26 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.model.search;
+package nl.knaw.dans.lib.dataverse.model.dataset;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class SearchResult {
-    private String q;
-    private int totalCount;
-    private int start;
-    private Map<String, String> spellingAlternatives;
-    private List<ResultItem> items;
-    private int countInResponse;
+public class DatasetArchivalStatus {
+    private String status;
+    private String message;
 }

@@ -21,6 +21,7 @@ import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import nl.knaw.dans.lib.dataverse.model.Lock;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
+import nl.knaw.dans.lib.dataverse.model.dataset.DatasetArchivalStatus;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetLatestVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetPublicationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
@@ -642,11 +643,9 @@ public class DatasetApi extends AbstractTargetedApi {
      * Deletes a lock of the specified type from the dataset.
      *
      * @param lockType the type of lock to delete (for example, "InReview", "Ingest").
-     * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
-     *         with information about the result of the deletion.
+     * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage} with information about the result of the deletion.
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request or returns an error status
-     *
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse Native API: Dataset locks</a>
      * @see <a href="https://github.com/DANS-KNAW/dans-dataverse-client-lib/blob/master/examples/src/main/java/nl/knaw/dans/lib/dataverse/example/DatasetDeleteLock.java">Code example</a>
      */
@@ -658,17 +657,16 @@ public class DatasetApi extends AbstractTargetedApi {
 
     /**
      * Adds a lock of the specified type to the dataset.
+     *
      * @param lockType the type of lock to add (for example, "InReview", "Ingest").
      * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
-     * @throws IOException       when I/O problems occur during the interaction with Dataverse
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request or returns an error status
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse Native API: Dataset locks</a>
      */
     public DataverseHttpResponse<DataMessage> addLock(String lockType) throws IOException, DataverseException {
         return httpClientWrapper.post(subPath("lock/" + lockType), new StringEntity(""), params(emptyMap()), extraHeaders, DataMessage.class);
     }
-
-
 
     /**
      * Utility function that lets you wait until all locks are cleared before proceeding. Unlike most other functions in this library, this does not correspond directly with an API call. Rather the
@@ -761,7 +759,7 @@ public class DatasetApi extends AbstractTargetedApi {
      * @param errorMessage           error to report in LockException if it occurs
      * @param maxNumberOfRetries     the maximum number of tries
      * @param waitTimeInMilliseconds the time to wait between tries
-     * @param lockTypesToCheck              type or types of locking
+     * @param lockTypesToCheck       type or types of locking
      */
     private void awaitLockState(Locked desiredState, String errorMessage, int maxNumberOfRetries, int waitTimeInMilliseconds, String... lockTypesToCheck)
         throws IOException, DataverseException {
@@ -857,5 +855,31 @@ public class DatasetApi extends AbstractTargetedApi {
      */
     public String getState() throws IOException, DataverseException {
         return getVersion(Version.LATEST.toString(), true).getData().getVersionState();
+    }
+
+    /**
+     * Returns the archival status of the dataset.
+     *
+     * @param version the version of the dataset
+     * @return the archival status
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-the-archival-status-of-a-dataset-by-version" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DatasetArchivalStatus> getArchivalStatus(String version) throws IOException, DataverseException {
+        return httpClientWrapper.get(buildPath(targetBase, persistendId, version, "archivalStatus"), params(emptyMap()), extraHeaders, DatasetArchivalStatus.class);
+    }
+
+    /**
+     * Deletes the archival status of a dataset version.
+     *
+     * @param version the version of the dataset
+     * @return the archival status
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#delete-the-archival-status-of-a-dataset-by-version" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> deleteArchivalStatus(String version) throws IOException, DataverseException {
+        return httpClientWrapper.delete(buildPath(targetBase, persistendId, version, "archivalStatus"), params(emptyMap()), DataMessage.class);
     }
 }

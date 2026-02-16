@@ -186,4 +186,28 @@ public class AdminApi extends AbstractApi {
         Path path = buildPath(targetBase, "bannerMessage", Integer.toString(id));
         return httpClientWrapper.delete(path, new HashMap<>(), DataMessage.class);
     }
+
+    /**
+     * Submits a dataset version to the archive.
+     *
+     * @param id             the dataset id
+     * @param version        the version of the dataset
+     * @param isPersistentId indicates whether the id is a persistent identifier
+     * @return the result
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/installation/config.html#bagit-export-api-calls" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> submitDatasetVersionToArchive(String id, String version, boolean isPersistentId) throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "submitDatasetVersionToArchive");
+        var queryParameters = new HashMap<String, List<String>>();
+        if (isPersistentId) {
+            path = path.resolve(":persistentId").resolve(version);
+            queryParameters.put("persistentId", List.of(id));
+        }
+        else {
+            path = path.resolve(id).resolve(version);
+        }
+        return httpClientWrapper.post(path, null, queryParameters, new HashMap<>(), DataMessage.class);
+    }
 }
