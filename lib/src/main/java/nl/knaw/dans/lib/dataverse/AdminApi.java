@@ -188,6 +188,8 @@ public class AdminApi extends AbstractApi {
     }
 
     /**
+     * Submits a dataset version to the archive.
+     *
      * @param id             the dataset id
      * @param version        the version of the dataset
      * @param isPersistentId indicates whether the id is a persistent identifier

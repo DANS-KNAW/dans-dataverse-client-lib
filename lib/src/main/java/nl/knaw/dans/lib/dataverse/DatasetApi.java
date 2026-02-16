@@ -858,6 +858,8 @@ public class DatasetApi extends AbstractTargetedApi {
     }
 
     /**
+     * Returns the archival status of the dataset.
+     *
      * @param version the version of the dataset
      * @return the archival status
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
@@ -869,6 +871,8 @@ public class DatasetApi extends AbstractTargetedApi {
     }
 
     /**
+     * Deletes the archival status of a dataset version.
+     *
      * @param version the version of the dataset
      * @return the archival status
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
