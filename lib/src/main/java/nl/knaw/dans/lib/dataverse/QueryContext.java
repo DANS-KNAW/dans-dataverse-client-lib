@@ -25,7 +25,7 @@ import java.util.function.Function;
 
 /**
  * Context for executing a SQL query with multiple sets of parameters. Automatically manages the lifecycle of the database connection and prepared statement. This class is intended to be used for
- * ready-only queries and will set the connection to read-only mode.
+ * read-only queries and will set the connection to read-only mode.
  */
 public final class QueryContext<T> implements AutoCloseable {
     private final Connection c;
