@@ -160,4 +160,8 @@ public class DataverseClient {
     public DatabaseApi database() {
         return new DatabaseApi(httpClientWrapper);
     }
+
+    public BuiltinUserApi builtinUsers(String builtinUsersKey) {
+        return new BuiltinUserApi(httpClientWrapper, builtinUsersKey);
+    }
 }
