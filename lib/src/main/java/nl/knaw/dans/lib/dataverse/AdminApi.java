@@ -218,7 +218,7 @@ public class AdminApi extends AbstractApi {
      * @return a {@code DataverseHttpResponse} containing a list of {@code StorageDriver} objects
      * @throws IOException        if an I/O error occurs during the interaction with Dataverse
      * @throws DataverseException if Dataverse fails to process the request
-     * @see <a href=""https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store" target="_blank">Dataverse documentation</a>
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<Map<String, String>> getAvailableStorageDrivers() throws IOException, DataverseException {
         Path path = buildPath(targetBase, "dataverse/storageDrivers");
