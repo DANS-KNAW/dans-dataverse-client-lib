@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import nl.knaw.dans.lib.dataverse.model.DataMessageWithId;
 import nl.knaw.dans.lib.dataverse.model.DatasetFileValidationResultList;
+import nl.knaw.dans.lib.dataverse.model.StorageDriver;
 import nl.knaw.dans.lib.dataverse.model.banner.BannerMessage;
 import nl.knaw.dans.lib.dataverse.model.banner.Messages;
 import nl.knaw.dans.lib.dataverse.model.user.AuthenticatedUser;
@@ -210,4 +211,18 @@ public class AdminApi extends AbstractApi {
         }
         return httpClientWrapper.post(path, null, queryParameters, new HashMap<>(), DataMessage.class);
     }
+
+    /**
+     * Retrieves a list of available storage drivers from the Dataverse instance.
+     *
+     * @return a {@code DataverseHttpResponse} containing a list of {@code StorageDriver} objects
+     * @throws IOException        if an I/O error occurs during the interaction with Dataverse
+     * @throws DataverseException if Dataverse fails to process the request
+     * @see <a href=""https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<Map<String, String>> getAvailableStorageDrivers() throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "dataverse/storageDrivers");
+        return httpClientWrapper.get(path, new HashMap<>(), Map.class);
+    }
+
 }

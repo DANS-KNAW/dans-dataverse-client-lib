@@ -21,6 +21,7 @@ import nl.knaw.dans.lib.dataverse.model.DataMessage;
 import nl.knaw.dans.lib.dataverse.model.Lock;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
+import nl.knaw.dans.lib.dataverse.model.StorageDriver;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetArchivalStatus;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetLatestVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetPublicationResult;
@@ -545,7 +546,46 @@ public class DatasetApi extends AbstractTargetedApi {
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#retrieving-citations-for-a-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-unpublished-dataset
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#delete-published-dataset
+
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store
+
+    /**
+     * Retrieves the storage driver associated with a specific dataset.
+     *
+     * @return a {@code DataverseHttpResponse<StorageDriver>} containing the storage driver information
+     * @throws DataverseException if there is an error specific to the Dataverse API interaction
+     * @throws IOException        if a network or I/O error occurs during the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store">Dataverse API Documentation</a>
+     */
+    public DataverseHttpResponse<StorageDriver> getStorageDriver() throws DataverseException, IOException {
+        return httpClientWrapper.get(subPath("storageDriver"), params(emptyMap()), StorageDriver.class);
+    }
+
+    /**
+     * Sets the storage driver for the Dataverse instance with the specified label.
+     *
+     * @param label the label of the storage driver to set
+     * @return a DataverseHttpResponse containing the response from the server
+     * @throws DataverseException if an error occurs in the Dataverse operation
+     * @throws IOException        if an input or output exception occurs
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store">Dataverse API Documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> setStorageDriver(String label) throws DataverseException, IOException {
+        return httpClientWrapper.putTextString(subPath("storageDriver"), label, params(emptyMap()), emptyMap(), DataMessage.class);
+    }
+
+    /**
+     * Deletes the storage driver with the specified label.
+     *
+     * @param label the label of the storage driver to delete
+     * @return a DataverseHttpResponse containing the response from the server
+     * @throws DataverseException if an error occurs in the Dataverse operation
+     * @throws IOException        if an input or output exception occurs
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#configure-a-dataset-to-use-a-specific-file-store">Dataverse API Documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> deleteStorageDriver(String label) throws DataverseException, IOException {
+        return httpClientWrapper.delete(subPath("storageDriver"), params(emptyMap()), DataMessage.class);
+    }
 
     // TODO: FIRST
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#view-the-timestamps-on-a-dataset
