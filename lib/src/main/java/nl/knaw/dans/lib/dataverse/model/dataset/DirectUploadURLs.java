@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.model;
+package nl.knaw.dans.lib.dataverse.model.dataset;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
-public class StorageDriver {
-    private String name;
-    // For older versions of Dataverse (6.7)?
-    private String message;
-    private String type;
-    private String label;
-    private boolean directUpload;
-    private boolean directDownload;
-    private boolean uploadOutOfBand;
+public class DirectUploadURLs {
+    private String url;
+    private Map<String, String> urls;
+    private long partSize;
+    private String storageIdentifier;
+    private String complete;
+    private String abort;
 }
