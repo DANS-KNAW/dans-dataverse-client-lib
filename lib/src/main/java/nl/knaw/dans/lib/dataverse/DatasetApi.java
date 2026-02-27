@@ -74,10 +74,6 @@ public class DatasetApi extends AbstractTargetedApi {
         super(httpClientWrapper, id, isPersistentId, invocationId, Paths.get("api/datasets/"));
     }
 
-    public HttpClientWrapper getHttpClientWrapper() {
-        return httpClientWrapper;
-    }
-
     /**
      * Returns metadata of the latest version of the dataset <b>that you can see with your permissions</b>. If there is a draft for a new version this is returned in the field
      * <code>latestVersionPublishingState</code>. The use of this method is not recommended, as the {@link #getVersion(String)} method is more explicit and you can retrieve the latest version by
