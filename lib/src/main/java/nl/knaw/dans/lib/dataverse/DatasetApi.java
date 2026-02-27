@@ -26,6 +26,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.DatasetArchivalStatus;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetLatestVersion;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetPublicationResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetVersion;
+import nl.knaw.dans.lib.dataverse.model.dataset.DirectUploadURLs;
 import nl.knaw.dans.lib.dataverse.model.dataset.Embargo;
 import nl.knaw.dans.lib.dataverse.model.dataset.FieldList;
 import nl.knaw.dans.lib.dataverse.model.dataset.FileList;
@@ -34,6 +35,7 @@ import nl.knaw.dans.lib.dataverse.model.dataset.SubmitForReviewResult;
 import nl.knaw.dans.lib.dataverse.model.dataset.UpdateType;
 import nl.knaw.dans.lib.dataverse.model.file.FileMeta;
 import nl.knaw.dans.lib.dataverse.model.file.FileMetaUpdate;
+import nl.knaw.dans.lib.dataverse.model.file.prestaged.PrestagedFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.entity.mime.FileBody;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
@@ -70,6 +72,10 @@ public class DatasetApi extends AbstractTargetedApi {
 
     DatasetApi(HttpClientWrapper httpClientWrapper, String id, boolean isPersistentId, String invocationId) {
         super(httpClientWrapper, id, isPersistentId, invocationId, Paths.get("api/datasets/"));
+    }
+
+    public HttpClientWrapper getHttpClientWrapper() {
+        return httpClientWrapper;
     }
 
     /**
@@ -521,6 +527,30 @@ public class DatasetApi extends AbstractTargetedApi {
      */
     public DataverseHttpResponse<FileList> addFile(Path file, FileMeta fileMeta) throws IOException, DataverseException {
         return addFile(file, httpClientWrapper.writeValueAsString(fileMeta));
+    }
+
+    /**
+     * @param fileSize size of the file to be uploaded in bytes
+     * @return a JSON object containing the upload URLs
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/developers/s3-direct-upload-api.html#requesting-direct-upload-of-a-datafile" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DirectUploadURLs> getUploadUrls(long fileSize) throws IOException, DataverseException {
+        return httpClientWrapper.get(subPath("uploadurls"), params(Map.of("size", List.of(String.valueOf(fileSize)))), DirectUploadURLs.class);
+    }
+
+    /**
+     * @param prestagedFile the metadata of the file to be added
+     * @return a list of file metadata
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/developers/s3-direct-upload-api.html#adding-the-uploaded-file-to-the-dataset" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<FileList> addFile(PrestagedFile prestagedFile) throws IOException, DataverseException {
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.addPart("jsonData", new StringBody(httpClientWrapper.writeValueAsString(prestagedFile), ContentType.APPLICATION_JSON));
+        return httpClientWrapper.post(subPath("add"), builder.build(), params(emptyMap()), emptyMap(), FileList.class);
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#report-the-data-file-size-of-a-dataset

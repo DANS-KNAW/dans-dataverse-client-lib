@@ -15,11 +15,14 @@
  */
 package nl.knaw.dans.lib.dataverse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
 public class StorageDriver {
     private String name;
+    // For older versions of Dataverse (6.7)?
+    private String message;
     private String type;
     private String label;
     private boolean directUpload;
