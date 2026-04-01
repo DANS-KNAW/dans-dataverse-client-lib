@@ -46,6 +46,6 @@ public class MetricsApi extends AbstractApi {
      */
     public DataverseHttpResponse<MetricsTreeNode> tree() throws IOException, DataverseException {
         Path path = buildPath(targetBase, "tree");
-        return httpClientWrapper.get(path, MetricsTreeNode.class);
+        return httpClientWrapper.stopPassingUnblockKey().get(path, MetricsTreeNode.class);
     }
 }

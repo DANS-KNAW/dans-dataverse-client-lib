@@ -67,6 +67,7 @@ class HttpClientWrapper implements MediaTypes {
 
     // If false, it is sent through the X-Dataverse-key header
     private boolean sendApiTokenViaBasicAuth = false;
+    private boolean ignoreUnblockKey = false;
 
     HttpClientWrapper(DataverseClientConfig config, HttpClient httpClient, ObjectMapper mapper) {
         this.config = config;
@@ -77,6 +78,14 @@ class HttpClientWrapper implements MediaTypes {
     public HttpClientWrapper sendApiTokenViaBasicAuth() {
         HttpClientWrapper wrapper = new HttpClientWrapper(getConfig(), httpClient, mapper);
         wrapper.sendApiTokenViaBasicAuth = true;
+        wrapper.ignoreUnblockKey = this.ignoreUnblockKey;
+        return wrapper;
+    }
+
+    public HttpClientWrapper stopPassingUnblockKey() {
+        HttpClientWrapper wrapper = new HttpClientWrapper(getConfig(), httpClient, mapper);
+        wrapper.sendApiTokenViaBasicAuth = this.sendApiTokenViaBasicAuth;
+        wrapper.ignoreUnblockKey = true;
         return wrapper;
     }
 
@@ -212,7 +221,9 @@ class HttpClientWrapper implements MediaTypes {
                 .collect(Collectors.toList());
             URIBuilder uriBuilder = new URIBuilder(config.getBaseUrl().resolve(subPath.toString()));
             uriBuilder.setParameters(nameValuePairs);
-            Optional.ofNullable(config.getUnblockKey()).ifPresent(key -> uriBuilder.setParameter(UNBLOCK_KEY, key));
+            if (!ignoreUnblockKey) {
+                Optional.ofNullable(config.getUnblockKey()).ifPresent(key -> uriBuilder.setParameter(UNBLOCK_KEY, key));
+            }
             URI uri = uriBuilder.build();
             log.debug("buildUri: {}", uri.toASCIIString());
             return uri;
