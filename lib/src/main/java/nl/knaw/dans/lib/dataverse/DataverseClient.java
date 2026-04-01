@@ -157,6 +157,10 @@ public class DataverseClient {
         return new LicenseApi(httpClientWrapper);
     }
 
+    public MetricsApi metrics() {
+        return new MetricsApi(httpClientWrapper);
+    }
+
     public DatabaseApi database() {
         return new DatabaseApi(httpClientWrapper);
     }
