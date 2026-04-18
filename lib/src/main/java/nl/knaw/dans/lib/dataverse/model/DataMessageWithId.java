@@ -16,8 +16,10 @@
 package nl.knaw.dans.lib.dataverse.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class DataMessageWithId extends DataMessage {
     private String id;
 }

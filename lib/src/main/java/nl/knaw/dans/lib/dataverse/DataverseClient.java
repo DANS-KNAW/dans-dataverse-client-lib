@@ -107,11 +107,11 @@ public class DataverseClient {
         return new SwordApi(httpClientWrapper);
     }
 
-    public FileApi file(int id) {
+    public FileApi file(long id) {
         return new FileApi(httpClientWrapper, String.valueOf(id), false);
     }
 
-    public FileApi file(int id, String invocationId) {
+    public FileApi file(long id, String invocationId) {
         return new FileApi(httpClientWrapper, String.valueOf(id), false, invocationId);
     }
 
@@ -119,7 +119,7 @@ public class DataverseClient {
         return new DataAccessRequestsApi(httpClientWrapper, pid, true);
     }
 
-    public DataAccessRequestsApi accessRequests(int id) {
+    public DataAccessRequestsApi accessRequests(long id) {
         return new DataAccessRequestsApi(httpClientWrapper, String.valueOf(id), false);
     }
 
@@ -127,7 +127,7 @@ public class DataverseClient {
         return new DataAccessRequestsApi(httpClientWrapper, pid, true, invocationId);
     }
 
-    public DataAccessRequestsApi accessRequests(int id, String invocationId) {
+    public DataAccessRequestsApi accessRequests(long id, String invocationId) {
         return new DataAccessRequestsApi(httpClientWrapper, String.valueOf(id), false, invocationId);
     }
 
@@ -139,12 +139,12 @@ public class DataverseClient {
         return new BasicFileAccessApi(httpClientWrapper, pid, true, invocationId);
     }
 
-    public BasicFileAccessApi basicFileAccess(int id) {
-        return new BasicFileAccessApi(httpClientWrapper, Integer.toString(id), false);
+    public BasicFileAccessApi basicFileAccess(long id) {
+        return new BasicFileAccessApi(httpClientWrapper, Long.toString(id), false);
     }
 
-    public BasicFileAccessApi basicFileAccess(int id, String invocationId) {
-        return new BasicFileAccessApi(httpClientWrapper, Integer.toString(id), false, invocationId);
+    public BasicFileAccessApi basicFileAccess(long id, String invocationId) {
+        return new BasicFileAccessApi(httpClientWrapper, Long.toString(id), false, invocationId);
     }
 
     public SearchApi search() {

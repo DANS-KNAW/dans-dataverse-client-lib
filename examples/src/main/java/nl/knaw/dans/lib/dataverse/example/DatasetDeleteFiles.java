@@ -25,9 +25,9 @@ import java.util.List;
 public class DatasetDeleteFiles extends ExampleBase {
     public static void main(String[] args) throws Exception {
         String persistentId = args[0];
-        List<Integer> fileIds = new ArrayList<>();
+        List<Long> fileIds = new ArrayList<>();
         for (int i = 1; i < args.length; i++) {
-            fileIds.add(Integer.parseInt(args[i]));
+            fileIds.add(Long.parseLong(args[i]));
         }
         var r = client.dataset(persistentId).deleteFiles(fileIds);
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
