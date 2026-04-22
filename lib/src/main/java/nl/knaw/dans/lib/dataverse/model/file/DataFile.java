@@ -32,7 +32,7 @@ import java.util.List;
 public class DataFile {
     // Note that the following fields should align with those 
     // in dataverse src/main/java/edu/harvard/iq/dataverse/util/json/JsonPrinter.java
-    private int id;
+    private long id;
     private String persistentId;
     private String pidURL;
     private String filename;
@@ -50,8 +50,8 @@ public class DataFile {
     private String originalFileName;
     @JsonProperty("UNF")
     private String unf;
-    private int rootDataFileId;
-    private int previousDataFileId;
+    private Long rootDataFileId;
+    private Long previousDataFileId;
     // md5 is ignored!
     private Checksum checksum;
     private Boolean tabularData;

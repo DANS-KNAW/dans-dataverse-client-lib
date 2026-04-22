@@ -43,6 +43,16 @@ public class FileApi extends AbstractTargetedApi {
         super(httpClientWrapper, id, isPersistentId, invocationId, Paths.get("api/v1/files/"));
     }
 
+    /**
+     * @return a {@link DataverseHttpResponse} object containing a {@link FileMeta} instance that contains the metadata of the requested file
+     * @throws IOException        if an I/O error occurs during the request or response processing
+     * @throws DataverseException if the Dataverse API returns an error response
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-json-representation-of-a-file" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<FileMeta> getMetadata() throws IOException, DataverseException {
+        return httpClientWrapper.get(subPath(""), params(emptyMap()), extraHeaders, FileMeta.class);
+    }
+
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#restrict-files
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#uningest-a-file
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#reingest-a-file

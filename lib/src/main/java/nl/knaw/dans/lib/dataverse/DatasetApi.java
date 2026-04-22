@@ -660,7 +660,7 @@ public class DatasetApi extends AbstractTargetedApi {
         return httpClientWrapper.postJsonString(subPath("files/actions/:set-retention"), json, params(emptyMap()), extraHeaders, HashMap.class);
     }
 
-    public DataverseHttpResponse<String> deleteFiles(List<Integer> fileIds) throws IOException, DataverseException {
+    public DataverseHttpResponse<String> deleteFiles(List<Long> fileIds) throws IOException, DataverseException {
         return httpClientWrapper.putJsonString(subPath("deleteFiles"), httpClientWrapper.writeValueAsString(fileIds), params(emptyMap()), extraHeaders, String.class);
     }
 

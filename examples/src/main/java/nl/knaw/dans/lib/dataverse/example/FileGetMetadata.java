@@ -18,19 +18,13 @@ package nl.knaw.dans.lib.dataverse.example;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Slf4j
-public class DatasetDeleteFiles extends ExampleBase {
+public class FileGetMetadata extends ExampleBase {
     public static void main(String[] args) throws Exception {
-        String persistentId = args[0];
-        List<Long> fileIds = new ArrayList<>();
-        for (int i = 1; i < args.length; i++) {
-            fileIds.add(Long.parseLong(args[i]));
-        }
-        var r = client.dataset(persistentId).deleteFiles(fileIds);
+        var r = client.file(Long.parseLong(args[0])).getMetadata();
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
 
+        var checksum = r.getData().getDataFile().getChecksum();
+        log.info("Checksum type = {}, value = {}", checksum.getType(), checksum.getValue());
     }
 }
