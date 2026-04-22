@@ -50,7 +50,7 @@ public class FileApi extends AbstractTargetedApi {
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-json-representation-of-a-file" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<FileMeta> getMetadata() throws IOException, DataverseException {
-        return httpClientWrapper.get(subPath(""), params(emptyMap()), new HashMap<>(), FileMeta.class);
+        return httpClientWrapper.get(subPath(""), params(emptyMap()), extraHeaders, FileMeta.class);
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#restrict-files
