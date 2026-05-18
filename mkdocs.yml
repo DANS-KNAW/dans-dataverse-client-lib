@@ -26,9 +26,9 @@ nav:
       - Description: index.md
       - Getting started: getting-started.md
   - JavaDocs: api.md
+  - Context: context.md
   - Development:
       - Overview: dev.md
-  - Context: context.md
 
 plugins:
   - markdownextradata
