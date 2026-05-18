@@ -28,6 +28,7 @@ nav:
   - JavaDocs: api.md
   - Development:
       - Overview: dev.md
+  - Context: context.md
 
 plugins:
   - markdownextradata
