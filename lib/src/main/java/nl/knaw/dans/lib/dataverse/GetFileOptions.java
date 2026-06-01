@@ -23,4 +23,5 @@ public class GetFileOptions {
     private boolean noVarHeader;
     private boolean imageThumb;
     private int imageThumbPixels = 64;
+    private boolean gbrecs = false;
 }

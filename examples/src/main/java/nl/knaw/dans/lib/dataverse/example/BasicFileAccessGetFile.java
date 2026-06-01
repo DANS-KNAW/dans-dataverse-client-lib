@@ -17,6 +17,7 @@ package nl.knaw.dans.lib.dataverse.example;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.GetFileOptions;
 import nl.knaw.dans.lib.dataverse.GetFileRange;
 import org.apache.commons.io.FileUtils;
 import org.apache.hc.core5.http.HttpStatus;
@@ -35,8 +36,9 @@ public class BasicFileAccessGetFile extends ExampleBase {
         if (args.length > 3) {
             range = new GetFileRange(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
         }
-        // TODO: test GetFileOptions
-        client.basicFileAccess(id).getFile(range, r -> {
+        GetFileOptions options = new GetFileOptions();
+        options.setGbrecs(false); // suppress guestbook record?
+        client.basicFileAccess(id).getFile(options, range, r -> {
             if (List.of(HttpStatus.SC_OK, HttpStatus.SC_PARTIAL_CONTENT).contains(r.getCode())) {
                 FileUtils.copyInputStreamToFile(r.getEntity().getContent(), dest.toFile());
             }

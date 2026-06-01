@@ -62,6 +62,8 @@ public class BasicFileAccessApi extends AbstractTargetedApi {
                 params.put("imageThumb", Collections.singletonList(Integer.toString(options.getImageThumbPixels())));
             if (options.isNoVarHeader())
                 params.put("noVarHeader", Collections.singletonList("true"));
+            if (options.isGbrecs())
+                params.put("gbrecs", Collections.singletonList("true"));
         }
         HashMap<String, String> headers = new HashMap<>();
         if (range != null) {
