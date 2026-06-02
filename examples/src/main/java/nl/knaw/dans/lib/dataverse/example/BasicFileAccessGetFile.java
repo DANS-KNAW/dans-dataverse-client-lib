@@ -38,6 +38,7 @@ public class BasicFileAccessGetFile extends ExampleBase {
         }
         GetFileOptions options = new GetFileOptions();
         options.setGbrecs(false); // suppress guestbook record?
+        options.setFormat("original");
         client.basicFileAccess(id).getFile(options, range, r -> {
             if (List.of(HttpStatus.SC_OK, HttpStatus.SC_PARTIAL_CONTENT).contains(r.getCode())) {
                 FileUtils.copyInputStreamToFile(r.getEntity().getContent(), dest.toFile());
