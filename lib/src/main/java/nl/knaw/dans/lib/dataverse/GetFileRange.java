@@ -23,8 +23,9 @@ public class GetFileRange {
     private final long end;
 
     public GetFileRange(long start, long end) {
-        if (start >= end)
-            throw new IllegalArgumentException("Start must be greater than end");
+        if (start < 0 || start > end) {
+            throw new IllegalArgumentException("Invalid range: start must be non-negative and less than or equal to end");
+        }
         this.start = start;
         this.end = end;
     }
