@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 
@@ -44,13 +46,24 @@ public class FileApi extends AbstractTargetedApi {
     }
 
     /**
+     * @param includeDesaccessioned whether to include deaccessioned files in the metadata response
+     * @return a {@link DataverseHttpResponse} object containing a {@link FileMeta} instance that contains the metadata of the requested file
+     * @throws IOException        if an I/O error occurs during the request or response processing
+     * @throws DataverseException if the Dataverse API returns an error response
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-json-representation-of-a-file" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<FileMeta> getMetadata(boolean includeDesaccessioned) throws IOException, DataverseException {
+        return httpClientWrapper.get(subPath(""), params(Map.of("includeDeaccessioned", List.of(Boolean.toString(includeDesaccessioned)))), extraHeaders, FileMeta.class);
+    }
+
+    /**
      * @return a {@link DataverseHttpResponse} object containing a {@link FileMeta} instance that contains the metadata of the requested file
      * @throws IOException        if an I/O error occurs during the request or response processing
      * @throws DataverseException if the Dataverse API returns an error response
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#get-json-representation-of-a-file" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<FileMeta> getMetadata() throws IOException, DataverseException {
-        return httpClientWrapper.get(subPath(""), params(emptyMap()), extraHeaders, FileMeta.class);
+        return getMetadata(false);
     }
 
     // TODO: https://guides.dataverse.org/en/latest/api/native-api.html#restrict-files

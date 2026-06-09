@@ -21,7 +21,7 @@ import nl.knaw.dans.lib.dataverse.ExampleBase;
 @Slf4j
 public class FileGetMetadata extends ExampleBase {
     public static void main(String[] args) throws Exception {
-        var r = client.file(Long.parseLong(args[0])).getMetadata();
+        var r = client.file(Long.parseLong(args[0])).getMetadata(true);
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
 
         var checksum = r.getData().getDataFile().getChecksum();
