@@ -15,6 +15,7 @@
  */
 package nl.knaw.dans.lib.dataverse.model.dataset;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Embargo {
     private String dateAvailable;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String reason;
     private int[] fileIds;
 }
