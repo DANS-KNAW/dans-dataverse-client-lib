@@ -24,7 +24,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-// Ignoring isPartOf, has to specified as option in the API call, which we don't do yet
+// Ignoring isPartOf, has to be specified as option in the API call, which we don't do yet
 @Data
 @JsonIgnoreProperties({"isPartOf"})
 public class DatasetVersion {
@@ -54,6 +54,8 @@ public class DatasetVersion {
     private String citationDate;
     private String versionNote;
     private License license;
+    private Integer effectiveDatasetFileCountLimit;
+    private Integer datasetFileUploadsAvailable;
 
     private String termsOfUse;
     private String confidentialityDeclaration;
@@ -63,7 +65,6 @@ public class DatasetVersion {
     private String depositorRequirements;
     private String conditions;
     private String disclaimer;
-
 
     private String termsOfAccess;
     private String dataAccessPlace;
