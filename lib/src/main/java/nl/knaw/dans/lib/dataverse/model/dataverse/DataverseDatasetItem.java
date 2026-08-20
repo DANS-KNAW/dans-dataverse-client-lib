@@ -30,6 +30,7 @@ public class DataverseDatasetItem extends DataverseItem {
     private String publisher;
     private String publicationDate;
     private String storageIdentifier;
+    private String guestbookId;
     private String metadataLanguage;
 
     public DataverseDatasetItem() {

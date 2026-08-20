@@ -53,6 +53,7 @@ public class DatasetVersion {
     private String publicationDate;
     private String citationDate;
     private String versionNote;
+    private String guestbookId;
     private License license;
     private Integer effectiveDatasetFileCountLimit;
     private Integer datasetFileUploadsAvailable;

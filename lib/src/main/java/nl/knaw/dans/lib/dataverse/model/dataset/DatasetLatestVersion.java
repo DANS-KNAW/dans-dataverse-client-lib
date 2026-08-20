@@ -27,6 +27,7 @@ public class DatasetLatestVersion {
     private String publisher;
     private String publicationDate;
     private String storageIdentifier;
+    private String guestbookId;
     private String metadataLanguage;
     private DatasetVersion latestVersion;
 }
