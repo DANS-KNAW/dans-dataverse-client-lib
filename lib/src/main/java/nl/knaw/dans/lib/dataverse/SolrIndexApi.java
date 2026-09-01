@@ -18,6 +18,7 @@ package nl.knaw.dans.lib.dataverse;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.model.DataMessage;
+import nl.knaw.dans.lib.dataverse.model.DataMessageSolrIndex;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -51,8 +52,8 @@ public class SolrIndexApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#solr-index" target="_blank">Dataverse documentation</a>
      */
-    public DataverseHttpResponse<DataMessage> indexAll() throws IOException, DataverseException {
-        return httpClientWrapper.get(targetBase, DataMessage.class);
+    public DataverseHttpResponse<DataMessageSolrIndex> indexAll() throws IOException, DataverseException {
+        return httpClientWrapper.get(targetBase, DataMessageSolrIndex.class);
     }
 
     /**
@@ -77,11 +78,11 @@ public class SolrIndexApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#solr-index" target="_blank">Dataverse documentation</a>
      */
-    public DataverseHttpResponse<DataMessage> indexDataset(String persistentId) throws IOException, DataverseException {
+    public DataverseHttpResponse<DataMessageSolrIndex> indexDataset(String persistentId) throws IOException, DataverseException {
         Path path = buildPath(targetBase, "dataset");
         Map<String, List<String>> parameters = new HashMap<>();
         parameters.put("persistentId", Collections.singletonList(persistentId));
-        return httpClientWrapper.get(path, parameters, DataMessage.class);
+        return httpClientWrapper.get(path, parameters, DataMessageSolrIndex.class);
     }
 
     /**
@@ -93,9 +94,9 @@ public class SolrIndexApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#solr-index" target="_blank">Dataverse documentation</a>
      */
-    public DataverseHttpResponse<DataMessage> indexDataset(int id) throws IOException, DataverseException {
+    public DataverseHttpResponse<DataMessageSolrIndex> indexDataset(int id) throws IOException, DataverseException {
         Path path = buildPath(targetBase, "dataset", Integer.toString(id));
-        return httpClientWrapper.get(path, DataMessage.class);
+        return httpClientWrapper.get(path, DataMessageSolrIndex.class);
     }
 
     /**
@@ -108,7 +109,7 @@ public class SolrIndexApi extends AbstractApi {
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#solr-index" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<DataMessage> indexDataverse(int id) throws IOException, DataverseException {
-        Path path = buildPath(targetBase, "dataverse", Integer.toString(id));
+        Path path = buildPath(targetBase, "dataverses", Integer.toString(id));
         return httpClientWrapper.get(path, DataMessage.class);
     }
 
@@ -120,8 +121,9 @@ public class SolrIndexApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#solr-index" target="_blank">Dataverse documentation</a>
      */
-    public DataverseHttpResponse<DataMessage> clear() throws IOException, DataverseException {
-        return httpClientWrapper.delete(targetBase, new HashMap<>(), DataMessage.class);
+    public DataverseHttpResponse<DataMessageSolrIndex> clear() throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "clear");
+        return httpClientWrapper.get(path, DataMessageSolrIndex.class);
     }
 
     /**
