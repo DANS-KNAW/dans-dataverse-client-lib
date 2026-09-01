@@ -165,6 +165,10 @@ public class DataverseClient {
         return new DatabaseApi(httpClientWrapper);
     }
 
+    public SolrIndexApi solrIndex() {
+        return new SolrIndexApi(httpClientWrapper);
+    }
+
     public BuiltinUserApi builtinUsers(String builtinUsersKey) {
         return new BuiltinUserApi(httpClientWrapper, builtinUsersKey);
     }
