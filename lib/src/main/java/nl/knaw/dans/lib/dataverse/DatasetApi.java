@@ -230,6 +230,18 @@ public class DatasetApi extends AbstractTargetedApi {
     }
 
     /**
+     * Checks whether the metadata registered at the PID provider for a published dataset is up to date and updates it if necessary.
+     *
+     * @return a data message
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/admin/dataverses-datasets.html#update-metadata-for-a-published-dataset-at-the-pid-provider" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> updateRegistrationMetadata() throws IOException, DataverseException {
+        return httpClientWrapper.postJsonString(subPath("modifyRegistrationMetadata"), "", params(emptyMap()), extraHeaders, DataMessage.class);
+    }
+
+    /**
      * Edits the current draft's metadata, adding the fields that do not exist yet. If `replace` is set to `false`, all specified fields must be either currently empty or allow multiple values.
      *
      * @param s JSON document containing the edits to perform
