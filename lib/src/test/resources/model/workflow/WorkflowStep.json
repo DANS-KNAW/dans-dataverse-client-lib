@@ -1,0 +1,11 @@
+{
+  "stepType": "api",
+  "provider": "http://example.com/workflow/step",
+  "parameters": {
+    "method": "POST",
+    "datasetId": ":persistentId"
+  },
+  "requiredSettings": {
+    "authToken": "auth.example.token"
+  }
+}
