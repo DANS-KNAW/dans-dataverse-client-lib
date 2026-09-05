@@ -86,6 +86,17 @@ public class AdminApi extends AbstractApi {
     }
 
     /**
+     * @return all database settings
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#list-all-database-settings" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<Map<String, String>> listAllDatabaseSettings() throws IOException, DataverseException {
+        Path path = buildPath(targetBase, "settings");
+        return httpClientWrapper.get(path, new HashMap<>(), Map.class);
+    }
+
+    /**
      * The following validates all the physical files in the dataset specified by recalculating the checksums and comparing them against the values saved in the database.
      *
      * @param dbId the dataset database id
