@@ -61,7 +61,7 @@ public class MetadataExportApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseHttpResponse<Object> reExportAll() throws IOException, DataverseException {
-        return reExportAll(null, null);
+        return reExportAll(null, (String[]) null);
     }
 
     /**
@@ -73,7 +73,7 @@ public class MetadataExportApi extends AbstractApi {
      * @throws DataverseException when Dataverse fails to perform the request
      */
     public DataverseHttpResponse<Object> reExportAllOlderThan(String olderThan) throws IOException, DataverseException {
-        return reExportAll(olderThan, null);
+        return reExportAll(olderThan, (String[]) null);
     }
 
     /**
