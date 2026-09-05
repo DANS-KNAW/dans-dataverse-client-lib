@@ -79,8 +79,8 @@ public class WorkflowsApi extends AbstractApi {
         return httpClientWrapper.delete(managementSubPath.resolve(Long.toString(workflowId)), DataMessage.class);
     }
 
-    public DataverseHttpResponse<String> getIpWhitelist() throws IOException, DataverseException {
-        return httpClientWrapper.get(managementSubPath.resolve("ip-whitelist"), String.class);
+    public DataverseHttpResponse<DataMessage> getIpWhitelist() throws IOException, DataverseException {
+        return httpClientWrapper.get(managementSubPath.resolve("ip-whitelist"), DataMessage.class);
     }
 
     public DataverseHttpResponse<String> setIpWhitelist(String ipWhitelist) throws IOException, DataverseException {

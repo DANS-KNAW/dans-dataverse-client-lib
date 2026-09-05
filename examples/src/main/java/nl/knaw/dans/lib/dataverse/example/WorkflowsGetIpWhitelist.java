@@ -18,13 +18,14 @@ package nl.knaw.dans.lib.dataverse.example;
 import lombok.extern.slf4j.Slf4j;
 import nl.knaw.dans.lib.dataverse.DataverseResponse;
 import nl.knaw.dans.lib.dataverse.ExampleBase;
+import nl.knaw.dans.lib.dataverse.model.DataMessage;
 
 @Slf4j
 public class WorkflowsGetIpWhitelist extends ExampleBase {
 
     public static void main(String[] args) throws Exception {
-        DataverseResponse<String> r = client.workflows().getIpWhitelist();
+        DataverseResponse<DataMessage> r = client.workflows().getIpWhitelist();
         log.info("Response message: {}", r.getEnvelopeAsJson().toPrettyString());
-        log.info("Whitelist: {}", r.getData());
+        log.info("Whitelist: {}", r.getData().getMessage());
     }
 }
