@@ -172,4 +172,8 @@ public class DataverseClient {
     public BuiltinUserApi builtinUsers(String builtinUsersKey) {
         return new BuiltinUserApi(httpClientWrapper, builtinUsersKey);
     }
+
+    public MetadataExportApi metadataExport() {
+        return new MetadataExportApi(httpClientWrapper);
+    }
 }
