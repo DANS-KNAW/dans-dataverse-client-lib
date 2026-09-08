@@ -18,13 +18,25 @@ package nl.knaw.dans.lib.dataverse.model.dataset;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
-public class MetadataBlock {
+public class DatasetFieldType {
 
-    private int id;
     private String name;
     private String displayName;
+    private String title;
+    private String type;
+    private String typeClass;
+    private boolean multiple;
+    private Boolean isControlledVocabulary;
+    private Boolean isAdvancedSearchFieldType;
+    private Integer displayOrder;
+    private String displayFormat;
+    private Boolean isRequired;
     private Boolean displayOnCreate;
-    private List<MetadataField> fields;
+    private String watermark;
+    private String description;
+    private Map<String, DatasetFieldType> childFields;
+    private List<String> controlledVocabularyValues;
 }

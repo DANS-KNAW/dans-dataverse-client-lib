@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.knaw.dans.lib.dataverse.model.dataset;
+package nl.knaw.dans.lib.dataverse.example;
 
-import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import nl.knaw.dans.lib.dataverse.ExampleBase;
 
-import java.util.List;
-
-@Data
-public class MetadataBlock {
-
-    private int id;
-    private String name;
-    private String displayName;
-    private Boolean displayOnCreate;
-    private List<MetadataField> fields;
+@Slf4j
+public class MetadataBlocksGet extends ExampleBase {
+    public static void main(String[] args) throws Exception {
+        var id = args.length > 0 ? args[0] : "citation";
+        var response = client.metadataBlocks().getMetadataBlock(id);
+        log.info("MetadataBlock: {}", toPrettyJson(response.getData()));
+    }
 }

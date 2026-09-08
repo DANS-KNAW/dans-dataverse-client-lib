@@ -17,10 +17,14 @@ package nl.knaw.dans.lib.dataverse.model.dataset;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
-public class MetadataBlockSummary {
-    int id;
-    String name;
-    String displayName;
-    Boolean displayOnCreate;
+public class MetadataBlockDefinition {
+
+    private int id;
+    private String name;
+    private String displayName;
+    private Boolean displayOnCreate;
+    private Map<String, DatasetFieldType> fields;
 }
