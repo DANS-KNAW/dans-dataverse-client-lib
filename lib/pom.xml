@@ -21,7 +21,7 @@
     <parent>
         <groupId>nl.datastations</groupId>
         <artifactId>dans-core-systems-parent</artifactId>
-        <version>0.1.0</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath />
     </parent>
     <artifactId>dans-dataverse-client-lib</artifactId>
@@ -109,7 +109,7 @@
                         <goals>
                             <goal>delombok</goal>
                         </goals>
-                        <!-- Performing a delombok so that javadoc can run subsequently and we can see if javadocs are
+                        <!-- Performing a delombok so that javadoc can run subsequently, and we can see if Javadocs are
                         generated successfully -->
                         <phase>test</phase>
                     </execution>

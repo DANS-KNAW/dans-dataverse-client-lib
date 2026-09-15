@@ -19,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,9 +36,10 @@ public abstract class ExampleBase {
 
     static {
         try {
-            String propsFiles = getExamplesRoot().resolve("dataverse.properties").toString();
-            PropertiesConfiguration props = new PropertiesConfiguration(propsFiles);
-            DataverseClientConfig config = new DataverseClientConfig(
+            var propsFile = getExamplesRoot().resolve("dataverse.properties").toFile();
+            var configs = new Configurations();
+            var props = configs.properties(propsFile);
+            var config = new DataverseClientConfig(
                 new URI(props.getString("baseUrl")),
                 props.getString("apiToken"),
                 props.getInt("awaitLockStateMaxNumberOfRetries", DataverseClientConfig.DEFAULT_AWAIT_LOCK_STATE_MAX_NUMBER_OF_RETRIES),
