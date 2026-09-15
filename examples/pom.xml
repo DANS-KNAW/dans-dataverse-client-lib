@@ -22,16 +22,16 @@
         <groupId>nl.knaw.dans</groupId>
         <artifactId>dd-parent</artifactId>
         <version>3.0.0</version>
-        <relativePath/>
+        <relativePath />
     </parent>
     <artifactId>dans-dataverse-client-lib-examples</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.1</version>
     <name>DANS Dataverse Client Library Examples</name>
     <inceptionYear>2021</inceptionYear>
     <scm>
         <connection>scm:git:https://github.com/DANS-KNAW/dans-dataverse-client-lib.git</connection>
         <developerConnection>scm:git:ssh://github.com/DANS-KNAW/dans-dataverse-client-lib</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v3.0.1</tag>
     </scm>
     <dependencies>
         <dependency>

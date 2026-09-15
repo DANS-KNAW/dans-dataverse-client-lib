@@ -22,17 +22,17 @@
         <groupId>nl.datastations</groupId>
         <artifactId>dans-core-systems-parent</artifactId>
         <version>1.0.0</version>
-        <relativePath/>
+        <relativePath />
     </parent>
     <artifactId>dans-dataverse-client-lib</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.1</version>
     <name>DANS Dataverse Client Library</name>
     <url>https://dans-knaw.github.io/${project.artifactId}</url>
     <inceptionYear>2021</inceptionYear>
     <scm>
         <connection>scm:git:https://github.com/DANS-KNAW/${project.artifactId}</connection>
         <developerConnection>scm:git:ssh://github.com/DANS-KNAW/${project.artifactId}</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v3.0.1</tag>
     </scm>
     <dependencies>
         <dependency>
