@@ -15,20 +15,19 @@
 # limitations under the License.
 #
 
-set -e
+set -euo pipefail
 
+export MAVEN_ARGS="-s ../.github/ci-settings.xml"
 
 echo "START add javadocs..."
 pushd lib
 echo "Delomboking first, so that getters and setters will appear in JavaDocs"
-mvn clean lombok:delombok
+mvn $MAVEN_ARGS clean lombok:delombok
 echo "Calling JavaDoc"
-mvn javadoc:javadoc
+mvn $MAVEN_ARGS javadoc:javadoc
 popd
 echo "Removing existing JavaDocs if present"
 if [ -d "docs/javadocs" ]; then rm -fr docs/javadocs; fi
 echo "Moving newly generated JavaDocs in place"
 mv lib/target/reports/apidocs docs/javadocs
 echo "DONE build and add javadocs"
-
-
