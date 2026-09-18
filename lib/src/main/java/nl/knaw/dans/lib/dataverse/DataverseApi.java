@@ -22,7 +22,6 @@ import nl.knaw.dans.lib.dataverse.model.RoleAssignment;
 import nl.knaw.dans.lib.dataverse.model.RoleAssignmentReadOnly;
 import nl.knaw.dans.lib.dataverse.model.dataset.Dataset;
 import nl.knaw.dans.lib.dataverse.model.dataset.DatasetCreationResult;
-import nl.knaw.dans.lib.dataverse.model.dataset.MetadataBlock;
 import nl.knaw.dans.lib.dataverse.model.dataverse.Dataverse;
 import nl.knaw.dans.lib.dataverse.model.dataverse.DataverseItem;
 import org.slf4j.Logger;
@@ -192,16 +191,6 @@ public class DataverseApi extends AbstractApi {
      */
     public DataverseHttpResponse<DataMessage> deleteRoleAssignment(int roleAssignmentId) throws IOException, DataverseException {
         return httpClientWrapper.delete(subPath.resolve("assignments/" + roleAssignmentId), DataMessage.class);
-    }
-
-    /**
-     * @return a list of metadata blocks
-     * @throws IOException        when I/O problems occur during the interaction with Dataverse
-     * @throws DataverseException when Dataverse fails to perform the request
-     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#list-metadata-blocks-defined-on-a-dataverse-collection" target="_blank">Dataverse documentation</a>
-     */
-    public DataverseHttpResponse<List<MetadataBlock>> listMetadataBlocks() throws IOException, DataverseException {
-        return httpClientWrapper.get(subPath.resolve("metadatablocks"), List.class, MetadataBlock.class);
     }
 
     /* https://guides.dataverse.org/en/latest/api/native-api.html#define-metadata-blocks-for-a-dataverse-collection
