@@ -29,7 +29,7 @@
     <name>DANS Dataverse Client Library Examples</name>
     <inceptionYear>2021</inceptionYear>
     <scm>
-        <connection>scm:git:https://github.com/DANS-KNAW/dans-dataverse-client-lib.git</connection>
+        <connection>scm:git:https://github.com/DANS-KNAW/dans-dataverse-client-lib</connection>
         <developerConnection>scm:git:ssh://github.com/DANS-KNAW/dans-dataverse-client-lib</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/DANS-KNAW/${project.artifactId}</url>
