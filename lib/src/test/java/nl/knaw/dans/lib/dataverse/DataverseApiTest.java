@@ -28,9 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 class DataverseApiTest {
 
@@ -39,7 +39,7 @@ class DataverseApiTest {
         HttpClientWrapper wrapper = mock(HttpClientWrapper.class);
         @SuppressWarnings("unchecked")
         DataverseHttpResponse<List<MetadataBlockDefinition>> response = mock(DataverseHttpResponse.class);
-        when(wrapper.get(any(), anyMap(), eq(List.class), eq(MetadataBlockDefinition.class))).thenReturn(response);
+        doReturn(response).when(wrapper).get(any(), anyMap(), eq(List.class), eq(MetadataBlockDefinition.class));
 
         DataverseApi api = new DataverseApi(wrapper, "collectionAlias");
 
@@ -55,7 +55,7 @@ class DataverseApiTest {
         HttpClientWrapper wrapper = mock(HttpClientWrapper.class);
         @SuppressWarnings("unchecked")
         DataverseHttpResponse<List<MetadataBlockDefinition>> response = mock(DataverseHttpResponse.class);
-        when(wrapper.get(any(), anyMap(), eq(List.class), eq(MetadataBlockDefinition.class))).thenReturn(response);
+        doReturn(response).when(wrapper).get(any(), anyMap(), eq(List.class), eq(MetadataBlockDefinition.class));
 
         DataverseApi api = new DataverseApi(wrapper, "collectionAlias");
 
@@ -74,7 +74,7 @@ class DataverseApiTest {
         HttpClientWrapper wrapper = mock(HttpClientWrapper.class);
         @SuppressWarnings("unchecked")
         DataverseHttpResponse<List<MetadataBlockDefinition>> response = mock(DataverseHttpResponse.class);
-        when(wrapper.get(any(), anyMap(), eq(List.class), eq(MetadataBlockDefinition.class))).thenReturn(response);
+        doReturn(response).when(wrapper).get(any(), anyMap(), eq(List.class), eq(MetadataBlockDefinition.class));
 
         DataverseApi api = new DataverseApi(wrapper, "collectionAlias");
 
