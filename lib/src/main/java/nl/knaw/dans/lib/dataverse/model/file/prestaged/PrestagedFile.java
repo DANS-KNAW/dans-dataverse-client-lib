@@ -16,6 +16,7 @@
 package nl.knaw.dans.lib.dataverse.model.file.prestaged;
 
 import lombok.Data;
+import nl.knaw.dans.lib.dataverse.model.dataset.License;
 
 import java.util.List;
 
@@ -30,4 +31,14 @@ public class PrestagedFile {
     private List<String> categories;
     private Boolean restrict;
     private Boolean forceReplace;
+
+    private License license;
+    private String termsOfUse;
+    private String confidentialityDeclaration;
+    private String specialPermissions;
+    private String restrictions;
+    private String citationRequirements;
+    private String depositorRequirements;
+    private String conditions;
+    private String disclaimer;
 }

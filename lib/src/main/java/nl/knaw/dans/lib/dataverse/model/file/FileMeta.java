@@ -16,6 +16,7 @@
 package nl.knaw.dans.lib.dataverse.model.file;
 
 import lombok.Data;
+import nl.knaw.dans.lib.dataverse.model.dataset.License;
 import nl.knaw.dans.lib.dataverse.model.file.prestaged.Checksum;
 import nl.knaw.dans.lib.dataverse.model.file.prestaged.PrestagedFile;
 
@@ -35,6 +36,16 @@ public class FileMeta {
     private DataFile dataFile;
     private Boolean forceReplace;
 
+    private License license;
+    private String termsOfUse;
+    private String confidentialityDeclaration;
+    private String specialPermissions;
+    private String restrictions;
+    private String citationRequirements;
+    private String depositorRequirements;
+    private String conditions;
+    private String disclaimer;
+
     public PrestagedFile toPrestagedFile() {
         if (dataFile == null)
             throw new IllegalArgumentException("Cannot convert to PrestagedFile if dataFile is null");
@@ -48,6 +59,15 @@ public class FileMeta {
         p.setCategories(categories);
         p.setRestrict(restricted);
         p.setForceReplace(forceReplace);
+        p.setLicense(license);
+        p.setTermsOfUse(termsOfUse);
+        p.setConfidentialityDeclaration(confidentialityDeclaration);
+        p.setSpecialPermissions(specialPermissions);
+        p.setRestrictions(restrictions);
+        p.setCitationRequirements(citationRequirements);
+        p.setDepositorRequirements(depositorRequirements);
+        p.setConditions(conditions);
+        p.setDisclaimer(disclaimer);
         return p;
     }
 
