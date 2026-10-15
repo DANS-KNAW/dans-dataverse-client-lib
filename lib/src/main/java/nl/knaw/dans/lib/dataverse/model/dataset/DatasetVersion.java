@@ -25,8 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 // Ignoring isPartOf, has to be specified as option in the API call, which we don't do yet
+// Ignoring additionalLicenses it is derived from the list of FileMeta
 @Data
-@JsonIgnoreProperties({"isPartOf"})
+@JsonIgnoreProperties({"isPartOf", "additionalLicenses"})
 public class DatasetVersion {
 
     private Integer id;
