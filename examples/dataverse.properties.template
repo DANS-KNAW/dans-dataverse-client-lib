@@ -20,10 +20,18 @@ baseUrl=http://localhost:8080
 # https://<HOST>/dataverseuser.xhtml?selectTab=apiTokenTab
 apiToken=changeme
 
-# from https://guides.dataverse.org/en/latest/installation/config.html#blockedapikey
-# - to execute admin examples:
-#   curl -X PUT -d s3kretKey http://localhost:8080/api/admin/settings/:BlockedApiKey
-#   curl -X PUT -d unblock-key http://localhost:8080/api/admin/settings/:BlockedApiPolicy
-# - to reset for applications using the library:
-#   curl -X PUT -d localhost-only http://localhost:8080/api/admin/settings/:BlockedApiPolicy/?unblock-key=s3kretKey
+# See https://guides.dataverse.org/en/latest/installation/config.html#dataverse-api-blocked-policy
+# For a local development Vagrant box only, run these commands inside the box,
+# from the Payara bin directory (e.g. /usr/local/payara6/bin), authenticating as admin.
+# Keep dataverse.api.blocked.endpoints=api/admin,api/builtin-users configured.
+# To execute admin examples remotely (replace s3kretKey here and below):
+#   ./asadmin delete-jvm-options '-Ddataverse.api.blocked.policy=localhost-only'
+#   ./asadmin create-jvm-options '-Ddataverse.api.blocked.key=s3kretKey'
+#   ./asadmin create-jvm-options '-Ddataverse.api.blocked.policy=unblock-key'
+#   sudo systemctl restart payara
+# When done, restore localhost-only access and remove the development key:
+#   ./asadmin delete-jvm-options '-Ddataverse.api.blocked.policy=unblock-key'
+#   ./asadmin create-jvm-options '-Ddataverse.api.blocked.policy=localhost-only'
+#   ./asadmin delete-jvm-options '-Ddataverse.api.blocked.key=s3kretKey'
+#   sudo systemctl restart payara
 unblockKey=s3kretKey
