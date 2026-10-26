@@ -58,12 +58,12 @@ More examples can be found in the [examples submodule](https://github.com/DANS-K
 an example:
 
 1. Copy the supplied `dataverse.properties.template` to `dataverse.properties`.
-2. Edit the properties to match your setup. For example; when running Dataverse on localhost, set the `baseUrl=http://localhost:8080`.
+2. Edit the properties to match your setup. For example, when running Dataverse on localhost, set the `baseUrl=http://localhost:8080`.
 3. Run [one of the programs]{:target=_blank} providing sensible command line parameters where required.
 4. To access admin end-points from outside a local development Vagrant box, follow the JVM-option setup and reset instructions in
    `examples/dataverse.properties.template`. Keep `dataverse.api.blocked.endpoints=api/admin,api/builtin-users` configured and temporarily switch
    `dataverse.api.blocked.policy` to `unblock-key`, with a matching `dataverse.api.blocked.key`. Set `unblockKey` in `dataverse.properties` to that key.
-   Restart Payara after changing JVM options, and restore `localhost-only` access when finished. Do not use this development setup on production systems.
+   Restart Payara after changing JVM options and restore `localhost-only` access when finished. Do not use this development setup on production systems.
 
 [one of the programs]: https://github.com/DANS-KNAW/dans-dataverse-client-lib/tree/master/examples/src/main/java/nl/knaw/dans/lib/dataverse/example
 
