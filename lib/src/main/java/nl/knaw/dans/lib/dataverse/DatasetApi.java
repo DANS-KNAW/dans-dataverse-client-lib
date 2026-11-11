@@ -707,6 +707,18 @@ public class DatasetApi extends AbstractTargetedApi {
     }
 
     /**
+     * Sets the version note of the draft version of the dataset. Requires the Dataverse feature flag VERSION_NOTE to be enabled.
+     *
+     * @param note the note
+     * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     */
+    public DataverseHttpResponse<DataMessage> setVersionNote(String note) throws IOException, DataverseException {
+        return httpClientWrapper.putJsonString(versionedSubPath("versionNote", ":draft"), note, params(emptyMap()), extraHeaders, DataMessage.class);
+    }
+
+    /**
      * @return a list of locks
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request
