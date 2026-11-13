@@ -707,22 +707,37 @@ public class DatasetApi extends AbstractTargetedApi {
     }
 
     /**
-     * Sets the version note of the draft version of the dataset. Requires the Dataverse feature flag VERSION_NOTE to be enabled.
+     * Sets the version note of the draft version of the dataset. Requires the Dataverse version note feature to be enabled.
      *
      * @param note the note
      * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-version-notes" target="_blank">Dataverse documentation</a>
      */
     public DataverseHttpResponse<DataMessage> setVersionNote(String note) throws IOException, DataverseException {
-        return httpClientWrapper.putJsonString(versionedSubPath("versionNote", ":draft"), note, params(emptyMap()), extraHeaders, DataMessage.class);
+        return setVersionNote(Version.DRAFT.toString(), note);
+    }
+
+    /**
+     * Sets the version note of the draft version of the dataset. Requires the Dataverse version note feature to be enabled.
+     *
+     * @param version the version, a version number such as 1.0 or a tag such as :draft, :latest or :latest-published
+     * @param note    the note
+     * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage}
+     * @throws IOException        when I/O problems occur during the interaction with Dataverse
+     * @throws DataverseException when Dataverse fails to perform the request
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-version-notes" target="_blank">Dataverse documentation</a>
+     */
+    public DataverseHttpResponse<DataMessage> setVersionNote(String version, String note) throws IOException, DataverseException {
+        return httpClientWrapper.putJsonString(versionedSubPath("versionNote", version), note, params(emptyMap()), extraHeaders, DataMessage.class);
     }
 
     /**
      * @return a list of locks
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request
-     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">...</a>
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse documentation</a>
      * @see <a href="https://github.com/DANS-KNAW/dans-dataverse-client-lib/blob/master/examples/src/main/java/nl/knaw/dans/lib/dataverse/example/DatasetGetLocks.java">Code example</a>
      */
     public DataverseHttpResponse<List<Lock>> getLocks() throws IOException, DataverseException {
@@ -736,7 +751,7 @@ public class DatasetApi extends AbstractTargetedApi {
      * @return a response envelope containing a {@link nl.knaw.dans.lib.dataverse.model.DataMessage} with information about the result of the deletion.
      * @throws IOException        when I/O problems occur during the interaction with Dataverse
      * @throws DataverseException when Dataverse fails to perform the request or returns an error status
-     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse Native API: Dataset locks</a>
+     * @see <a href="https://guides.dataverse.org/en/latest/api/native-api.html#dataset-locks" target="_blank">Dataverse documentation</a>
      * @see <a href="https://github.com/DANS-KNAW/dans-dataverse-client-lib/blob/master/examples/src/main/java/nl/knaw/dans/lib/dataverse/example/DatasetDeleteLock.java">Code example</a>
      */
     public DataverseHttpResponse<DataMessage> deleteLock(String lockType) throws IOException, DataverseException {
